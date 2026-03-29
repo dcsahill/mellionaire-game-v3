@@ -443,23 +443,31 @@ function updatePermanentLadder(roundIndex) {
   });
 }
 
-/* TRANSITION LADDER */
+/* FIXED TRANSITION LADDER */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(
     document.querySelectorAll("#money-ladder .ladder-item")
   );
 
+  // Convert logical round index → visual reversed index
+  const visualIndex = items.length - 1 - roundIndex;
+
+  // Reset all ladder items
   items.forEach(item => item.classList.remove("reached", "current"));
 
+  // Mark reached levels (from bottom up)
   items.forEach((item, i) => {
-    if (i <= roundIndex) item.classList.add("reached");
+    if (i >= visualIndex) item.classList.add("reached");
   });
 
-  items[roundIndex].classList.add("current");
+  // Highlight current level
+  items[visualIndex].classList.add("current");
 
+  // Show transition screen
   screen.style.display = "flex";
 
+  // Animate for 3 seconds, then continue
   setTimeout(() => {
     screen.style.display = "none";
     currentRound++;
