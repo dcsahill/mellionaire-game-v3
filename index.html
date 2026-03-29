@@ -17,13 +17,13 @@ body {
   background-attachment: fixed;
 }
 
-/* PERMANENT MONEY LADDER (STATIC) */
+/* PERMANENT MONEY LADDER */
 #permanent-ladder {
   position: fixed;
   right: 20px;
   top: 120px;
   display: flex;
-  flex-direction: column-reverse; /* lowest at bottom */
+  flex-direction: column-reverse;
   gap: 12px;
   z-index: 10;
 }
@@ -36,10 +36,9 @@ body {
   color: #ffd700;
   opacity: 0.35;
   background: rgba(0,0,0,0.4);
-  transition: opacity 0.4s ease, transform 0.4s ease, text-shadow 0.4s ease, background 0.4s ease;
+  transition: 0.4s ease;
 }
 
-/* Permanent green for achieved rounds */
 #permanent-ladder .ladder-item.reached {
   background: #0f7a0f;
   border-color: #32cd32;
@@ -48,14 +47,13 @@ body {
   text-shadow: 0 0 12px #32cd32;
 }
 
-/* Gold highlight for current round */
 #permanent-ladder .ladder-item.active {
   opacity: 1;
   transform: scale(1.12);
   text-shadow: 0 0 12px #ffd700, 0 0 25px #ffd700;
 }
 
-/* MAIN GAME BOX */
+/* MAIN GAME */
 #game {
   max-width: 800px;
   width: 100%;
@@ -63,8 +61,6 @@ body {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
-  position: relative;
-  overflow: hidden;
   margin-right: 200px;
 }
 
@@ -73,7 +69,6 @@ h1 {
   color: #ffd700;
   font-size: 2.2rem;
   text-shadow: 0 0 10px #000, 0 0 20px #ffd700;
-  margin-bottom: 20px;
 }
 
 #host {
@@ -89,7 +84,6 @@ h1 {
   font-weight: bold;
   color: #ffd700;
   margin-bottom: 10px;
-  text-shadow: 0 0 6px #000;
 }
 
 #question {
@@ -100,7 +94,6 @@ h1 {
   border: 2px solid #ffd700;
   border-radius: 12px;
   text-align: center;
-  text-shadow: 0 0 6px #000;
 }
 
 .options {
@@ -118,8 +111,7 @@ h1 {
   cursor: pointer;
   font-size: 1.1rem;
   text-align: left;
-  transition: all 0.2s ease;
-  text-shadow: 0 0 6px #000;
+  transition: 0.2s ease;
 }
 
 .option-btn:hover {
@@ -128,32 +120,20 @@ h1 {
   box-shadow: 0 0 15px rgba(255,215,0,0.4);
 }
 
-/* Suspense gold state */
 .option-btn.locked {
   background: #ffd700;
   border-color: #ffea70;
   color: #000;
-  box-shadow: 0 0 20px #ffd700;
 }
 
-/* Reveal states */
 .option-btn.correct {
   background: #0f7a0f;
   border-color: #32cd32;
-  box-shadow: 0 0 20px #32cd32;
 }
 
 .option-btn.wrong {
   background: #7a0f0f;
   border-color: #ff4500;
-  box-shadow: 0 0 20px #ff4500;
-}
-
-#controls {
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
 }
 
 button.main {
@@ -165,7 +145,6 @@ button.main {
   font-weight: bold;
   cursor: pointer;
   font-size: 1.1rem;
-  transition: all 0.2s ease;
 }
 
 button.main:hover {
@@ -201,33 +180,29 @@ button.main:hover {
   border-radius: 10px;
   color: #ffd700;
   opacity: 0.25;
-  transition: opacity 0.6s ease, transform 0.6s ease, text-shadow 0.6s ease, background 0.6s ease;
+  transition: 0.6s ease;
 }
 
-/* Previous rungs = green */
 #money-ladder .ladder-item.reached {
   background: #0f7a0f;
   border-color: #32cd32;
   color: #fff;
   opacity: 1;
-  text-shadow: 0 0 14px #32cd32, 0 0 28px #32cd32;
 }
 
-/* New rung = gold animation */
 #money-ladder .ladder-item.current {
   opacity: 1;
   transform: scale(1.22);
   background: #ffd700;
   border-color: #ffea70;
   color: #000;
-  text-shadow: 0 0 22px #ffd700, 0 0 45px #ffd700;
 }
 </style>
 </head>
 
 <body>
 
-<!-- STATIC PERMANENT LADDER (lowest at bottom) -->
+<!-- PERMANENT LADDER -->
 <div id="permanent-ladder">
   <div class="ladder-item">$1</div>
   <div class="ladder-item">$100</div>
@@ -244,9 +219,7 @@ button.main:hover {
   <div id="round-info"></div>
   <div id="question"></div>
   <div class="options"></div>
-  <div id="controls">
-    <button class="main" onclick="startGame()">Start Game</button>
-  </div>
+  <button class="main" onclick="startGame()">Start Game</button>
 </div>
 
 <!-- TRANSITION SCREEN -->
@@ -262,6 +235,7 @@ button.main:hover {
 </div>
 
 <script>
+/* ROUND DEFINITIONS */
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
   { name: "Round 2", prize: "$100" },
@@ -271,6 +245,7 @@ const ROUNDS = [
   { name: "Final Round", prize: "MELLIONAIRE" }
 ];
 
+/* QUESTIONS */
 const QUESTIONS = {
   1: [
     { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
@@ -310,15 +285,18 @@ const QUESTIONS = {
   ]
 };
 
+/* GAME STATE */
 let currentRound = 0;
 let currentQuestion = null;
 
+/* START GAME */
 function startGame() {
   currentRound = 0;
-  updatePermanentLadder(currentRound);
+  updatePermanentLadder(0);
   nextRound();
 }
 
+/* LOAD NEXT ROUND */
 function nextRound() {
   if (currentRound >= ROUNDS.length) {
     document.getElementById("host").innerText = "You did it! You are officially… a Mellionaire!";
@@ -340,6 +318,7 @@ function nextRound() {
   displayQuestion();
 }
 
+/* DISPLAY QUESTION */
 function displayQuestion() {
   document.getElementById("question").innerText = currentQuestion.q;
 
@@ -355,6 +334,7 @@ function displayQuestion() {
   });
 }
 
+/* CHECK ANSWER */
 function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
@@ -381,36 +361,37 @@ function checkAnswer(button, index) {
   }, 3000);
 }
 
+/* UPDATE PERMANENT LADDER */
 function updatePermanentLadder(roundIndex) {
   const items = document.querySelectorAll("#permanent-ladder .ladder-item");
 
   items.forEach((item, i) => {
     item.classList.remove("active");
 
-    if (i < roundIndex) {
-      item.classList.add("reached");
-    }
-
-    if (i === roundIndex) {
-      item.classList.add("active");
-    }
+    if (i < roundIndex) item.classList.add("reached");
+    if (i === roundIndex) item.classList.add("active");
   });
 }
 
+/* TRANSITION LADDER */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
 
+  items.forEach(item => item.classList.remove("reached", "current"));
+
   items.forEach((item, i) => {
-    item.classList.remove("reached", "current");
     if (i <= roundIndex) item.classList.add("reached");
   });
 
   screen.style.display = "flex";
 
-  setTimeout(() => {
-    items[roundIndex + 1].classList.add("current");
-  }, 700);
+  const nextIndex = roundIndex + 1;
+  if (nextIndex < items.length) {
+    setTimeout(() => {
+      items[nextIndex].classList.add("current");
+    }, 700);
+  }
 
   setTimeout(() => {
     screen.style.display = "none";
