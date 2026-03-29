@@ -17,13 +17,13 @@ body {
   background-attachment: fixed;
 }
 
-/* PERMANENT MONEY LADDER */
+/* PERMANENT MONEY LADDER (STATIC) */
 #permanent-ladder {
   position: fixed;
   right: 20px;
   top: 120px;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column-reverse; /* lowest at bottom */
   gap: 12px;
   z-index: 10;
 }
@@ -36,9 +36,10 @@ body {
   color: #ffd700;
   opacity: 0.35;
   background: rgba(0,0,0,0.4);
-  transition: 0.4s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease, text-shadow 0.4s ease, background 0.4s ease;
 }
 
+/* Permanent green for achieved rounds */
 #permanent-ladder .ladder-item.reached {
   background: #0f7a0f;
   border-color: #32cd32;
@@ -47,13 +48,14 @@ body {
   text-shadow: 0 0 12px #32cd32;
 }
 
+/* Gold highlight for current round */
 #permanent-ladder .ladder-item.active {
   opacity: 1;
   transform: scale(1.12);
   text-shadow: 0 0 12px #ffd700, 0 0 25px #ffd700;
 }
 
-/* MAIN GAME */
+/* MAIN GAME BOX */
 #game {
   max-width: 800px;
   width: 100%;
@@ -61,6 +63,8 @@ body {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
+  position: relative;
+  overflow: hidden;
   margin-right: 200px;
 }
 
@@ -69,6 +73,7 @@ h1 {
   color: #ffd700;
   font-size: 2.2rem;
   text-shadow: 0 0 10px #000, 0 0 20px #ffd700;
+  margin-bottom: 20px;
 }
 
 #host {
@@ -84,6 +89,7 @@ h1 {
   font-weight: bold;
   color: #ffd700;
   margin-bottom: 10px;
+  text-shadow: 0 0 6px #000;
 }
 
 #question {
@@ -94,6 +100,7 @@ h1 {
   border: 2px solid #ffd700;
   border-radius: 12px;
   text-align: center;
+  text-shadow: 0 0 6px #000;
 }
 
 .options {
@@ -111,7 +118,8 @@ h1 {
   cursor: pointer;
   font-size: 1.1rem;
   text-align: left;
-  transition: 0.2s ease;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 6px #000;
 }
 
 .option-btn:hover {
@@ -120,6 +128,7 @@ h1 {
   box-shadow: 0 0 15px rgba(255,215,0,0.4);
 }
 
+/* Suspense gold state */
 .option-btn.locked {
   background: #ffd700;
   border-color: #ffea70;
@@ -127,14 +136,24 @@ h1 {
   box-shadow: 0 0 20px #ffd700;
 }
 
+/* Reveal states */
 .option-btn.correct {
   background: #0f7a0f;
   border-color: #32cd32;
+  box-shadow: 0 0 20px #32cd32;
 }
 
 .option-btn.wrong {
   background: #7a0f0f;
   border-color: #ff4500;
+  box-shadow: 0 0 20px #ff4500;
+}
+
+#controls {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 button.main {
@@ -146,6 +165,7 @@ button.main {
   font-weight: bold;
   cursor: pointer;
   font-size: 1.1rem;
+  transition: all 0.2s ease;
 }
 
 button.main:hover {
@@ -181,29 +201,33 @@ button.main:hover {
   border-radius: 10px;
   color: #ffd700;
   opacity: 0.25;
-  transition: 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease, text-shadow 0.6s ease, background 0.6s ease;
 }
 
+/* Previous rungs = green */
 #money-ladder .ladder-item.reached {
   background: #0f7a0f;
   border-color: #32cd32;
   color: #fff;
   opacity: 1;
+  text-shadow: 0 0 14px #32cd32, 0 0 28px #32cd32;
 }
 
+/* New rung = gold animation */
 #money-ladder .ladder-item.current {
   opacity: 1;
   transform: scale(1.22);
   background: #ffd700;
   border-color: #ffea70;
   color: #000;
+  text-shadow: 0 0 22px #ffd700, 0 0 45px #ffd700;
 }
 </style>
 </head>
 
 <body>
 
-<!-- PERMANENT LADDER -->
+<!-- STATIC PERMANENT LADDER (lowest at bottom) -->
 <div id="permanent-ladder">
   <div class="ladder-item">$1</div>
   <div class="ladder-item">$100</div>
@@ -220,7 +244,9 @@ button.main:hover {
   <div id="round-info"></div>
   <div id="question"></div>
   <div class="options"></div>
-  <button class="main" onclick="startGame()">Start Game</button>
+  <div id="controls">
+    <button class="main" onclick="startGame()">Start Game</button>
+  </div>
 </div>
 
 <!-- TRANSITION SCREEN -->
@@ -245,12 +271,51 @@ const ROUNDS = [
   { name: "Final Round", prize: "MELLIONAIRE" }
 ];
 
+const QUESTIONS = {
+  1: [
+    { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
+    { q: "HOW MANY SIBLINGS DOES SHE HAVE?", a: ["ZERO","ONE","TWO","THREE"], c: 1 },
+    { q: "MEL'S PARENTS NAMES ARE?", a: ["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"], c: 2 },
+    { q: "MEL'S MAIDEN NAME IS?", a: ["HIGGINS","HASKINS","HOLLOWAY","HILL"], c: 3 }
+  ],
+  2: [
+    { q: "WHAT HIGH SCHOOL DID MEL ATTEND?", a: ["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"], c: 2 },
+    { q: "WHAT IS OSCAR'S MIDDLE NAME?", a: ["JACOB","JAMES","JOHN","JOEL"], c: 1 },
+    { q: "WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?", a: ["SAXOPHONE","GUITAR","CLARINET","TUBA"], c: 0 },
+    { q: "WHAT IS MEL'S FAVOURITE SPIRIT?", a: ["RUM","GIN","VODKA","TEQUILA"], c: 1 }
+  ],
+  3: [
+    { q: "WHAT WAS THE THEME FOR MEL'S WEDDING?", a: ["PAPER","DISCO","OCEAN","ICE"], c: 0 },
+    { q: "WHERE IS SNUG COTTAGE LOCATED?", a: ["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"], c: 3 },
+    { q: "WHAT FLAVOUR WAS MEL'S WEDDING CAKE?", a: ["RED VELVET","LEMON","CHEESE","PISTACHIO"], c: 2 },
+    { q: "MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?", a: ["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"], c: 1 }
+  ],
+  4: [
+    { q: "WHAT STAR SIGN IS MEL?", a: ["GEMINI","LIBRA","SCORPIO","ARIES"], c: 3 },
+    { q: "WHAT PRIMARY SCHOOL DID MEL ATTEND?", a: ["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c: 2 },
+    { q: "WHAT POSITION DID MEL PLAY FOR NETBALL?", a: ["GK","C","GS","WD"], c: 0 },
+    { q: "WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?", a: ["COLLAR BONE","WRIST","LEG","NONE"], c: 3 }
+  ],
+  5: [
+    { q: "WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?", a: ["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"], c: 3 },
+    { q: "WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?", a: ["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"], c: 1 },
+    { q: "IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?", a: ["GERMANY","ARGENTINA","JAPAN","CANADA"], c: 2 },
+    { q: "IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?", a: ["ANDREWS","CAMDEN","MORPHETT","LOHE"], c: 3 }
+  ],
+  6: [
+    { q: "AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?", a: ["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"], c: 2 },
+    { q: "AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?", a: ["BLUE","YELLOW","GREEN","RED"], c: 0 },
+    { q: "WHAT WAS THE NAME OF MEL'S GUINEA PIG?", a: ["CHARLOTTE","GINGER","PATCHES","MISSY"], c: 1 },
+    { q: "MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?", a: ["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"], c: 3 }
+  ]
+};
+
 let currentRound = 0;
 let currentQuestion = null;
 
 function startGame() {
   currentRound = 0;
-  updatePermanentLadder(0);
+  updatePermanentLadder(currentRound);
   nextRound();
 }
 
@@ -322,8 +387,13 @@ function updatePermanentLadder(roundIndex) {
   items.forEach((item, i) => {
     item.classList.remove("active");
 
-    if (i < roundIndex) item.classList.add("reached");
-    if (i === roundIndex) item.classList.add("active");
+    if (i < roundIndex) {
+      item.classList.add("reached");
+    }
+
+    if (i === roundIndex) {
+      item.classList.add("active");
+    }
   });
 }
 
@@ -331,20 +401,16 @@ function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
 
-  items.forEach(item => item.classList.remove("reached", "current"));
-
   items.forEach((item, i) => {
+    item.classList.remove("reached", "current");
     if (i <= roundIndex) item.classList.add("reached");
   });
 
   screen.style.display = "flex";
 
-  const nextIndex = roundIndex + 1;
-  if (nextIndex < items.length) {
-    setTimeout(() => {
-      items[nextIndex].classList.add("current");
-    }, 700);
-  }
+  setTimeout(() => {
+    items[roundIndex + 1].classList.add("current");
+  }, 700);
 
   setTimeout(() => {
     screen.style.display = "none";
@@ -352,45 +418,6 @@ function showTransition(roundIndex) {
     nextRound();
   }, 3000);
 }
-
-const QUESTIONS = {
-  1: [
-    { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
-    { q: "HOW MANY SIBLINGS DOES SHE HAVE?", a: ["ZERO","ONE","TWO","THREE"], c: 1 },
-    { q: "MEL'S PARENTS NAMES ARE?", a: ["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"], c: 2 },
-    { q: "MEL'S MAIDEN NAME IS?", a: ["HIGGINS","HASKINS","HOLLOWAY","HILL"], c: 3 }
-  ],
-  2: [
-    { q: "WHAT HIGH SCHOOL DID MEL ATTEND?", a: ["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"], c: 2 },
-    { q: "WHAT IS OSCAR'S MIDDLE NAME?", a: ["JACOB","JAMES","JOHN","JOEL"], c: 1 },
-    { q: "WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?", a: ["SAXOPHONE","GUITAR","CLARINET","TUBA"], c: 0 },
-    { q: "WHAT IS MEL'S FAVOURITE SPIRIT?", a: ["RUM","GIN","VODKA","TEQUILA"], c: 1 }
-  ],
-  3: [
-    { q: "WHAT WAS THE THEME FOR MEL'S WEDDING?", a: ["PAPER","DISCO","OCEAN","ICE"], c: 0 },
-    { q: "WHERE IS SNUG COTTAGE LOCATED?", a: ["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"], c: 3 },
-    { q: "WHAT FLAVOUR WAS MEL'S WEDDING CAKE?", a: ["RED VELVET","LEMON","CHEESE","PISTACHIO"], c: 2 },
-    { q: "MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?", a: ["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"], c: 1 }
-  ],
-  4: [
-    { q: "WHAT STAR SIGN IS MEL?", a: ["GEMINI","LIBRA","SCORPIO","ARIES"], c: 3 },
-    { q: "WHAT PRIMARY SCHOOL DID MEL ATTEND?", a: ["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c: 2 },
-    { q: "WHAT POSITION DID MEL PLAY FOR NETBALL?", a: ["GK","C","GS","WD"], c: 0 },
-    { q: "WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?", a: ["COLLAR BONE","WRIST","LEG","NONE"], c: 3 }
-  ],
-  5: [
-    { q: "WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?", a: ["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"], c: 3 },
-    { q: "WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?", a: ["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"], c: 1 },
-    { q: "IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?", a: ["GERMANY","ARGENTINA","JAPAN","CANADA"], c: 2 },
-    { q: "IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?", a: ["ANDREWS","CAMDEN","MORPHETT","LOHE"], c: 3 }
-  ],
-  6: [
-    { q: "AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?", a: ["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"], c: 2 },
-    { q: "AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?", a: ["BLUE","YELLOW","GREEN","RED"], c: 0 },
-    { q: "WHAT WAS THE NAME OF MEL'S GUINEA PIG?", a: ["CHARLOTTE","GINGER","PATCHES","MISSY"], c: 1 },
-    { q: "MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?", a: ["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"], c: 3 }
-  ]
-};
 </script>
 
 </body>
