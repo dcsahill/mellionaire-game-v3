@@ -17,29 +17,33 @@ body {
   background-attachment: fixed;
 }
 
-/* LOGO */
-#logo-container {
+/* SIDE PANEL (logo + ladder together) */
+#side-panel {
   position: fixed;
   top: 20px;
-  right: 20px;
+  right: 120px; /* moves entire block left */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   z-index: 30;
 }
 
+/* LOGO */
+#logo-container {
+  margin-bottom: 20px;
+}
+
 #millionaire-logo {
-  width: 150px;
+  width: 220px; /* larger logo */
   height: auto;
   filter: drop-shadow(0 0 10px rgba(0,0,0,0.6));
 }
 
 /* PERMANENT MONEY LADDER */
 #permanent-ladder {
-  position: fixed;
-  right: 20px;
-  top: 180px;
   display: flex;
   flex-direction: column-reverse;
   gap: 12px;
-  z-index: 10;
 }
 
 #permanent-ladder .ladder-item {
@@ -75,7 +79,7 @@ body {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
-  margin-right: 200px;
+  margin-right: 300px; /* extra space for larger side panel */
 }
 
 h1 {
@@ -216,19 +220,22 @@ button.main:hover {
 
 <body>
 
-<!-- LOGO -->
-<div id="logo-container">
-  <img src="millionaire-logo.png" id="millionaire-logo" alt="Millionaire Logo">
-</div>
+<!-- SIDE PANEL (logo + ladder) -->
+<div id="side-panel">
 
-<!-- PERMANENT LADDER -->
-<div id="permanent-ladder">
-  <div class="ladder-item">$1</div>
-  <div class="ladder-item">$100</div>
-  <div class="ladder-item">$1,000</div>
-  <div class="ladder-item">$10,000</div>
-  <div class="ladder-item">$100,000</div>
-  <div class="ladder-item">MELLIONAIRE</div>
+  <div id="logo-container">
+    <img src="millionaire-logo.png" id="millionaire-logo" alt="Millionaire Logo">
+  </div>
+
+  <div id="permanent-ladder">
+    <div class="ladder-item">$1</div>
+    <div class="ladder-item">$100</div>
+    <div class="ladder-item">$1,000</div>
+    <div class="ladder-item">$10,000</div>
+    <div class="ladder-item">$100,000</div>
+    <div class="ladder-item">MELLIONAIRE</div>
+  </div>
+
 </div>
 
 <!-- MAIN GAME -->
