@@ -17,12 +17,26 @@ body {
   background-attachment: fixed;
 }
 
-/* PERMANENT MONEY LADDER */
+/* LOGO TOP RIGHT */
+#millionaire-logo {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 11;
+}
+
+#millionaire-logo img {
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 0 10px #000);
+}
+
+/* PERMANENT MONEY LADDER (RIGHT SIDE) */
 #permanent-ladder {
   position: fixed;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 20px;
+  top: 200px;
+  transform: translateY(0);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -56,7 +70,7 @@ body {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
   position: relative;
   overflow: hidden;
-  margin-left: 160px;
+  margin-right: 200px;
 }
 
 h1 {
@@ -203,6 +217,11 @@ button.main:hover {
 </head>
 
 <body>
+
+<!-- LOGO -->
+<div id="millionaire-logo">
+  <img src="mellionaire-logo.png" alt="Mellionaire Logo">
+</div>
 
 <!-- PERMANENT LADDER -->
 <div id="permanent-ladder">
@@ -378,7 +397,7 @@ function showTransition(roundIndex) {
     screen.style.display = "none";
     currentRound++;
     nextRound();
-  }, 2000);
+  }, 5000); /* 5 seconds */
 }
 </script>
 
