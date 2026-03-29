@@ -25,7 +25,7 @@ body {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
-  margin-right: 320px; /* space for logo + ladder */
+  margin-right: 320px;
 }
 
 h1 {
@@ -60,13 +60,19 @@ h1 {
   text-align: center;
 }
 
+/* 2×2 GRID FOR ANSWERS */
 .options {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+  margin-top: 20px;
 }
 
+/* ANSWER BUTTONS WITH LABELS */
 .option-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   background: linear-gradient(to bottom, #0d2a66, #081a44);
   border: 2px solid #ffd700;
   border-radius: 40px;
@@ -74,14 +80,27 @@ h1 {
   color: #f8f8f8;
   cursor: pointer;
   font-size: 1.1rem;
-  text-align: left;
   transition: 0.2s ease;
+  text-align: left;
 }
 
 .option-btn:hover {
   background: linear-gradient(to bottom, #123b8a, #0a255c);
   transform: scale(1.02);
   box-shadow: 0 0 15px rgba(255,215,0,0.4);
+}
+
+.option-label {
+  background: #ffd700;
+  color: #000;
+  font-weight: bold;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
 }
 
 .option-btn.locked {
@@ -133,14 +152,14 @@ button.main:hover {
 }
 
 #millionaire-logo {
-  width: 240px !important;   /* EXACT MATCH TO LADDER WIDTH */
+  width: 240px !important;
   height: auto;
   filter: drop-shadow(0 0 10px rgba(0,0,0,0.6));
 }
 
 /* PERMANENT MONEY LADDER */
 #permanent-ladder {
-  width: 240px; /* ensures ladder width matches logo */
+  width: 240px;
   display: flex;
   flex-direction: column-reverse;
   gap: 12px;
@@ -292,7 +311,7 @@ const QUESTIONS = {
   ],
   4: [
     { q: "WHAT STAR SIGN IS MEL?", a: ["GEMINI","LIBRA","SCORPIO","ARIES"], c: 3 },
-    { q: "WHAT PRIMARY SCHOOL DID MEL ATTEND?", a: ["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c: 2 },
+    { q: "WHAT PRIMARY SCHOOL DID MEL ATTEND?", a: ["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c: 0 },
     { q: "WHAT POSITION DID MEL PLAY FOR NETBALL?", a: ["GK","C","GS","WD"], c: 0 },
     { q: "WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?", a: ["COLLAR BONE","WRIST","LEG","NONE"], c: 3 }
   ],
@@ -313,12 +332,14 @@ const QUESTIONS = {
 let currentRound = 0;
 let currentQuestion = null;
 
+/* START GAME */
 function startGame() {
   currentRound = 0;
   updatePermanentLadder(0);
   nextRound();
 }
 
+/* LOAD NEXT ROUND */
 function nextRound() {
   if (currentRound >= ROUNDS.length) {
     document.getElementById("host").innerText = "You did it! You are officially… a Mellionaire!";
@@ -340,21 +361,35 @@ function nextRound() {
   displayQuestion();
 }
 
+/* DISPLAY QUESTION WITH A/B/C/D LABELS */
 function displayQuestion() {
   document.getElementById("question").innerText = currentQuestion.q;
 
   const optionsDiv = document.querySelector(".options");
   optionsDiv.innerHTML = "";
 
+  const labels = ["A", "B", "C", "D"];
+
   currentQuestion.a.forEach((opt, index) => {
     const btn = document.createElement("button");
     btn.className = "option-btn";
-    btn.innerText = opt;
+
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "option-label";
+    labelSpan.innerText = labels[index];
+
+    const textSpan = document.createElement("span");
+    textSpan.innerText = opt;
+
+    btn.appendChild(labelSpan);
+    btn.appendChild(textSpan);
+
     btn.onclick = () => checkAnswer(btn, index);
     optionsDiv.appendChild(btn);
   });
 }
 
+/* CHECK ANSWER */
 function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
@@ -381,6 +416,7 @@ function checkAnswer(button, index) {
   }, 3000);
 }
 
+/* UPDATE PERMANENT LADDER */
 function updatePermanentLadder(roundIndex) {
   const items = document.querySelectorAll("#permanent-ladder .ladder-item");
 
@@ -392,6 +428,7 @@ function updatePermanentLadder(roundIndex) {
   });
 }
 
+/* TRANSITION LADDER */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
