@@ -56,11 +56,19 @@ body {
   transform: scale(1.06);
 }
 
+/* GAME WRAPPER TO CENTER CONTENT */
+#game-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 /* MAIN GAME AREA */
 #game {
   max-width: 800px;
   width: 100%;
   padding: 30px;
+  padding-right: 300px; /* space for ladder */
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
@@ -270,12 +278,14 @@ h1 {
   </div>
 </div>
 
-<!-- MAIN GAME -->
-<div id="game">
-  <h1>Who Wants to Be a Mellionaire?</h1>
-  <div id="round-info"></div>
-  <div id="question"></div>
-  <div class="options"></div>
+<!-- GAME WRAPPER -->
+<div id="game-wrapper">
+  <div id="game">
+    <h1>Who Wants to Be a Mellionaire?</h1>
+    <div id="round-info"></div>
+    <div id="question"></div>
+    <div class="options"></div>
+  </div>
 </div>
 
 <!-- TRANSITION SCREEN -->
@@ -462,12 +472,4 @@ function showTransition(roundIndex) {
   }
 
   setTimeout(() => {
-    screen.style.display = "none";
-    currentRound++;
-    nextRound();
-  }, 3000);
-}
-</script>
-
-</body>
-</html>
+    screen.style.display = "none
