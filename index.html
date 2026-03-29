@@ -189,7 +189,7 @@ button.main:hover {
 
 #money-ladder {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column-reverse; /* same as permanent ladder */
   gap: 14px;
   text-align: center;
 }
@@ -401,24 +401,27 @@ function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
 
+  // Reset all states
+  items.forEach(item => item.classList.remove("reached", "current"));
+
+  // Mark all earned rungs green
   items.forEach((item, i) => {
-    item.classList.remove("reached", "current");
-    if (i <= roundIndex) item.classList.add("reached");
+    if (i <= roundIndex) {
+      item.classList.add("reached");
+    }
   });
 
   screen.style.display = "flex";
 
-  setTimeout(() => {
-    items[roundIndex + 1].classList.add("current");
-  }, 700);
+  // Animate the NEXT rung (gold)
+  const nextIndex = roundIndex + 1;
+  if (nextIndex < items.length) {
+    setTimeout(() => {
+      items[nextIndex].classList.add("current");
+    }, 700);
+  }
 
+  // Close transition and move to next round
   setTimeout(() => {
     screen.style.display = "none";
     currentRound++;
-    nextRound();
-  }, 3000);
-}
-</script>
-
-</body>
-</html>
