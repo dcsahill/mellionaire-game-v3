@@ -30,7 +30,7 @@ body {
 }
 
 #front-logo {
-  width: 480px; /* double size */
+  width: 480px;
   height: auto;
   margin-bottom: 40px;
   filter: drop-shadow(0 0 20px rgba(0,0,0,0.7));
@@ -56,24 +56,31 @@ body {
   transform: scale(1.06);
 }
 
-/* GAME WRAPPER TO CENTER CONTENT */
-#game-wrapper {
+/* MAIN LAYOUT: GAME LEFT, LADDER FIXED RIGHT */
+#layout {
   display: flex;
   justify-content: center;
   width: 100%;
+  padding-top: 40px;
 }
 
-/* MAIN GAME AREA */
+/* GAME WRAPPER (centres game area) */
+#game-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding-right: 320px; /* space for fixed ladder */
+}
+
+/* GAME AREA */
 #game {
-  max-width: 800px;
+  max-width: 650px;
   width: 100%;
   padding: 30px;
-  padding-right: 300px; /* space for ladder */
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
-  margin: 40px auto;
-  display: none; /* hidden until Start is pressed */
+  display: none;
 }
 
 h1 {
@@ -159,15 +166,15 @@ h1 {
   border-color: #ff4500;
 }
 
-/* SIDE PANEL: LOGO + LADDER */
+/* FIXED LADDER ON RIGHT */
 #side-panel {
   position: fixed;
   top: 40px;
   right: 40px;
+  width: 240px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 30;
 }
 
 #millionaire-logo {
@@ -265,7 +272,7 @@ h1 {
   <button id="start-btn" onclick="beginGame()">START GAME</button>
 </div>
 
-<!-- SIDE PANEL -->
+<!-- FIXED LADDER -->
 <div id="side-panel">
   <img src="millionaire-logo.png" id="millionaire-logo">
   <div id="permanent-ladder">
@@ -278,13 +285,15 @@ h1 {
   </div>
 </div>
 
-<!-- GAME WRAPPER -->
-<div id="game-wrapper">
-  <div id="game">
-    <h1>Who Wants to Be a Mellionaire?</h1>
-    <div id="round-info"></div>
-    <div id="question"></div>
-    <div class="options"></div>
+<!-- MAIN LAYOUT -->
+<div id="layout">
+  <div id="game-wrapper">
+    <div id="game">
+      <h1>Who Wants to Be a Mellionaire?</h1>
+      <div id="round-info"></div>
+      <div id="question"></div>
+      <div class="options"></div>
+    </div>
   </div>
 </div>
 
@@ -456,20 +465,4 @@ function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
 
-  items.forEach(item => item.classList.remove("reached", "current"));
-
-  items.forEach((item, i) => {
-    if (i <= roundIndex) item.classList.add("reached");
-  });
-
-  screen.style.display = "flex";
-
-  const nextIndex = roundIndex + 1;
-  if (nextIndex < items.length) {
-    setTimeout(() => {
-      items[nextIndex].classList.add("current");
-    }, 700);
-  }
-
-  setTimeout(() => {
-    screen.style.display = "none
+  items.forEach(item => item
