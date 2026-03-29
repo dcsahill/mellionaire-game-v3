@@ -443,7 +443,7 @@ function updatePermanentLadder(roundIndex) {
   });
 }
 
-/* FIXED TRANSITION LADDER */
+/* TRANSITION LADDER — FIXED */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(
@@ -456,12 +456,12 @@ function showTransition(roundIndex) {
   // Reset all ladder items
   items.forEach(item => item.classList.remove("reached", "current"));
 
-  // Mark reached levels (from bottom up)
+  // Mark reached levels (green)
   items.forEach((item, i) => {
-    if (i >= visualIndex) item.classList.add("reached");
+    if (i > visualIndex) item.classList.add("reached");
   });
 
-  // Highlight current level
+  // Highlight current level (yellow)
   items[visualIndex].classList.add("current");
 
   // Show transition screen
