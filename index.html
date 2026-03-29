@@ -475,4 +475,7 @@ function showTransition(roundIndex) {
   items.forEach(item => item.classList.remove("reached", "current"));
 
   items.forEach((item, i) => {
-    if (i <=
+    if (i <= roundIndex) item.classList.add("reached");
+  });
+
+  screen.style
