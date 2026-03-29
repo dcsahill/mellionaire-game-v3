@@ -153,7 +153,7 @@ h1 {
   background: #7a0f0f;
 }
 
-/* FIXED LADDER */
+/* FIXED LADDER (STATIC) */
 #side-panel {
   position: fixed;
   top: 40px;
@@ -211,9 +211,10 @@ h1 {
   z-index: 5000;
 }
 
+/* TRANSITION LADDER — MUST NOT REVERSE */
 #money-ladder {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column; /* FIXED */
   gap: 14px;
 }
 
