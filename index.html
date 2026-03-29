@@ -26,7 +26,8 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 99999; /* highest layer */
+  pointer-events: auto; /* ensure clicks work */
 }
 
 #front-logo {
@@ -57,6 +58,11 @@ body {
 }
 
 /* MAIN LAYOUT */
+#layout, #game-wrapper, #game {
+  position: relative;
+  z-index: 1; /* ensure they sit behind front page */
+}
+
 #layout {
   display: flex;
   justify-content: center;
@@ -175,6 +181,7 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  pointer-events: none; /* prevent blocking clicks */
 }
 
 #millionaire-logo {
@@ -227,7 +234,8 @@ h1 {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 5000;
+  pointer-events: none; /* prevent blocking clicks */
 }
 
 #money-ladder {
@@ -468,14 +476,3 @@ function updatePermanentLadder(roundIndex) {
 }
 
 /* TRANSITION LADDER */
-function showTransition(roundIndex) {
-  const screen = document.getElementById("transition-screen");
-  const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
-
-  items.forEach(item => item.classList.remove("reached", "current"));
-
-  items.forEach((item, i) => {
-    if (i <= roundIndex) item.classList.add("reached");
-  });
-
-  screen.style
