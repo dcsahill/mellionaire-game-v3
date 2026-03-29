@@ -56,7 +56,7 @@ body {
   transform: scale(1.06);
 }
 
-/* MAIN LAYOUT: GAME LEFT, LADDER FIXED RIGHT */
+/* MAIN LAYOUT */
 #layout {
   display: flex;
   justify-content: center;
@@ -64,7 +64,7 @@ body {
   padding-top: 40px;
 }
 
-/* GAME WRAPPER (centres game area) */
+/* GAME WRAPPER */
 #game-wrapper {
   flex: 1;
   display: flex;
@@ -115,7 +115,7 @@ h1 {
   margin-top: 20px;
 }
 
-/* ANSWER BUTTONS WITH LABELS */
+/* ANSWER BUTTONS */
 .option-btn {
   display: flex;
   align-items: center;
@@ -166,7 +166,7 @@ h1 {
   border-color: #ff4500;
 }
 
-/* FIXED LADDER ON RIGHT */
+/* FIXED LADDER */
 #side-panel {
   position: fixed;
   top: 40px;
@@ -396,7 +396,7 @@ function nextRound() {
   displayQuestion();
 }
 
-/* DISPLAY QUESTION WITH A/B/C/D LABELS */
+/* DISPLAY QUESTION */
 function displayQuestion() {
   document.getElementById("question").innerText = currentQuestion.q;
 
@@ -443,6 +443,13 @@ function checkAnswer(button, index) {
 
     } else {
       button.classList.add("wrong");
+
+      document.getElementById("round-info").innerText = "BAD LUCK!";
+      document.getElementById("transition-screen").style.display = "none";
+
+      setTimeout(() => {
+        location.reload();
+      }, 8000);
     }
 
   }, 3000);
@@ -465,4 +472,7 @@ function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
 
-  items.forEach(item => item
+  items.forEach(item => item.classList.remove("reached", "current"));
+
+  items.forEach((item, i) => {
+    if (i <=
