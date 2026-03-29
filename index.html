@@ -443,26 +443,33 @@ function updatePermanentLadder(roundIndex) {
   });
 }
 
-/* TRANSITION LADDER — FIXED */
+/* TRANSITION LADDER — FIXED TO START AT $1 */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(
     document.querySelectorAll("#money-ladder .ladder-item")
   );
 
-  // Convert logical round index → visual reversed index
-  const visualIndex = items.length - 1 - roundIndex;
+  // roundIndex maps directly to DOM index:
+  // 0 = $1
+  // 1 = $100
+  // 2 = $1,000
+  // 3 = $10,000
+  // 4 = $100,000
+  // 5 = MELLIONAIRE
+
+  const currentIndex = roundIndex;
 
   // Reset all ladder items
   items.forEach(item => item.classList.remove("reached", "current"));
 
-  // Mark reached levels (green)
+  // Mark previous levels as reached (green)
   items.forEach((item, i) => {
-    if (i > visualIndex) item.classList.add("reached");
+    if (i < currentIndex) item.classList.add("reached");
   });
 
-  // Highlight current level (yellow)
-  items[visualIndex].classList.add("current");
+  // Highlight current level (gold)
+  items[currentIndex].classList.add("current");
 
   // Show transition screen
   screen.style.display = "flex";
