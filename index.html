@@ -17,6 +17,36 @@ body {
   background-attachment: fixed;
 }
 
+/* PERMANENT MONEY LADDER */
+#permanent-ladder {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
+}
+
+#permanent-ladder .ladder-item {
+  font-size: 1.2rem;
+  padding: 8px 18px;
+  border: 2px solid #ffd700;
+  border-radius: 10px;
+  color: #ffd700;
+  opacity: 0.35;
+  background: rgba(0,0,0,0.4);
+  transition: opacity 0.4s ease, transform 0.4s ease, text-shadow 0.4s ease;
+}
+
+#permanent-ladder .ladder-item.active {
+  opacity: 1;
+  transform: scale(1.12);
+  text-shadow: 0 0 12px #ffd700, 0 0 25px #ffd700;
+}
+
+/* MAIN GAME BOX */
 #game {
   max-width: 800px;
   width: 100%;
@@ -26,6 +56,7 @@ body {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
   position: relative;
   overflow: hidden;
+  margin-left: 160px;
 }
 
 h1 {
@@ -123,10 +154,67 @@ button.main:hover {
   background: #ffea70;
   transform: scale(1.05);
 }
+
+/* TRANSITION SCREEN */
+#transition-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#money-ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: ladderIn 0.8s ease forwards;
+}
+
+@keyframes ladderIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ladder-item {
+  font-size: 1.6rem;
+  padding: 10px 24px;
+  border: 2px solid #ffd700;
+  border-radius: 10px;
+  color: #ffd700;
+  opacity: 0.35;
+  transition: opacity 0.4s ease, transform 0.4s ease, text-shadow 0.4s ease;
+}
+
+.ladder-item.active {
+  opacity: 1;
+  transform: scale(1.18);
+  text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+}
 </style>
 </head>
 
 <body>
+
+<!-- PERMANENT LADDER -->
+<div id="permanent-ladder">
+  <div class="ladder-item">$1</div>
+  <div class="ladder-item">$100</div>
+  <div class="ladder-item">$1,000</div>
+  <div class="ladder-item">$10,000</div>
+  <div class="ladder-item">$100,000</div>
+  <div class="ladder-item">MELLIONAIRE</div>
+</div>
+
+<!-- MAIN GAME -->
 <div id="game">
   <h1>Who Wants to Be a Mellionaire?</h1>
   <div id="host">Welcome to the show! Let’s see if you can become… a Mellionaire.</div>
@@ -135,6 +223,18 @@ button.main:hover {
   <div class="options"></div>
   <div id="controls">
     <button class="main" onclick="startGame()">Start Game</button>
+  </div>
+</div>
+
+<!-- TRANSITION SCREEN -->
+<div id="transition-screen">
+  <div id="money-ladder">
+    <div class="ladder-item">$1</div>
+    <div class="ladder-item">$100</div>
+    <div class="ladder-item">$1,000</div>
+    <div class="ladder-item">$10,000</div>
+    <div class="ladder-item">$100,000</div>
+    <div class="ladder-item">MELLIONAIRE</div>
   </div>
 </div>
 
@@ -192,6 +292,7 @@ let currentQuestion = null;
 
 function startGame() {
   currentRound = 0;
+  updatePermanentLadder(currentRound);
   nextRound();
 }
 
@@ -207,6 +308,8 @@ function nextRound() {
   const round = ROUNDS[currentRound];
   document.getElementById("round-info").innerText = `${round.name} – Prize: ${round.prize}`;
   document.getElementById("host").innerText = "Deep breath… here comes your next question.";
+
+  updatePermanentLadder(currentRound);
 
   const qList = QUESTIONS[currentRound + 1];
   currentQuestion = qList[Math.floor(Math.random() * qList.length)];
@@ -231,20 +334,51 @@ function displayQuestion() {
 
 function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
-
   buttons.forEach(b => b.disabled = true);
 
   if (index === currentQuestion.c) {
     button.classList.add("correct");
     document.getElementById("host").innerText = "Correct! Let’s lock that in… tension rising…";
+
     setTimeout(() => {
-      currentRound++;
-      nextRound();
-    }, 1500);
+      showTransition(currentRound);
+    }, 800);
+
   } else {
     button.classList.add("wrong");
     document.getElementById("host").innerText = "Oh no… that’s not it. Mel is shaking her head.";
   }
+}
+
+/* UPDATE PERMANENT LADDER */
+function updatePermanentLadder(roundIndex) {
+  const items = document.querySelectorAll("#permanent-ladder .ladder-item");
+  items.forEach((item, i) => {
+    item.classList.toggle("active", i === roundIndex);
+  });
+}
+
+/* TRANSITION SCREEN */
+function showTransition(roundIndex) {
+  const screen = document.getElementById("transition-screen");
+  const ladder = document.getElementById("money-ladder");
+  const items = document.querySelectorAll("#money-ladder .ladder-item");
+
+  ladder.style.animation = "none";
+  void ladder.offsetWidth;
+  ladder.style.animation = "";
+
+  items.forEach((item, i) => {
+    item.classList.toggle("active", i === roundIndex);
+  });
+
+  screen.style.display = "flex";
+
+  setTimeout(() => {
+    screen.style.display = "none";
+    currentRound++;
+    nextRound();
+  }, 2000);
 }
 </script>
 
