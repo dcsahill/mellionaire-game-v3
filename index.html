@@ -93,9 +93,160 @@ h1 {
   border-color: #32cd32;
   box-shadow: 0 0 20px #32cd32;
 }
-  
+
 .option-btn.wrong {
   background: #7a0f0f;
   border-color: #ff4500;
   box-shadow: 0 0 20px #ff4500;
 }
+
+#controls {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+button.main {
+  background: #ffd700;
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+}
+
+button.main:hover {
+  background: #ffea70;
+  transform: scale(1.05);
+}
+</style>
+</head>
+
+<body>
+<div id="game">
+  <h1>Who Wants to Be a Mellionaire?</h1>
+  <div id="host">Welcome to the show! Let’s see if you can become… a Mellionaire.</div>
+  <div id="round-info"></div>
+  <div id="question"></div>
+  <div class="options"></div>
+  <div id="controls">
+    <button class="main" onclick="startGame()">Start Game</button>
+  </div>
+</div>
+
+<script>
+const ROUNDS = [
+  { name: "Round 1", prize: "$1" },
+  { name: "Round 2", prize: "$100" },
+  { name: "Round 3", prize: "$1,000" },
+  { name: "Round 4", prize: "$10,000" },
+  { name: "Round 5", prize: "$100,000" },
+  { name: "Final Round", prize: "MELLIONAIRE" }
+];
+
+const QUESTIONS = {
+  1: [
+    { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
+    { q: "HOW MANY SIBLINGS DOES SHE HAVE?", a: ["ZERO","ONE","TWO","THREE"], c: 1 },
+    { q: "MEL'S PARENTS NAMES ARE?", a: ["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"], c: 2 },
+    { q: "MEL'S MAIDEN NAME IS?", a: ["HIGGINS","HASKINS","HOLLOWAY","HILL"], c: 3 }
+  ],
+  2: [
+    { q: "WHAT HIGH SCHOOL DID MEL ATTEND?", a: ["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"], c: 2 },
+    { q: "WHAT IS OSCAR'S MIDDLE NAME?", a: ["JACOB","JAMES","JOHN","JOEL"], c: 1 },
+    { q: "WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?", a: ["SAXOPHONE","GUITAR","CLARINET","TUBA"], c: 0 },
+    { q: "WHAT IS MEL'S FAVOURITE SPIRIT?", a: ["RUM","GIN","VODKA","TEQUILA"], c: 1 }
+  ],
+  3: [
+    { q: "WHAT WAS THE THEME FOR MEL'S WEDDING?", a: ["PAPER","DISCO","OCEAN","ICE"], c: 0 },
+    { q: "WHERE IS SNUG COTTAGE LOCATED?", a: ["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"], c: 3 },
+    { q: "WHAT FLAVOUR WAS MEL'S WEDDING CAKE?", a: ["RED VELVET","LEMON","CHEESE","PISTACHIO"], c: 2 },
+    { q: "MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?", a: ["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"], c: 1 }
+  ],
+  4: [
+    { q: "WHAT STAR SIGN IS MEL?", a: ["GEMINI","LIBRA","SCORPIO","ARIES"], c: 3 },
+    { q: "WHAT PRIMARY SCHOOL DID MEL ATTEND?", a: ["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c: 2 },
+    { q: "WHAT POSITION DID MEL PLAY FOR NETBALL?", a: ["GK","C","GS","WD"], c: 0 },
+    { q: "WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?", a: ["COLLAR BONE","WRIST","LEG","NONE"], c: 3 }
+  ],
+  5: [
+    { q: "WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?", a: ["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"], c: 3 },
+    { q: "WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?", a: ["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"], c: 1 },
+    { q: "IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?", a: ["GERMANY","ARGENTINA","JAPAN","CANADA"], c: 2 },
+    { q: "IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?", a: ["ANDREWS","CAMDEN","MORPHETT","LOHE"], c: 3 }
+  ],
+  6: [
+    { q: "AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?", a: ["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"], c: 2 },
+    { q: "AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?", a: ["BLUE","YELLOW","GREEN","RED"], c: 0 },
+    { q: "WHAT WAS THE NAME OF MEL'S GUINEA PIG?", a: ["CHARLOTTE","GINGER","PATCHES","MISSY"], c: 1 },
+    { q: "MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?", a: ["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"], c: 3 }
+  ]
+};
+
+let currentRound = 0;
+let currentQuestion = null;
+
+function startGame() {
+  currentRound = 0;
+  nextRound();
+}
+
+function nextRound() {
+  if (currentRound >= ROUNDS.length) {
+    document.getElementById("host").innerText = "You did it! You are officially… a Mellionaire!";
+    document.getElementById("round-info").innerText = "";
+    document.getElementById("question").innerText = "";
+    document.querySelector(".options").innerHTML = "";
+    return;
+  }
+
+  const round = ROUNDS[currentRound];
+  document.getElementById("round-info").innerText = `${round.name} – Prize: ${round.prize}`;
+  document.getElementById("host").innerText = "Deep breath… here comes your next question.";
+
+  const qList = QUESTIONS[currentRound + 1];
+  currentQuestion = qList[Math.floor(Math.random() * qList.length)];
+
+  displayQuestion();
+}
+
+function displayQuestion() {
+  document.getElementById("question").innerText = currentQuestion.q;
+
+  const optionsDiv = document.querySelector(".options");
+  optionsDiv.innerHTML = "";
+
+  currentQuestion.a.forEach((opt, index) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.innerText = opt;
+    btn.onclick = () => checkAnswer(btn, index);
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(button, index) {
+  const buttons = document.querySelectorAll(".option-btn");
+
+  buttons.forEach(b => b.disabled = true);
+
+  if (index === currentQuestion.c) {
+    button.classList.add("correct");
+    document.getElementById("host").innerText = "Correct! Let’s lock that in… tension rising…";
+    setTimeout(() => {
+      currentRound++;
+      nextRound();
+    }, 1500);
+  } else {
+    button.classList.add("wrong");
+    document.getElementById("host").innerText = "Oh no… that’s not it. Mel is shaking her head.";
+  }
+}
+</script>
+
+</body>
+</html>
