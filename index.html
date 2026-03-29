@@ -201,7 +201,7 @@ button.main:hover {
   border-radius: 10px;
   color: #ffd700;
   opacity: 0.25;
-  transition: opacity 0.6s ease, transform 0.6s ease, text-shadow 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease, text-shadow 0.6s ease, background 0.6s ease;
 }
 
 /* Previous rungs = green */
@@ -403,13 +403,13 @@ function showTransition(roundIndex) {
 
   items.forEach((item, i) => {
     item.classList.remove("reached", "current");
-    if (i < roundIndex) item.classList.add("reached");
+    if (i <= roundIndex) item.classList.add("reached");
   });
 
   screen.style.display = "flex";
 
   setTimeout(() => {
-    items[roundIndex].classList.add("current");
+    items[roundIndex + 1].classList.add("current");
   }, 700);
 
   setTimeout(() => {
