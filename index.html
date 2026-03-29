@@ -211,10 +211,10 @@ h1 {
   z-index: 5000;
 }
 
-/* TRANSITION LADDER — MUST NOT REVERSE */
+/* TRANSITION LADDER – TOP: MELLIONAIRE, BOTTOM: $1 */
 #money-ladder {
   display: flex;
-  flex-direction: column; /* FIXED */
+  flex-direction: column;
   gap: 14px;
 }
 
@@ -278,12 +278,12 @@ h1 {
 <!-- TRANSITION SCREEN -->
 <div id="transition-screen">
   <div id="money-ladder">
-    <div class="ladder-item">$1</div>
-    <div class="ladder-item">$100</div>
-    <div class="ladder-item">$1,000</div>
-    <div class="ladder-item">$10,000</div>
-    <div class="ladder-item">$100,000</div>
     <div class="ladder-item">MELLIONAIRE</div>
+    <div class="ladder-item">$100,000</div>
+    <div class="ladder-item">$10,000</div>
+    <div class="ladder-item">$1,000</div>
+    <div class="ladder-item">$100</div>
+    <div class="ladder-item">$1</div>
   </div>
 </div>
 
@@ -444,38 +444,28 @@ function updatePermanentLadder(roundIndex) {
   });
 }
 
-/* TRANSITION LADDER — FIXED TO START AT $1 */
+/* TRANSITION LADDER — CORRECTED */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
-  const items = Array.from(
-    document.querySelectorAll("#money-ladder .ladder-item")
-  );
+  const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
 
-  // roundIndex maps directly to DOM index:
-  // 0 = $1
-  // 1 = $100
-  // 2 = $1,000
-  // 3 = $10,000
-  // 4 = $100,000
-  // 5 = MELLIONAIRE
-
-  const currentIndex = roundIndex;
+  // Convert roundIndex (0 = $1) into visual index (0 = MELLIONAIRE)
+  const visualIndex = items.length - 1 - roundIndex;
 
   // Reset all ladder items
   items.forEach(item => item.classList.remove("reached", "current"));
 
   // Mark previous levels as reached (green)
   items.forEach((item, i) => {
-    if (i < currentIndex) item.classList.add("reached");
+    if (i > visualIndex) item.classList.add("reached");
   });
 
   // Highlight current level (gold)
-  items[currentIndex].classList.add("current");
+  items[visualIndex].classList.add("current");
 
   // Show transition screen
   screen.style.display = "flex";
 
-  // Animate for 3 seconds, then continue
   setTimeout(() => {
     screen.style.display = "none";
     currentRound++;
