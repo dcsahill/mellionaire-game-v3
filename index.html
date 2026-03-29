@@ -9,12 +9,47 @@ body {
   font-family: 'Trebuchet MS', sans-serif;
   background: radial-gradient(circle at center, #18346d 0%, #001634 80%);
   color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* FRONT PAGE */
+#front-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #18346d 0%, #001634 80%);
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  padding: 20px;
-  background-attachment: fixed;
+  align-items: center;
+  z-index: 9999;
+}
+
+#front-logo {
+  width: 360px;
+  margin-bottom: 40px;
+}
+
+#start-btn {
+  background: #ffd700;
+  color: #000;
+  padding: 16px 40px;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(255,215,0,0.6);
+  transition: 0.2s ease;
+}
+
+#start-btn:hover {
+  background: #ffea70;
+  transform: scale(1.05);
 }
 
 /* MAIN GAME AREA */
@@ -25,7 +60,8 @@ body {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
-  margin-right: 320px;
+  margin: 40px auto;
+  display: none; /* hidden until Start is pressed */
 }
 
 h1 {
@@ -35,19 +71,11 @@ h1 {
   text-shadow: 0 0 10px #000, 0 0 20px #ffd700;
 }
 
-#host {
-  background: rgba(255,255,255,0.08);
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-style: italic;
-  margin-bottom: 20px;
-  border: 1px solid rgba(255,215,0,0.3);
-}
-
 #round-info {
   font-weight: bold;
   color: #ffd700;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 #question {
@@ -119,22 +147,6 @@ h1 {
   border-color: #ff4500;
 }
 
-button.main {
-  background: #ffd700;
-  color: #000;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 20px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-button.main:hover {
-  background: #ffea70;
-  transform: scale(1.05);
-}
-
 /* SIDE PANEL: LOGO + LADDER */
 #side-panel {
   position: fixed;
@@ -146,18 +158,12 @@ button.main:hover {
   z-index: 30;
 }
 
-/* LOGO */
-#logo-container {
+#millionaire-logo {
+  width: 240px;
+  height: auto;
   margin-bottom: 20px;
 }
 
-#millionaire-logo {
-  width: 240px !important;
-  height: auto;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.6));
-}
-
-/* PERMANENT MONEY LADDER */
 #permanent-ladder {
   width: 240px;
   display: flex;
@@ -241,12 +247,15 @@ button.main:hover {
 
 <body>
 
+<!-- FRONT PAGE -->
+<div id="front-page">
+  <img src="millionaire-logo.png" id="front-logo">
+  <button id="start-btn" onclick="beginGame()">START</button>
+</div>
+
 <!-- SIDE PANEL -->
 <div id="side-panel">
-  <div id="logo-container">
-    <img src="millionaire-logo.png" id="millionaire-logo" alt="Millionaire Logo">
-  </div>
-
+  <img src="millionaire-logo.png" id="millionaire-logo">
   <div id="permanent-ladder">
     <div class="ladder-item">$1</div>
     <div class="ladder-item">$100</div>
@@ -260,11 +269,9 @@ button.main:hover {
 <!-- MAIN GAME -->
 <div id="game">
   <h1>Who Wants to Be a Mellionaire?</h1>
-  <div id="host">Welcome to the show! Let’s see if you can become… a Mellionaire.</div>
   <div id="round-info"></div>
   <div id="question"></div>
   <div class="options"></div>
-  <button class="main" onclick="startGame()">Start Game</button>
 </div>
 
 <!-- TRANSITION SCREEN -->
@@ -280,7 +287,7 @@ button.main:hover {
 </div>
 
 <script>
-/* GAME LOGIC */
+/* GAME DATA */
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
   { name: "Round 2", prize: "$100" },
@@ -332,6 +339,13 @@ const QUESTIONS = {
 let currentRound = 0;
 let currentQuestion = null;
 
+/* FRONT PAGE START */
+function beginGame() {
+  document.getElementById("front-page").style.display = "none";
+  document.getElementById("game").style.display = "block";
+  startGame();
+}
+
 /* START GAME */
 function startGame() {
   currentRound = 0;
@@ -342,8 +356,7 @@ function startGame() {
 /* LOAD NEXT ROUND */
 function nextRound() {
   if (currentRound >= ROUNDS.length) {
-    document.getElementById("host").innerText = "You did it! You are officially… a Mellionaire!";
-    document.getElementById("round-info").innerText = "";
+    document.getElementById("round-info").innerText = "You are a Mellionaire!";
     document.getElementById("question").innerText = "";
     document.querySelector(".options").innerHTML = "";
     return;
@@ -351,7 +364,6 @@ function nextRound() {
 
   const round = ROUNDS[currentRound];
   document.getElementById("round-info").innerText = `${round.name} – Prize: ${round.prize}`;
-  document.getElementById("host").innerText = "Deep breath… here comes your next question.";
 
   updatePermanentLadder(currentRound);
 
@@ -395,14 +407,12 @@ function checkAnswer(button, index) {
   buttons.forEach(b => b.disabled = true);
 
   button.classList.add("locked");
-  document.getElementById("host").innerText = "Locking that in…";
 
   setTimeout(() => {
     button.classList.remove("locked");
 
     if (index === currentQuestion.c) {
       button.classList.add("correct");
-      document.getElementById("host").innerText = "That's… correct!";
 
       setTimeout(() => {
         showTransition(currentRound);
@@ -410,7 +420,6 @@ function checkAnswer(button, index) {
 
     } else {
       button.classList.add("wrong");
-      document.getElementById("host").innerText = "Oh no… that’s not correct.";
     }
 
   }, 3000);
@@ -454,7 +463,4 @@ function showTransition(roundIndex) {
     nextRound();
   }, 3000);
 }
-</script>
-
-</body>
-</html>
+</script
