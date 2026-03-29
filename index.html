@@ -30,26 +30,30 @@ body {
 }
 
 #front-logo {
-  width: 360px;
+  width: 480px; /* double size */
+  height: auto;
   margin-bottom: 40px;
+  filter: drop-shadow(0 0 20px rgba(0,0,0,0.7));
 }
 
 #start-btn {
   background: #ffd700;
   color: #000;
-  padding: 16px 40px;
-  font-size: 1.4rem;
+  padding: 18px 50px;
+  font-size: 1.6rem;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
   font-weight: bold;
-  box-shadow: 0 0 20px rgba(255,215,0,0.6);
+  letter-spacing: 1px;
+  box-shadow: 0 0 25px rgba(255,215,0,0.6);
   transition: 0.2s ease;
+  text-transform: uppercase;
 }
 
 #start-btn:hover {
   background: #ffea70;
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 /* MAIN GAME AREA */
@@ -250,7 +254,7 @@ h1 {
 <!-- FRONT PAGE -->
 <div id="front-page">
   <img src="millionaire-logo.png" id="front-logo">
-  <button id="start-btn" onclick="beginGame()">START</button>
+  <button id="start-btn" onclick="beginGame()">START GAME</button>
 </div>
 
 <!-- SIDE PANEL -->
@@ -463,4 +467,7 @@ function showTransition(roundIndex) {
     nextRound();
   }, 3000);
 }
-</script
+</script>
+
+</body>
+</html>
