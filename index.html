@@ -17,60 +17,6 @@ body {
   background-attachment: fixed;
 }
 
-/* SIDE PANEL (logo + ladder together) */
-#side-panel {
-  position: fixed;
-  top: 20px;
-  right: 120px; /* moves entire block left */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 30;
-}
-
-/* LOGO */
-#logo-container {
-  margin-bottom: 20px;
-}
-
-#millionaire-logo {
-  width: 220px; /* larger logo */
-  height: auto;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.6));
-}
-
-/* PERMANENT MONEY LADDER */
-#permanent-ladder {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 12px;
-}
-
-#permanent-ladder .ladder-item {
-  font-size: 1.2rem;
-  padding: 8px 18px;
-  border: 2px solid #ffd700;
-  border-radius: 10px;
-  color: #ffd700;
-  opacity: 0.35;
-  background: rgba(0,0,0,0.4);
-  transition: 0.4s ease;
-}
-
-#permanent-ladder .ladder-item.reached {
-  background: #0f7a0f;
-  border-color: #32cd32;
-  color: #fff;
-  opacity: 1;
-  text-shadow: 0 0 12px #32cd32;
-}
-
-#permanent-ladder .ladder-item.active {
-  opacity: 1;
-  transform: scale(1.12);
-  text-shadow: 0 0 12px #ffd700, 0 0 25px #ffd700;
-}
-
 /* MAIN GAME */
 #game {
   max-width: 800px;
@@ -79,7 +25,7 @@ body {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
-  margin-right: 300px; /* extra space for larger side panel */
+  margin-right: 280px; /* space for logo + ladder block */
 }
 
 h1 {
@@ -170,6 +116,60 @@ button.main:hover {
   transform: scale(1.05);
 }
 
+/* SIDE PANEL: logo + ladder block */
+#side-panel {
+  position: fixed;
+  top: 40px;
+  right: 40px;          /* distance from right edge */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 30;
+}
+
+/* LOGO */
+#logo-container {
+  margin-bottom: 20px;
+}
+
+#millionaire-logo {
+  width: 220px;         /* larger logo */
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.6));
+}
+
+/* PERMANENT MONEY LADDER */
+#permanent-ladder {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 12px;
+}
+
+#permanent-ladder .ladder-item {
+  font-size: 1.2rem;
+  padding: 8px 18px;
+  border: 2px solid #ffd700;
+  border-radius: 10px;
+  color: #ffd700;
+  opacity: 0.35;
+  background: rgba(0,0,0,0.4);
+  transition: 0.4s ease;
+}
+
+#permanent-ladder .ladder-item.reached {
+  background: #0f7a0f;
+  border-color: #32cd32;
+  color: #fff;
+  opacity: 1;
+  text-shadow: 0 0 12px #32cd32;
+}
+
+#permanent-ladder .ladder-item.active {
+  opacity: 1;
+  transform: scale(1.12);
+  text-shadow: 0 0 12px #ffd700, 0 0 25px #ffd700;
+}
+
 /* TRANSITION SCREEN */
 #transition-screen {
   position: fixed;
@@ -222,7 +222,6 @@ button.main:hover {
 
 <!-- SIDE PANEL (logo + ladder) -->
 <div id="side-panel">
-
   <div id="logo-container">
     <img src="millionaire-logo.png" id="millionaire-logo" alt="Millionaire Logo">
   </div>
@@ -235,7 +234,6 @@ button.main:hover {
     <div class="ladder-item">$100,000</div>
     <div class="ladder-item">MELLIONAIRE</div>
   </div>
-
 </div>
 
 <!-- MAIN GAME -->
@@ -261,7 +259,6 @@ button.main:hover {
 </div>
 
 <script>
-/* ROUND DEFINITIONS */
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
   { name: "Round 2", prize: "$100" },
@@ -271,7 +268,6 @@ const ROUNDS = [
   { name: "Final Round", prize: "MELLIONAIRE" }
 ];
 
-/* QUESTIONS */
 const QUESTIONS = {
   1: [
     { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
@@ -311,18 +307,15 @@ const QUESTIONS = {
   ]
 };
 
-/* GAME STATE */
 let currentRound = 0;
 let currentQuestion = null;
 
-/* START GAME */
 function startGame() {
   currentRound = 0;
   updatePermanentLadder(0);
   nextRound();
 }
 
-/* LOAD NEXT ROUND */
 function nextRound() {
   if (currentRound >= ROUNDS.length) {
     document.getElementById("host").innerText = "You did it! You are officially… a Mellionaire!";
@@ -344,7 +337,6 @@ function nextRound() {
   displayQuestion();
 }
 
-/* DISPLAY QUESTION */
 function displayQuestion() {
   document.getElementById("question").innerText = currentQuestion.q;
 
@@ -360,7 +352,6 @@ function displayQuestion() {
   });
 }
 
-/* CHECK ANSWER */
 function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
@@ -387,7 +378,6 @@ function checkAnswer(button, index) {
   }, 3000);
 }
 
-/* UPDATE PERMANENT LADDER */
 function updatePermanentLadder(roundIndex) {
   const items = document.querySelectorAll("#permanent-ladder .ladder-item");
 
@@ -399,7 +389,6 @@ function updatePermanentLadder(roundIndex) {
   });
 }
 
-/* TRANSITION LADDER */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
