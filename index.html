@@ -17,27 +17,13 @@ body {
   background-attachment: fixed;
 }
 
-/* LOGO TOP RIGHT */
-#millionaire-logo {
-  position: fixed;
-  right: 20px;
-  top: 20px;
-  z-index: 11;
-}
-
-#millionaire-logo img {
-  width: 150px;
-  height: auto;
-  filter: drop-shadow(0 0 10px #000);
-}
-
-/* PERMANENT MONEY LADDER (RIGHT SIDE) */
+/* PERMANENT MONEY LADDER (STATIC) */
 #permanent-ladder {
   position: fixed;
   right: 20px;
-  top: 200px;
+  top: 120px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 12px;
   z-index: 10;
 }
@@ -132,6 +118,15 @@ h1 {
   box-shadow: 0 0 15px rgba(255,215,0,0.4);
 }
 
+/* Suspense gold state */
+.option-btn.locked {
+  background: #ffd700;
+  border-color: #ffea70;
+  color: #000;
+  box-shadow: 0 0 20px #ffd700;
+}
+
+/* Reveal states */
 .option-btn.correct {
   background: #0f7a0f;
   border-color: #32cd32;
@@ -184,52 +179,44 @@ button.main:hover {
 
 #money-ladder {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 14px;
   text-align: center;
-  opacity: 0;
-  transform: translateY(40px);
-  animation: ladderIn 0.8s ease forwards;
 }
 
-@keyframes ladderIn {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.ladder-item {
+#money-ladder .ladder-item {
   font-size: 1.6rem;
   padding: 10px 24px;
   border: 2px solid #ffd700;
   border-radius: 10px;
   color: #ffd700;
-  opacity: 0.35;
-  transition: opacity 0.4s ease, transform 0.4s ease, text-shadow 0.4s ease;
+  opacity: 0.25;
+  transition: opacity 0.6s ease, transform 0.6s ease, text-shadow 0.6s ease;
 }
 
-.ladder-item.active {
+#money-ladder .ladder-item.reached {
   opacity: 1;
-  transform: scale(1.18);
-  text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+  text-shadow: 0 0 14px #ffd700, 0 0 28px #ffd700;
+}
+
+#money-ladder .ladder-item.current {
+  opacity: 1;
+  transform: scale(1.22);
+  text-shadow: 0 0 22px #ffd700, 0 0 45px #ffd700;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGO -->
-<div id="millionaire-logo">
-  <img src="logo.png" alt="Mellionaire Logo">
-</div>
-
-<!-- PERMANENT LADDER -->
+<!-- STATIC PERMANENT LADDER -->
 <div id="permanent-ladder">
-  <div class="ladder-item">$1</div>
-  <div class="ladder-item">$100</div>
-  <div class="ladder-item">$1,000</div>
-  <div class="ladder-item">$10,000</div>
-  <div class="ladder-item">$100,000</div>
   <div class="ladder-item">MELLIONAIRE</div>
+  <div class="ladder-item">$100,000</div>
+  <div class="ladder-item">$10,000</div>
+  <div class="ladder-item">$1,000</div>
+  <div class="ladder-item">$100</div>
+  <div class="ladder-item">$1</div>
 </div>
 
 <!-- MAIN GAME -->
@@ -247,12 +234,12 @@ button.main:hover {
 <!-- TRANSITION SCREEN -->
 <div id="transition-screen">
   <div id="money-ladder">
-    <div class="ladder-item">$1</div>
-    <div class="ladder-item">$100</div>
-    <div class="ladder-item">$1,000</div>
-    <div class="ladder-item">$10,000</div>
-    <div class="ladder-item">$100,000</div>
     <div class="ladder-item">MELLIONAIRE</div>
+    <div class="ladder-item">$100,000</div>
+    <div class="ladder-item">$10,000</div>
+    <div class="ladder-item">$1,000</div>
+    <div class="ladder-item">$100</div>
+    <div class="ladder-item">$1</div>
   </div>
 </div>
 
@@ -354,21 +341,28 @@ function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
 
-  if (index === currentQuestion.c) {
-    button.classList.add("correct");
-    document.getElementById("host").innerText = "Correct! Let’s lock that in… tension rising…";
+  button.classList.add("locked");
+  document.getElementById("host").innerText = "Locking that in…";
 
-    setTimeout(() => {
-      showTransition(currentRound);
-    }, 800);
+  setTimeout(() => {
+    button.classList.remove("locked");
 
-  } else {
-    button.classList.add("wrong");
-    document.getElementById("host").innerText = "Oh no… that’s not it. Mel is shaking her head.";
-  }
+    if (index === currentQuestion.c) {
+      button.classList.add("correct");
+      document.getElementById("host").innerText = "That's… correct!";
+
+      setTimeout(() => {
+        showTransition(currentRound);
+      }, 1200);
+
+    } else {
+      button.classList.add("wrong");
+      document.getElementById("host").innerText = "Oh no… that’s not correct.";
+    }
+
+  }, 3000);
 }
 
-/* UPDATE PERMANENT LADDER */
 function updatePermanentLadder(roundIndex) {
   const items = document.querySelectorAll("#permanent-ladder .ladder-item");
   items.forEach((item, i) => {
@@ -376,27 +370,26 @@ function updatePermanentLadder(roundIndex) {
   });
 }
 
-/* TRANSITION SCREEN */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
-  const ladder = document.getElementById("money-ladder");
-  const items = document.querySelectorAll("#money-ladder .ladder-item");
-
-  ladder.style.animation = "none";
-  void ladder.offsetWidth;
-  ladder.style.animation = "";
+  const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
 
   items.forEach((item, i) => {
-    item.classList.toggle("active", i === roundIndex);
+    item.classList.remove("reached", "current");
+    if (i < roundIndex) item.classList.add("reached");
   });
 
   screen.style.display = "flex";
 
   setTimeout(() => {
+    items[roundIndex].classList.add("current");
+  }, 700);
+
+  setTimeout(() => {
     screen.style.display = "none";
     currentRound++;
     nextRound();
-  }, 5000); /* 5 seconds */
+  }, 3000);
 }
 </script>
 
