@@ -101,17 +101,6 @@ h1 {
   text-align: center;
 }
 
-/* LOCKED IN MESSAGE */
-#locked-in {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #ffd700;
-  margin-top: 10px;
-  min-height: 40px;
-  display: none;
-}
-
 /* ANSWERS */
 .options {
   display: grid;
@@ -157,6 +146,22 @@ h1 {
 
 .option-btn.wrong {
   background: #7a0f0f;
+}
+
+.option-btn.locked {
+  background: #ffd700;
+  color: #000;
+}
+
+/* LOCKED IN MESSAGE BELOW ANSWERS */
+#locked-in {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin-top: 25px;
+  min-height: 40px;
+  display: none;
 }
 
 /* FIXED LADDER */
@@ -234,10 +239,11 @@ h1 {
       <div id="round-info"></div>
       <div id="question"></div>
 
-      <!-- LOCKED IN MESSAGE -->
+      <div class="options"></div>
+
+      <!-- LOCKED IN BELOW ANSWERS -->
       <div id="locked-in"></div>
 
-      <div class="options"></div>
     </div>
   </div>
 </div>
@@ -361,34 +367,43 @@ function checkAnswer(button, index) {
   locked.innerText = "LOCKED IN";
   locked.style.display = "block";
 
-  if (index === currentQuestion.c) {
-    // CORRECT ANSWER
-    button.classList.add("correct");
+  // Selected answer turns GOLD
+  button.classList.add("locked");
 
-    setTimeout(() => {
-      locked.style.display = "none";
-      currentRound++;
-      nextRound();
-    }, 2000);
+  // WAIT 5 SECONDS BEFORE REVEALING OUTCOME
+  setTimeout(() => {
 
-  } else {
-    // WRONG ANSWER
-    button.classList.add("wrong");
-    document.getElementById("round-info").innerText = "BAD LUCK!";
+    if (index === currentQuestion.c) {
+      // CORRECT ANSWER
+      button.classList.remove("locked");
+      button.classList.add("correct");
 
-    setTimeout(() => {
+      setTimeout(() => {
+        locked.style.display = "none";
+        currentRound++;
+        nextRound();
+      }, 2000);
+
+    } else {
+      // WRONG ANSWER
+      button.classList.remove("locked");
+      button.classList.add("wrong");
+      document.getElementById("round-info").innerText = "BAD LUCK!";
+
+      // Reveal correct answer after 5 seconds
       const allButtons = document.querySelectorAll(".option-btn");
       allButtons[currentQuestion.c].classList.add("correct");
 
+      // Reset game after 2 more seconds
       setTimeout(() => {
         locked.style.display = "none";
         document.getElementById("game").style.display = "none";
         document.getElementById("front-page").style.display = "flex";
         updatePermanentLadder(0);
       }, 2000);
+    }
 
-    }, 2000);
-  }
+  }, 5000); // 5‑second suspense
 }
 
 /* UPDATE PERMANENT LADDER */
