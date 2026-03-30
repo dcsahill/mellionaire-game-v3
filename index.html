@@ -486,3 +486,39 @@ function showTransition(roundIndex) {
 
   setTimeout(() => {
     screen.style
+/* TRANSITION LADDER — SLIDING GLOW BAR */
+function showTransition(roundIndex) {
+  const screen = document.getElementById("transition-screen");
+  const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
+  const bar = document.getElementById("highlight-bar");
+
+  // Convert roundIndex (0 = $1) → visual index (0 = MELLIONAIRE)
+  const visualIndex = items.length - 1 - roundIndex;
+
+  // Reset all items
+  items.forEach(item => item.classList.remove("reached"));
+
+  // Mark previous levels as green
+  items.forEach((item, i) => {
+    if (i > visualIndex) item.classList.add("reached");
+  });
+
+  // Move the highlight bar
+  const barY = visualIndex * 62; // 48px height + 14px gap
+  bar.style.transform = `translateY(${barY}px)`;
+
+  // Show transition screen
+  screen.style.display = "flex";
+  screen.style.pointerEvents = "auto";
+
+  // Hide after animation and continue game
+  setTimeout(() => {
+    screen.style.display = "none";
+    screen.style.pointerEvents = "none";
+    currentRound++;
+    nextRound();
+  }, 3000);
+}
+</script>
+</body>
+</html>
