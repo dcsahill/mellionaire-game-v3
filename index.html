@@ -151,11 +151,6 @@ h1 {
   justify-content: center;
 }
 
-.option-btn.locked {
-  background: #ffd700;
-  color: #000;
-}
-
 .option-btn.correct {
   background: #0f7a0f;
 }
@@ -315,13 +310,6 @@ function startGame() {
 
 /* NEXT ROUND */
 function nextRound() {
-  if (currentRound >= ROUNDS.length) {
-    document.getElementById("round-info").innerText = "You are a Mellionaire!";
-    document.getElementById("question").innerText = "";
-    document.querySelector(".options").innerHTML = "";
-    return;
-  }
-
   const round = ROUNDS[currentRound];
   document.getElementById("round-info").innerText = `${round.name} – Prize: ${round.prize}`;
 
@@ -368,48 +356,39 @@ function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
 
-  // Show LOCKED IN message
+  // Show LOCKED IN immediately
   const locked = document.getElementById("locked-in");
   locked.innerText = "LOCKED IN";
   locked.style.display = "block";
 
-  button.classList.add("locked");
+  if (index === currentQuestion.c) {
+    // CORRECT ANSWER
+    button.classList.add("correct");
 
-  setTimeout(() => {
-    button.classList.remove("locked");
+    setTimeout(() => {
+      locked.style.display = "none";
+      currentRound++;
+      nextRound();
+    }, 2000);
 
-    if (index === currentQuestion.c) {
-      // CORRECT ANSWER
-      button.classList.add("correct");
+  } else {
+    // WRONG ANSWER
+    button.classList.add("wrong");
+    document.getElementById("round-info").innerText = "BAD LUCK!";
+
+    setTimeout(() => {
+      const allButtons = document.querySelectorAll(".option-btn");
+      allButtons[currentQuestion.c].classList.add("correct");
 
       setTimeout(() => {
         locked.style.display = "none";
-        currentRound++;
-        nextRound();
-      }, 1200);
-
-    } else {
-      // WRONG ANSWER
-      button.classList.add("wrong");
-      document.getElementById("round-info").innerText = "BAD LUCK!";
-
-      // After 2 seconds, highlight correct answer
-      setTimeout(() => {
-        const allButtons = document.querySelectorAll(".option-btn");
-        allButtons[currentQuestion.c].classList.add("correct");
-
-        // After another 2 seconds, reset to home
-        setTimeout(() => {
-          locked.style.display = "none";
-          document.getElementById("game").style.display = "none";
-          document.getElementById("front-page").style.display = "flex";
-          updatePermanentLadder(0);
-        }, 2000);
-
+        document.getElementById("game").style.display = "none";
+        document.getElementById("front-page").style.display = "flex";
+        updatePermanentLadder(0);
       }, 2000);
-    }
 
-  }, 3000);
+    }, 2000);
+  }
 }
 
 /* UPDATE PERMANENT LADDER */
