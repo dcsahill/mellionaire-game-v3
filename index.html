@@ -3,59 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Who Wants to Be a Mellionaire?</title>
-</head>
 
-<body>
-
-<!-- FRONT PAGE -->
-<div id="front-page">
-  <img src="millionaire-logo.png" id="front-logo">
-  <button id="start-btn" onclick="beginGame()">START GAME</button>
-</div>
-
-<!-- FIXED SIDE LADDER -->
-<div id="side-panel">
-  <img src="millionaire-logo.png" id="millionaire-logo">
-  <div id="permanent-ladder">
-    <div class="ladder-item">$1</div>
-    <div class="ladder-item">$100</div>
-    <div class="ladder-item">$1,000</div>
-    <div class="ladder-item">$10,000</div>
-    <div class="ladder-item">$100,000</div>
-    <div class="ladder-item">MELLIONAIRE</div>
-  </div>
-</div>
-
-<!-- MAIN GAME -->
-<div id="layout">
-  <div id="game-wrapper">
-    <div id="game">
-      <h1>Who Wants to Be a Mellionaire?</h1>
-      <div id="round-info"></div>
-      <div id="question"></div>
-      <div class="options"></div>
-    </div>
-  </div>
-</div>
-
-<!-- SIMPLE TRANSITION SCREEN -->
-<div id="transition-screen">
-  <div id="transition-ladder">
-
-    <!-- No highlight bar anymore -->
-    <div class="ladder-item">MELLIONAIRE</div>
-    <div class="ladder-item">$100,000</div>
-    <div class="ladder-item">$10,000</div>
-    <div class="ladder-item">$1,000</div>
-    <div class="ladder-item">$100</div>
-    <div class="ladder-item">$1</div>
-
-  </div>
-</div>
-
-<!-- SCRIPT WILL BE ADDED IN PARTS 3 & 4 -->
-</body>
-</html>
 <style>
 body {
   font-family: 'Trebuchet MS', sans-serif;
@@ -152,7 +100,8 @@ h1 {
   border-radius: 12px;
   text-align: center;
 }
-/* ANSWER BUTTONS */
+
+/* ANSWERS */
 .options {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -204,7 +153,7 @@ h1 {
   background: #7a0f0f;
 }
 
-/* FIXED SIDE LADDER */
+/* FIXED LADDER */
 #side-panel {
   position: fixed;
   top: 40px;
@@ -244,8 +193,6 @@ h1 {
 }
 
 #permanent-ladder .ladder-item.active {
-  background: #ffd700;
-  color: #000;
   opacity: 1;
   transform: scale(1.12);
 }
@@ -259,17 +206,14 @@ h1 {
   height: 100%;
   background: rgba(0,0,0,0.85);
   display: none;
-  pointer-events: none;
   justify-content: center;
   align-items: center;
   z-index: 5000;
 }
 
-/* TRANSITION LADDER (simple green/gold) */
 #money-ladder {
-  position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 14px;
 }
 
@@ -280,9 +224,6 @@ h1 {
   border-radius: 10px;
   color: #ffd700;
   opacity: 0.25;
-  height: 48px;
-  display: flex;
-  align-items: center;
 }
 
 #money-ladder .ladder-item.reached {
@@ -291,14 +232,62 @@ h1 {
   opacity: 1;
 }
 
-#money-ladder .ladder-item.active {
+#money-ladder .ladder-item.current {
+  opacity: 1;
+  transform: scale(1.22);
   background: #ffd700;
   color: #000;
-  opacity: 1;
 }
 </style>
+</head>
+
+<body>
+
+<!-- FRONT PAGE -->
+<div id="front-page">
+  <img src="millionaire-logo.png" id="front-logo">
+  <button id="start-btn" onclick="beginGame()">START GAME</button>
+</div>
+
+<!-- FIXED LADDER -->
+<div id="side-panel">
+  <img src="millionaire-logo.png" id="millionaire-logo">
+  <div id="permanent-ladder">
+    <div class="ladder-item">$1</div>
+    <div class="ladder-item">$100</div>
+    <div class="ladder-item">$1,000</div>
+    <div class="ladder-item">$10,000</div>
+    <div class="ladder-item">$100,000</div>
+    <div class="ladder-item">MELLIONAIRE</div>
+  </div>
+</div>
+
+<!-- MAIN GAME -->
+<div id="layout">
+  <div id="game-wrapper">
+    <div id="game">
+      <h1>Who Wants to Be a Mellionaire?</h1>
+      <div id="round-info"></div>
+      <div id="question"></div>
+      <div class="options"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSITION SCREEN -->
+<div id="transition-screen">
+  <div id="money-ladder">
+    <div class="ladder-item">$1</div>
+    <div class="ladder-item">$100</div>
+    <div class="ladder-item">$1,000</div>
+    <div class="ladder-item">$10,000</div>
+    <div class="ladder-item">$100,000</div>
+    <div class="ladder-item">MELLIONAIRE</div>
+  </div>
+</div>
+
 <script>
-// ROUND DEFINITIONS
+/* GAME DATA */
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
   { name: "Round 2", prize: "$100" },
@@ -308,7 +297,6 @@ const ROUNDS = [
   { name: "Final Round", prize: "MELLIONAIRE" }
 ];
 
-// QUESTIONS
 const QUESTIONS = {
   1: [
     { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
@@ -351,7 +339,7 @@ const QUESTIONS = {
 let currentRound = 0;
 let currentQuestion = null;
 
-// START GAME
+/* START GAME */
 function beginGame() {
   document.getElementById("front-page").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -364,7 +352,7 @@ function startGame() {
   nextRound();
 }
 
-// LOAD NEXT ROUND
+/* NEXT ROUND */
 function nextRound() {
   if (currentRound >= ROUNDS.length) {
     document.getElementById("round-info").innerText = "You are a Mellionaire!";
@@ -384,7 +372,7 @@ function nextRound() {
   displayQuestion();
 }
 
-// DISPLAY QUESTION
+/* DISPLAY QUESTION */
 function displayQuestion() {
   document.getElementById("question").innerText = currentQuestion.q;
 
@@ -412,7 +400,7 @@ function displayQuestion() {
   });
 }
 
-// CHECK ANSWER
+/* CHECK ANSWER */
 function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
@@ -431,6 +419,7 @@ function checkAnswer(button, index) {
 
     } else {
       button.classList.add("wrong");
+
       document.getElementById("round-info").innerText = "BAD LUCK!";
       document.getElementById("transition-screen").style.display = "none";
 
@@ -442,61 +431,42 @@ function checkAnswer(button, index) {
   }, 3000);
 }
 
-// UPDATE FIXED SIDE LADDER (simple green/gold)
+/* UPDATE PERMANENT LADDER */
 function updatePermanentLadder(roundIndex) {
   const items = document.querySelectorAll("#permanent-ladder .ladder-item");
 
   items.forEach((item, i) => {
     item.classList.remove("active");
-    item.classList.remove("reached");
 
     if (i < roundIndex) item.classList.add("reached");
     if (i === roundIndex) item.classList.add("active");
   });
 }
+
+/* TRANSITION LADDER */
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
-  const items = Array.from(document.querySelectorAll("#transition-ladder .ladder-item"));
+  const items = Array.from(
+    document.querySelectorAll("#money-ladder .ladder-item")
+  );
 
-  // Clear all states
-  items.forEach(item => {
-    item.classList.remove("reached", "active", "step-up");
-  });
+  items.forEach(item => item.classList.remove("reached", "current"));
 
-  // Convert round → ladder index (ladder is top→bottom)
-  const ladderIndex = items.length - 1 - roundIndex;
-
-  // Mark completed cells green
   items.forEach((item, i) => {
-    if (i > ladderIndex) item.classList.add("reached");
+    if (i <= roundIndex) item.classList.add("reached");
   });
 
-  // Mark next target gold
-  const goldIndex = ladderIndex - 1;
-  if (goldIndex >= 0) {
-    const goldCell = items[goldIndex];
-    goldCell.classList.add("active");
+  items[roundIndex].classList.add("current");
 
-    // Subtle upward step
-    setTimeout(() => {
-      goldCell.classList.add("step-up");
-    }, 20);
-  }
+  screen.style.display = "flex";
 
-  // Fade in transition screen
-  screen.classList.add("visible");
-
-  // Hold for 500ms after the lift
   setTimeout(() => {
-    screen.classList.remove("visible");
-
-    setTimeout(() => {
-      currentRound++;
-      nextRound();
-    }, 200);
-
-  }, 150 + 500);
+    screen.style.display = "none";
+    currentRound++;
+    nextRound();
+  }, 3000);
 }
 </script>
+
 </body>
 </html>
