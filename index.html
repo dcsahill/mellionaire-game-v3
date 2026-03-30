@@ -140,6 +140,11 @@ h1 {
   justify-content: center;
 }
 
+.option-btn.locked {
+  background: #ffd700;
+  color: #000;
+}
+
 .option-btn.correct {
   background: #0f7a0f;
 }
@@ -148,20 +153,19 @@ h1 {
   background: #7a0f0f;
 }
 
-.option-btn.locked {
-  background: #ffd700;
-  color: #000;
-}
-
-/* LOCKED IN MESSAGE BELOW ANSWERS */
+/* LOCKED IN MESSAGE AT BOTTOM OF SCREEN */
 #locked-in {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: #ffd700;
-  margin-top: 25px;
-  min-height: 40px;
+  text-shadow: 0 0 10px rgba(0,0,0,0.8);
   display: none;
+  z-index: 100000;
 }
 
 /* FIXED LADDER */
@@ -238,15 +242,13 @@ h1 {
       <h1>Who Wants to Be a Mellionaire?</h1>
       <div id="round-info"></div>
       <div id="question"></div>
-
       <div class="options"></div>
-
-      <!-- LOCKED IN BELOW ANSWERS -->
-      <div id="locked-in"></div>
-
     </div>
   </div>
 </div>
+
+<!-- LOCKED IN MESSAGE (BOTTOM OF SCREEN) -->
+<div id="locked-in">LOCKED IN</div>
 
 <script>
 /* GAME DATA */
@@ -362,19 +364,17 @@ function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
 
-  // Show LOCKED IN immediately
   const locked = document.getElementById("locked-in");
   locked.innerText = "LOCKED IN";
   locked.style.display = "block";
 
-  // Selected answer turns GOLD
+  // Selected answer turns GOLD immediately
   button.classList.add("locked");
 
-  // WAIT 5 SECONDS BEFORE REVEALING OUTCOME
+  // Pause 5 seconds before revealing outcome
   setTimeout(() => {
-
     if (index === currentQuestion.c) {
-      // CORRECT ANSWER
+      // Correct: turn green
       button.classList.remove("locked");
       button.classList.add("correct");
 
@@ -385,16 +385,14 @@ function checkAnswer(button, index) {
       }, 2000);
 
     } else {
-      // WRONG ANSWER
+      // Wrong: turn red, then show correct in green
       button.classList.remove("locked");
       button.classList.add("wrong");
       document.getElementById("round-info").innerText = "BAD LUCK!";
 
-      // Reveal correct answer after 5 seconds
       const allButtons = document.querySelectorAll(".option-btn");
       allButtons[currentQuestion.c].classList.add("correct");
 
-      // Reset game after 2 more seconds
       setTimeout(() => {
         locked.style.display = "none";
         document.getElementById("game").style.display = "none";
@@ -402,8 +400,7 @@ function checkAnswer(button, index) {
         updatePermanentLadder(0);
       }, 2000);
     }
-
-  }, 5000); // 5‑second suspense
+  }, 5000);
 }
 
 /* UPDATE PERMANENT LADDER */
