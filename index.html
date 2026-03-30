@@ -372,10 +372,11 @@ function checkAnswer(button, index) {
   // Selected answer turns GOLD immediately
   button.classList.add("locked");
 
-  // Pause 5 seconds before revealing outcome
+  // 5‑second suspense before revealing outcome
   setTimeout(() => {
+
     if (index === currentQuestion.c) {
-      // Correct: turn green
+      // CORRECT ANSWER (unchanged)
       button.classList.remove("locked");
       button.classList.add("correct");
 
@@ -392,7 +393,7 @@ function checkAnswer(button, index) {
       }, 2000);
 
     } else {
-      // Wrong: turn red, show correct in green
+      // WRONG ANSWER
       button.classList.remove("locked");
       button.classList.add("wrong");
       document.getElementById("round-info").innerText = "BAD LUCK!";
@@ -400,7 +401,7 @@ function checkAnswer(button, index) {
       const allButtons = document.querySelectorAll(".option-btn");
       allButtons[currentQuestion.c].classList.add("correct");
 
-      // 10‑second pause before returning to home screen
+      // FULL 10‑second pause AFTER reveal
       setTimeout(() => {
         locked.style.display = "none";
         document.getElementById("game").style.display = "none";
@@ -408,7 +409,8 @@ function checkAnswer(button, index) {
         updatePermanentLadder(0);
       }, 10000);
     }
-  }, 5000);
+
+  }, 5000); // 5‑second gold suspense
 }
 
 /* UPDATE PERMANENT LADDER */
