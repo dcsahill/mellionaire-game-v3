@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<html lang```html
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -198,48 +196,6 @@ h1 {
   opacity: 1;
   transform: scale(1.12);
 }
-
-/* TRANSITION SCREEN */
-#transition-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.85);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 5000;
-}
-
-#money-ladder {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 14px;
-}
-
-#money-ladder .ladder-item {
-  font-size: 1.6rem;
-  padding: 10px 24px;
-  border: 2px solid #ffd700;
-  border-radius: 10px;
-  color: #ffd700;
-  opacity: 0.25;
-}
-
-#money-ladder .ladder-item.reached {
-  background: #0f7a0f;
-  color: #fff;
-  opacity: 1;
-}
-
-#money-ladder .ladder-item.current {
-  opacity: 1;
-  transform: scale(1.22);
-  background: #ffd700;
-  color: #000;
-}
 </style>
 </head>
 
@@ -273,18 +229,6 @@ h1 {
       <div id="question"></div>
       <div class="options"></div>
     </div>
-  </div>
-</div>
-
-<!-- TRANSITION SCREEN -->
-<div id="transition-screen">
-  <div id="money-ladder">
-    <div class="ladder-item">$1</div>
-    <div class="ladder-item">$100</div>
-    <div class="ladder-item">$1,000</div>
-    <div class="ladder-item">$10,000</div>
-    <div class="ladder-item">$100,000</div>
-    <div class="ladder-item">MELLIONAIRE</div>
   </div>
 </div>
 
@@ -416,14 +360,14 @@ function checkAnswer(button, index) {
       button.classList.add("correct");
 
       setTimeout(() => {
-        showTransition(currentRound);
+        currentRound++;
+        nextRound();
       }, 1200);
 
     } else {
       button.classList.add("wrong");
 
       document.getElementById("round-info").innerText = "BAD LUCK!";
-      document.getElementById("transition-screen").style.display = "none";
 
       setTimeout(() => {
         location.reload();
@@ -443,30 +387,6 @@ function updatePermanentLadder(roundIndex) {
     if (i < roundIndex) item.classList.add("reached");
     if (i === roundIndex) item.classList.add("active");
   });
-}
-
-/* TRANSITION LADDER */
-function showTransition(roundIndex) {
-  const screen = document.getElementById("transition-screen");
-  const items = Array.from(
-    document.querySelectorAll("#money-ladder .ladder-item")
-  );
-
-  items.forEach(item => item.classList.remove("reached", "current"));
-
-  items.forEach((item, i) => {
-    if (i <= roundIndex) item.classList.add("reached");
-  });
-
-  items[roundIndex].classList.add("current");
-
-  screen.style.display = "flex";
-
-  setTimeout(() => {
-    screen.style.display = "none";
-    currentRound++;
-    nextRound();
-  }, 3000);
 }
 </script>
 
