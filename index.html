@@ -40,7 +40,7 @@
 
 <!-- SIMPLE TRANSITION SCREEN -->
 <div id="transition-screen">
-  <div id="money-ladder">
+  <div id="transition-ladder">
 
     <!-- No highlight bar anymore -->
     <div class="ladder-item">MELLIONAIRE</div>
@@ -456,7 +456,7 @@ function updatePermanentLadder(roundIndex) {
 }
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
-  const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
+  const items = Array.from(document.querySelectorAll("#transition-ladder .ladder-item"));
 
   // Clear all states
   items.forEach(item => {
@@ -488,16 +488,14 @@ function showTransition(roundIndex) {
 
   // Hold for 500ms after the lift
   setTimeout(() => {
-    // Fade out
     screen.classList.remove("visible");
 
-    // Continue game after fade-out
     setTimeout(() => {
       currentRound++;
       nextRound();
     }, 200);
 
-  }, 150 + 500); // lift duration + pause
+  }, 150 + 500);
 }
 </script>
 </body>
