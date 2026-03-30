@@ -68,6 +68,7 @@ body {
   padding-right: 320px;
 }
 
+/* GAME CARD AS FLEX COLUMN SO BOTTOM SPACE IS CONTROLLED */
 #game {
   max-width: 650px;
   width: 100%;
@@ -76,6 +77,10 @@ body {
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
   display: none;
+  display: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 70vh;
 }
 
 h1 {
@@ -153,19 +158,15 @@ h1 {
   background: #7a0f0f;
 }
 
-/* LOCKED IN MESSAGE AT BOTTOM OF SCREEN */
+/* LOCKED IN MESSAGE IN THE BOTTOM SPACE OF GAME CARD */
 #locked-in {
-  position: fixed;
-  bottom: 20px;
-  left: 0;
-  width: 100%;
+  margin-top: auto;          /* pushes it to the bottom of the card */
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #ffd700;
-  text-shadow: 0 0 10px rgba(0,0,0,0.8);
+  min-height: 40px;
   display: none;
-  z-index: 100000;
 }
 
 /* FIXED LADDER */
@@ -243,12 +244,12 @@ h1 {
       <div id="round-info"></div>
       <div id="question"></div>
       <div class="options"></div>
+
+      <!-- LOCKED IN SITS IN THE BOTTOM SPACE OF THIS CARD -->
+      <div id="locked-in"></div>
     </div>
   </div>
 </div>
-
-<!-- LOCKED IN MESSAGE (BOTTOM OF SCREEN) -->
-<div id="locked-in">LOCKED IN</div>
 
 <script>
 /* GAME DATA */
@@ -306,7 +307,7 @@ let currentQuestion = null;
 /* START GAME */
 function beginGame() {
   document.getElementById("front-page").style.display = "none";
-  document.getElementById("game").style.display = "block";
+  document.getElementById("game").style.display = "flex";
   startGame();
 }
 
@@ -327,6 +328,7 @@ function nextRound() {
   currentQuestion = qList[Math.floor(Math.random() * qList.length)];
 
   document.getElementById("locked-in").style.display = "none";
+  document.getElementById("locked-in").innerText = "";
 
   displayQuestion();
 }
@@ -381,11 +383,17 @@ function checkAnswer(button, index) {
       setTimeout(() => {
         locked.style.display = "none";
         currentRound++;
-        nextRound();
+        if (currentRound >= ROUNDS.length) {
+          document.getElementById("round-info").innerText = "You are a Mellionaire!";
+          document.querySelector(".options").innerHTML = "";
+          document.getElementById("question").innerText = "";
+        } else {
+          nextRound();
+        }
       }, 2000);
 
     } else {
-      // Wrong: turn red, then show correct in green
+      // Wrong: turn red, show correct in green
       button.classList.remove("locked");
       button.classList.add("wrong");
       document.getElementById("round-info").innerText = "BAD LUCK!";
