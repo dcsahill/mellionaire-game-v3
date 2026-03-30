@@ -80,7 +80,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 70vh;
-  position: relative;
 }
 
 h1 {
@@ -156,37 +155,6 @@ h1 {
 
 .option-btn.wrong {
   background: #7a0f0f;
-}
-
-/* HOST SPEECH BUBBLE */
-#host-bubble {
-  position: absolute;
-  bottom: 140px;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 480px;
-  padding: 20px 28px;
-  background: #ffffff;
-  color: #000;
-  border-radius: 20px;
-  font-size: 1.4rem;
-  font-weight: bold;
-  text-align: center;
-  box-shadow: 0 0 25px rgba(0,0,0,0.4);
-  border: 4px solid #ffd700;
-  display: none;
-  z-index: 5000;
-}
-
-#host-bubble::after {
-  content: "";
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 20px 20px 0 20px;
-  border-style: solid;
-  border-color: #ffffff transparent transparent transparent;
 }
 
 /* LOCKED IN MESSAGE */
@@ -276,9 +244,6 @@ h1 {
       <div id="question"></div>
       <div class="options"></div>
 
-      <!-- HOST SPEECH BUBBLE -->
-      <div id="host-bubble"></div>
-
       <!-- LOCKED IN MESSAGE -->
       <div id="locked-in"></div>
     </div>
@@ -286,16 +251,6 @@ h1 {
 </div>
 
 <script>
-/* HOST LINES */
-const HOST_LINES = [
-  "Brilliant! You're on fire!",
-  "That’s the spirit! Keep climbing!",
-  "You’re making this look easy!",
-  "A flawless answer! The crowd goes wild!",
-  "You were born for this game!",
-  "Another one! You’re unstoppable!"
-];
-
 /* GAME DATA */
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
@@ -421,21 +376,10 @@ function checkAnswer(button, index) {
   setTimeout(() => {
 
     if (index === currentQuestion.c) {
-      // CORRECT ANSWER
+      // CORRECT ANSWER (unchanged)
       button.classList.remove("locked");
       button.classList.add("correct");
 
-      // Show host bubble instantly
-      const bubble = document.getElementById("host-bubble");
-      bubble.innerText = HOST_LINES[Math.floor(Math.random() * HOST_LINES.length)];
-      bubble.style.display = "block";
-
-      // Hide bubble after 2 seconds
-      setTimeout(() => {
-        bubble.style.display = "none";
-      }, 2000);
-
-      // Continue to next round after short pause
       setTimeout(() => {
         locked.style.display = "none";
         currentRound++;
@@ -455,4 +399,32 @@ function checkAnswer(button, index) {
       document.getElementById("round-info").innerText = "BAD LUCK!";
 
       const allButtons = document.querySelectorAll(".option-btn");
-      allButtons[currentQuestion.c
+      allButtons[currentQuestion.c].classList.add("correct");
+
+      // FULL 10‑second pause AFTER reveal
+      setTimeout(() => {
+        locked.style.display = "none";
+        document.getElementById("game").style.display = "none";
+        document.getElementById("front-page").style.display = "flex";
+        updatePermanentLadder(0);
+      }, 10000);
+    }
+
+  }, 5000); // 5‑second gold suspense
+}
+
+/* UPDATE PERMANENT LADDER */
+function updatePermanentLadder(roundIndex) {
+  const items = document.querySelectorAll("#permanent-ladder .ladder-item");
+
+  items.forEach((item, i) => {
+    item.classList.remove("active");
+
+    if (i < roundIndex) item.classList.add("reached");
+    if (i === roundIndex) item.classList.add("active");
+  });
+}
+</script>
+
+</body>
+</html>
