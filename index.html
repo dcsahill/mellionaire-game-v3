@@ -68,7 +68,7 @@ body {
   padding-right: 320px;
 }
 
-/* GAME CARD AS FLEX COLUMN SO BOTTOM SPACE IS CONTROLLED */
+/* GAME CARD */
 #game {
   max-width: 650px;
   width: 100%;
@@ -76,7 +76,6 @@ body {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
-  display: none;
   display: none;
   display: flex;
   flex-direction: column;
@@ -158,9 +157,9 @@ h1 {
   background: #7a0f0f;
 }
 
-/* LOCKED IN MESSAGE IN THE BOTTOM SPACE OF GAME CARD */
+/* LOCKED IN MESSAGE */
 #locked-in {
-  margin-top: auto;          /* pushes it to the bottom of the card */
+  margin-top: auto;
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
@@ -245,7 +244,7 @@ h1 {
       <div id="question"></div>
       <div class="options"></div>
 
-      <!-- LOCKED IN SITS IN THE BOTTOM SPACE OF THIS CARD -->
+      <!-- LOCKED IN MESSAGE -->
       <div id="locked-in"></div>
     </div>
   </div>
@@ -401,12 +400,13 @@ function checkAnswer(button, index) {
       const allButtons = document.querySelectorAll(".option-btn");
       allButtons[currentQuestion.c].classList.add("correct");
 
+      // 10‑second pause before returning to home screen
       setTimeout(() => {
         locked.style.display = "none";
         document.getElementById("game").style.display = "none";
         document.getElementById("front-page").style.display = "flex";
         updatePermanentLadder(0);
-      }, 2000);
+      }, 10000);
     }
   }, 5000);
 }
