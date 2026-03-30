@@ -233,14 +233,6 @@ h1 {
 </div>
 
 <script>
-/* SHUFFLE FUNCTION */
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
 /* GAME DATA */
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
@@ -321,8 +313,7 @@ function nextRound() {
   updatePermanentLadder(currentRound);
 
   const qList = QUESTIONS[currentRound + 1];
-  shuffle(qList);
-  currentQuestion = qList[0];
+  currentQuestion = qList[Math.floor(Math.random() * qList.length)];
 
   displayQuestion();
 }
@@ -375,21 +366,20 @@ function checkAnswer(button, index) {
       }, 1200);
 
     } else {
-      // WRONG ANSWER: show red, then reveal correct in green, then reset to home
+      // WRONG ANSWER: show red, then reveal correct in green, then reset
       button.classList.add("wrong");
       document.getElementById("round-info").innerText = "BAD LUCK!";
 
       // After 2 seconds, highlight the correct answer in green
       setTimeout(() => {
         const allButtons = document.querySelectorAll(".option-btn");
-        allButtons[currentQuestion.c].classList.add("correct");
+        if (allButtons[currentQuestion.c]) {
+          allButtons[currentQuestion.c].classList.add("correct");
+        }
 
-        // After another 2 seconds, reset back to home screen
+        // After another 2 seconds, reload to go back to home screen
         setTimeout(() => {
-          currentRound = 0;
-          document.getElementById("game").style.display = "none";
-          document.getElementById("front-page").style.display = "flex";
-          updatePermanentLadder(0);
+          location.reload();
         }, 2000);
 
       }, 2000);
