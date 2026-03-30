@@ -454,42 +454,50 @@ function updatePermanentLadder(roundIndex) {
     if (i === roundIndex) item.classList.add("active");
   });
 }
-// SIMPLE TRANSITION LADDER (green = reached, gold = next)
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
 
   // Clear all states
   items.forEach(item => {
-    item.classList.remove("reached");
-    item.classList.remove("active");
+    item.classList.remove("reached", "active", "step-up");
   });
 
-  // Convert roundIndex to ladder index (ladder is top→bottom, rounds bottom→top)
-  const visualIndex = items.length - 1 - roundIndex;
+  // Convert round → ladder index (ladder is top→bottom)
+  const ladderIndex = items.length - 1 - roundIndex;
 
-  // Mark completed rounds green
+  // Mark completed cells green
   items.forEach((item, i) => {
-    if (i > visualIndex) item.classList.add("reached");
+    if (i > ladderIndex) item.classList.add("reached");
   });
 
-  // Mark next round gold
-  const nextIndex = visualIndex - 1;
-  if (nextIndex >= 0) {
-    items[nextIndex].classList.add("active");
+  // Mark next target gold
+  const goldIndex = ladderIndex - 1;
+  if (goldIndex >= 0) {
+    const goldCell = items[goldIndex];
+    goldCell.classList.add("active");
+
+    // Subtle upward step
+    setTimeout(() => {
+      goldCell.classList.add("step-up");
+    }, 20);
   }
 
-  // Show transition screen
-  screen.style.display = "flex";
-  screen.style.pointerEvents = "auto";
+  // Fade in transition screen
+  screen.classList.add("visible");
 
-  // Hide after 2 seconds and continue
+  // Hold for 500ms after the lift
   setTimeout(() => {
-    screen.style.display = "none";
-    screen.style.pointerEvents = "none";
-    currentRound++;
-    nextRound();
-  }, 2000);
+    // Fade out
+    screen.classList.remove("visible");
+
+    // Continue game after fade-out
+    setTimeout(() => {
+      currentRound++;
+      nextRound();
+    }, 200);
+
+  }, 150 + 500); // lift duration + pause
 }
 </script>
 </body>
