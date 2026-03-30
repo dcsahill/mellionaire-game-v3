@@ -101,6 +101,17 @@ h1 {
   text-align: center;
 }
 
+/* LOCKED IN MESSAGE */
+#locked-in {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin-top: 10px;
+  min-height: 40px;
+  display: none;
+}
+
 /* ANSWERS */
 .options {
   display: grid;
@@ -227,6 +238,10 @@ h1 {
       <h1>Who Wants to Be a Mellionaire?</h1>
       <div id="round-info"></div>
       <div id="question"></div>
+
+      <!-- LOCKED IN MESSAGE -->
+      <div id="locked-in"></div>
+
       <div class="options"></div>
     </div>
   </div>
@@ -315,6 +330,8 @@ function nextRound() {
   const qList = QUESTIONS[currentRound + 1];
   currentQuestion = qList[Math.floor(Math.random() * qList.length)];
 
+  document.getElementById("locked-in").style.display = "none";
+
   displayQuestion();
 }
 
@@ -351,6 +368,11 @@ function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
 
+  // Show LOCKED IN message
+  const locked = document.getElementById("locked-in");
+  locked.innerText = "LOCKED IN";
+  locked.style.display = "block";
+
   button.classList.add("locked");
 
   setTimeout(() => {
@@ -361,24 +383,24 @@ function checkAnswer(button, index) {
       button.classList.add("correct");
 
       setTimeout(() => {
+        locked.style.display = "none";
         currentRound++;
         nextRound();
       }, 1200);
 
     } else {
-      // WRONG ANSWER: show red, then reveal correct in green, then reset
+      // WRONG ANSWER
       button.classList.add("wrong");
       document.getElementById("round-info").innerText = "BAD LUCK!";
 
-      // After 2 seconds, highlight the correct answer in green
+      // After 2 seconds, highlight correct answer
       setTimeout(() => {
         const allButtons = document.querySelectorAll(".option-btn");
-        if (allButtons[currentQuestion.c]) {
-          allButtons[currentQuestion.c].classList.add("correct");
-        }
+        allButtons[currentQuestion.c].classList.add("correct");
 
-        // After another 2 seconds, reload to go back to home screen
+        // After another 2 seconds, reset to home
         setTimeout(() => {
+          locked.style.display = "none";
           location.reload();
         }, 2000);
 
