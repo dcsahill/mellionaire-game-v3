@@ -413,12 +413,12 @@ function checkAnswer(button, index) {
   }, 5000); // 5‑second gold suspense
 }
 
-/* UPDATE PERMANENT LADDER */
+/* FIXED LADDER RESET */
 function updatePermanentLadder(roundIndex) {
   const items = document.querySelectorAll("#permanent-ladder .ladder-item");
 
   items.forEach((item, i) => {
-    item.classList.remove("active");
+    item.classList.remove("active", "reached");
 
     if (i < roundIndex) item.classList.add("reached");
     if (i === roundIndex) item.classList.add("active");
