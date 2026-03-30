@@ -13,7 +13,7 @@
   <button id="start-btn" onclick="beginGame()">START GAME</button>
 </div>
 
-<!-- FIXED LADDER -->
+<!-- FIXED SIDE LADDER -->
 <div id="side-panel">
   <img src="millionaire-logo.png" id="millionaire-logo">
   <div id="permanent-ladder">
@@ -38,23 +38,22 @@
   </div>
 </div>
 
-<!-- TRANSITION SCREEN -->
+<!-- SIMPLE TRANSITION SCREEN -->
 <div id="transition-screen">
   <div id="money-ladder">
 
-    <!-- IMPORTANT: highlight bar MUST be first -->
-    <div id="highlight-bar"></div>
-
+    <!-- No highlight bar anymore -->
     <div class="ladder-item">MELLIONAIRE</div>
     <div class="ladder-item">$100,000</div>
     <div class="ladder-item">$10,000</div>
     <div class="ladder-item">$1,000</div>
     <div class="ladder-item">$100</div>
     <div class="ladder-item">$1</div>
+
   </div>
 </div>
 
-<!-- SCRIPT WILL BE ADDED IN PART 3 & 4 -->
+<!-- SCRIPT WILL BE ADDED IN PARTS 3 & 4 -->
 </body>
 </html>
 <style>
@@ -245,6 +244,8 @@ h1 {
 }
 
 #permanent-ladder .ladder-item.active {
+  background: #ffd700;
+  color: #000;
   opacity: 1;
   transform: scale(1.12);
 }
@@ -264,26 +265,12 @@ h1 {
   z-index: 5000;
 }
 
-/* TRANSITION LADDER */
+/* TRANSITION LADDER (simple green/gold) */
 #money-ladder {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 14px;
-}
-
-#highlight-bar {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 48px;
-  background: rgba(255,215,0,0.35);
-  border: 2px solid #ffd700;
-  border-radius: 10px;
-  box-shadow: 0 0 25px #ffd700;
-  transition: transform 0.6s ease-out;
-  pointer-events: none;
-  z-index: -1;
 }
 
 #money-ladder .ladder-item {
@@ -303,9 +290,15 @@ h1 {
   color: #fff;
   opacity: 1;
 }
+
+#money-ladder .ladder-item.active {
+  background: #ffd700;
+  color: #000;
+  opacity: 1;
+}
 </style>
 <script>
-// ROUND DATA
+// ROUND DEFINITIONS
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
   { name: "Round 2", prize: "$100" },
@@ -391,7 +384,7 @@ function nextRound() {
   displayQuestion();
 }
 
-// DISPLAY QUESTION + ANSWERS
+// DISPLAY QUESTION
 function displayQuestion() {
   document.getElementById("question").innerText = currentQuestion.q;
 
@@ -438,7 +431,6 @@ function checkAnswer(button, index) {
 
     } else {
       button.classList.add("wrong");
-
       document.getElementById("round-info").innerText = "BAD LUCK!";
       document.getElementById("transition-screen").style.display = "none";
 
@@ -450,18 +442,19 @@ function checkAnswer(button, index) {
   }, 3000);
 }
 
-// UPDATE FIXED SIDE LADDER
+// UPDATE FIXED SIDE LADDER (simple green/gold)
 function updatePermanentLadder(roundIndex) {
   const items = document.querySelectorAll("#permanent-ladder .ladder-item");
 
   items.forEach((item, i) => {
     item.classList.remove("active");
+    item.classList.remove("reached");
 
     if (i < roundIndex) item.classList.add("reached");
     if (i === roundIndex) item.classList.add("active");
   });
 }
-// TRANSITION LADDER ANIMATION
+// SIMPLE TRANSITION LADDER (green = reached, gold = next)
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
@@ -472,29 +465,32 @@ function showTransition(roundIndex) {
     item.classList.remove("active");
   });
 
+  // Convert roundIndex to ladder index (ladder is top→bottom, rounds bottom→top)
+  const visualIndex = items.length - 1 - roundIndex;
+
   // Mark completed rounds green
   items.forEach((item, i) => {
-    if (i > items.length - 1 - roundIndex) {
-      item.classList.add("reached");
-    }
+    if (i > visualIndex) item.classList.add("reached");
   });
 
   // Mark next round gold
-  const nextIndex = items.length - 1 - roundIndex - 1;
+  const nextIndex = visualIndex - 1;
   if (nextIndex >= 0) {
     items[nextIndex].classList.add("active");
   }
 
-  // Show transition screen briefly
+  // Show transition screen
   screen.style.display = "flex";
+  screen.style.pointerEvents = "auto";
 
+  // Hide after 2 seconds and continue
   setTimeout(() => {
     screen.style.display = "none";
+    screen.style.pointerEvents = "none";
     currentRound++;
     nextRound();
   }, 2000);
 }
-
 </script>
 </body>
 </html>
