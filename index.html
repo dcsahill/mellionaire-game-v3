@@ -321,10 +321,8 @@ function nextRound() {
   updatePermanentLadder(currentRound);
 
   const qList = QUESTIONS[currentRound + 1];
-
-  shuffle(qList); // SHUFFLE QUESTIONS FOR THIS ROUND
-
-  currentQuestion = qList[0]; // TAKE FIRST QUESTION FROM SHUFFLED LIST
+  shuffle(qList);
+  currentQuestion = qList[0];
 
   displayQuestion();
 }
@@ -381,7 +379,11 @@ function checkAnswer(button, index) {
       document.getElementById("round-info").innerText = "BAD LUCK!";
 
       setTimeout(() => {
-        startGame(); // restart without reload
+        // Reset to home screen
+        currentRound = 0;
+        document.getElementById("game").style.display = "none";
+        document.getElementById("front-page").style.display = "flex";
+        updatePermanentLadder(0);
       }, 3000);
     }
 
