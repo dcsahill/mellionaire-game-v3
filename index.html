@@ -465,46 +465,36 @@ function updatePermanentLadder(roundIndex) {
 function showTransition(roundIndex) {
   const screen = document.getElementById("transition-screen");
   const items = Array.from(document.querySelectorAll("#money-ladder .ladder-item"));
-  const bar = document.getElementById("highlight-bar");
 
-  // Convert roundIndex (0 = $1) → visual index (0 = MELLIONAIRE)
-  const visualIndex = items.length - 1 - roundIndex;
+  // Clear all states
+  items.forEach(item => {
+    item.classList.remove("reached");
+    item.classList.remove("active");
+  });
 
-  // Reset all items
-  items.forEach(item => item.classList.remove("reached"));
-
-  // Mark previous levels as green
+  // Mark completed rounds green
   items.forEach((item, i) => {
-    if (i > visualIndex) item.classList.add("reached");
+    if (i > items.length - 1 - roundIndex) {
+      item.classList.add("reached");
+    }
   });
 
-  // Show transition screen
+  // Mark next round gold
+  const nextIndex = items.length - 1 - roundIndex - 1;
+  if (nextIndex >= 0) {
+    items[nextIndex].classList.add("active");
+  }
+
+  // Show transition screen briefly
   screen.style.display = "flex";
-  screen.style.pointerEvents = "auto";
 
-  // Reset animation
-  bar.style.transition = "none";
-  bar.style.transform = "translateY(0px)";
-
-  requestAnimationFrame(() => {
-    // Measure actual row height (including padding, borders, line-height)
-    const rowHeight = items[0].offsetHeight + 14; // 14px gap between rows
-
-    // Calculate correct Y position
-    const barY = visualIndex * rowHeight;
-
-    bar.style.transition = "transform 0.6s ease-out";
-    bar.style.transform = `translateY(${barY}px)`;
-  });
-
-  // Hide after animation and continue game
   setTimeout(() => {
     screen.style.display = "none";
-    screen.style.pointerEvents = "none";
     currentRound++;
     nextRound();
-  }, 3000);
+  }, 2000);
 }
+
 </script>
 </body>
 </html>
