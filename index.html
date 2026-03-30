@@ -366,6 +366,7 @@ function checkAnswer(button, index) {
     button.classList.remove("locked");
 
     if (index === currentQuestion.c) {
+      // CORRECT ANSWER
       button.classList.add("correct");
 
       setTimeout(() => {
@@ -374,17 +375,24 @@ function checkAnswer(button, index) {
       }, 1200);
 
     } else {
+      // WRONG ANSWER: show red, then reveal correct in green, then reset to home
       button.classList.add("wrong");
-
       document.getElementById("round-info").innerText = "BAD LUCK!";
 
+      // After 2 seconds, highlight the correct answer in green
       setTimeout(() => {
-        // Reset to home screen
-        currentRound = 0;
-        document.getElementById("game").style.display = "none";
-        document.getElementById("front-page").style.display = "flex";
-        updatePermanentLadder(0);
-      }, 3000);
+        const allButtons = document.querySelectorAll(".option-btn");
+        allButtons[currentQuestion.c].classList.add("correct");
+
+        // After another 2 seconds, reset back to home screen
+        setTimeout(() => {
+          currentRound = 0;
+          document.getElementById("game").style.display = "none";
+          document.getElementById("front-page").style.display = "flex";
+          updatePermanentLadder(0);
+        }, 2000);
+
+      }, 2000);
     }
 
   }, 3000);
