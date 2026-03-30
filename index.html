@@ -476,6 +476,35 @@ function showTransition(roundIndex) {
     if (i > visualIndex) item.classList.add("reached");
   });
 
+  // Show transition screen
+  screen.style.display = "flex";
+  screen.style.pointerEvents = "auto";
+
+  // Force animation restart
+  bar.style.transition = "none";
+  bar.style.transform = "translateY(0px)";
+
+  requestAnimationFrame(() => {
+    // Measure actual row height (including padding, borders, line-height)
+    const rowHeight = items[0].offsetHeight + 14; // 14px gap between rows
+
+    // Calculate correct Y position
+    const barY = visualIndex * rowHeight;
+
+    bar.style.transition = "transform 0.6s ease-out";
+    bar.style.transform = `translateY(${barY}px)`;
+  });
+
+  // Hide after animation
+  setTimeout(() => {
+    screen.style.display = "none";
+    screen.style.pointerEvents = "none";
+    currentRound++;
+    nextRound();
+  }, 3000);
+}
+
+
   // Move the highlight bar
   const barY = visualIndex * 62; // 48px height + 14px gap
   bar.style.transform = `translateY(${barY}px)`;
