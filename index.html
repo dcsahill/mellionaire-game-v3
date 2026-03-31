@@ -14,14 +14,14 @@ body {
   overflow-x: hidden;
 }
 
-/* FRONT PAGE */
+/* FRONT PAGE WITH IMAGE BACKGROUND */
 #front-page {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, #18346d 0%, #001634 80%);
+  background: #000;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,23 +29,14 @@ body {
   z-index: 99999;
 }
 
-/* Dancer + Logo Row */
-#front-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 40px;
-}
-
-.front-dancer {
-  width: 480px;      /* same size as logo */
-  height: auto;
-}
-
-#front-logo {
-  width: 480px;
-  height: auto;
+#front-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 }
 
 #start-btn {
@@ -60,6 +51,7 @@ body {
   letter-spacing: 1px;
   box-shadow: 0 0 25px rgba(255,215,0,0.6);
   transition: 0.2s ease;
+  z-index: 1;
 }
 
 #start-btn:hover {
@@ -67,7 +59,7 @@ body {
   transform: scale(1.06);
 }
 
-/* MAIN LAYOUT — shifted down by 180px */
+/* MAIN LAYOUT */
 #layout {
   display: flex;
   justify-content: center;
@@ -93,9 +85,7 @@ body {
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
   display: none;
-  display: flex;
   flex-direction: column;
-  margin-top: 0;
 }
 
 h1 {
@@ -234,13 +224,7 @@ h1 {
 
 <!-- FRONT PAGE -->
 <div id="front-page">
-
-  <div id="front-row">
-    <img src="dancer-left.png" class="front-dancer">
-    <img src="millionaire-logo.png" id="front-logo">
-    <img src="dancer-right.png" class="front-dancer">
-  </div>
-
+  <img src="front-page-background.png" id="front-background">
   <button id="start-btn" onclick="beginGame()">START GAME</button>
 </div>
 
@@ -271,8 +255,7 @@ h1 {
 </div>
 
 <script>
-/* GAME LOGIC (unchanged) */
-
+/* GAME DATA */
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
   { name: "Round 2", prize: "$100" },
