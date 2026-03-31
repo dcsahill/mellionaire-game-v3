@@ -60,16 +60,15 @@ body {
   width: 100%;
 }
 
-/* THIS is what actually shifts the game down */
+/* GAME WRAPPER */
 #game-wrapper {
   flex: 1;
   display: flex;
   justify-content: center;
   padding-right: 320px;
-  margin-top: 120px;   /* ← REAL downward shift */
 }
 
-/* GAME CARD */
+/* GAME CARD — THIS is what actually moves down */
 #game {
   max-width: 650px;
   width: 100%;
@@ -81,6 +80,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 70vh;
+  margin-top: 120px;   /* ← REAL downward shift */
 }
 
 h1 {
