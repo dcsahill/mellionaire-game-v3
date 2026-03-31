@@ -68,7 +68,7 @@ body {
   padding-right: 320px;
 }
 
-/* GAME CARD — SMALL UPWARD SHIFT */
+/* GAME CARD — min-height removed to eliminate blank space */
 #game {
   max-width: 650px;
   width: 100%;
@@ -79,8 +79,7 @@ body {
   display: none;
   display: flex;
   flex-direction: column;
-  min-height: 70vh;
-  margin-top: 90px;   /* ← SMALLER SHIFT (was 120px) */
+  margin-top: 90px;   /* your adjusted upward shift */
 }
 
 h1 {
@@ -160,7 +159,7 @@ h1 {
 
 /* LOCKED IN MESSAGE */
 #locked-in {
-  margin-top: auto;
+  margin-top: 20px;
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
@@ -169,10 +168,10 @@ h1 {
   display: none;
 }
 
-/* FIXED LADDER — SAME DOWNWARD SHIFT */
+/* FIXED LADDER */
 #side-panel {
   position: fixed;
-  top: 120px;     /* ← ladder stays here unless you want it moved too */
+  top: 120px;
   right: 120px;
   width: 240px;
   display: flex;
