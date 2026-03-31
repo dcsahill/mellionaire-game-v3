@@ -29,9 +29,23 @@ body {
   z-index: 99999;
 }
 
+/* Dancer + Logo Row */
+#front-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.front-dancer {
+  width: 480px;      /* same size as logo */
+  height: auto;
+}
+
 #front-logo {
   width: 480px;
-  margin-bottom: 40px;
+  height: auto;
 }
 
 #start-btn {
@@ -59,7 +73,7 @@ body {
   justify-content: center;
   width: 100%;
   position: relative;
-  top: 180px;   /* ← updated shift */
+  top: 180px;
 }
 
 /* GAME WRAPPER */
@@ -220,7 +234,13 @@ h1 {
 
 <!-- FRONT PAGE -->
 <div id="front-page">
-  <img src="millionaire-logo.png" id="front-logo">
+
+  <div id="front-row">
+    <img src="dancer-left.png" class="front-dancer">
+    <img src="millionaire-logo.png" id="front-logo">
+    <img src="dancer-right.png" class="front-dancer">
+  </div>
+
   <button id="start-btn" onclick="beginGame()">START GAME</button>
 </div>
 
@@ -245,15 +265,14 @@ h1 {
       <div id="round-info"></div>
       <div id="question"></div>
       <div class="options"></div>
-
-      <!-- LOCKED IN MESSAGE -->
       <div id="locked-in"></div>
     </div>
   </div>
 </div>
 
 <script>
-/* GAME DATA */
+/* GAME LOGIC (unchanged) */
+
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
   { name: "Round 2", prize: "$100" },
@@ -305,7 +324,6 @@ const QUESTIONS = {
 let currentRound = 0;
 let currentQuestion = null;
 
-/* START GAME */
 function beginGame() {
   document.getElementById("front-page").style.display = "none";
   document.getElementById("game").style.display = "flex";
@@ -318,7 +336,6 @@ function startGame() {
   nextRound();
 }
 
-/* NEXT ROUND */
 function nextRound() {
   const round = ROUNDS[currentRound];
   document.getElementById("round-info").innerText = `${round.name} – Prize: ${round.prize}`;
@@ -334,7 +351,6 @@ function nextRound() {
   displayQuestion();
 }
 
-/* DISPLAY QUESTION */
 function displayQuestion() {
   document.getElementById("question").innerText = currentQuestion.q;
 
@@ -362,7 +378,6 @@ function displayQuestion() {
   });
 }
 
-/* CHECK ANSWER */
 function checkAnswer(button, index) {
   const buttons = document.querySelectorAll(".option-btn");
   buttons.forEach(b => b.disabled = true);
@@ -371,14 +386,10 @@ function checkAnswer(button, index) {
   locked.innerText = "LOCKED IN";
   locked.style.display = "block";
 
-  // Selected answer turns GOLD immediately
   button.classList.add("locked");
 
-  // 5‑second suspense before revealing outcome
   setTimeout(() => {
-
     if (index === currentQuestion.c) {
-      // CORRECT ANSWER
       button.classList.remove("locked");
       button.classList.add("correct");
 
@@ -395,7 +406,6 @@ function checkAnswer(button, index) {
       }, 2000);
 
     } else {
-      // WRONG ANSWER
       button.classList.remove("locked");
       button.classList.add("wrong");
       document.getElementById("round-info").innerText = "BAD LUCK!";
@@ -403,7 +413,6 @@ function checkAnswer(button, index) {
       const allButtons = document.querySelectorAll(".option-btn");
       allButtons[currentQuestion.c].classList.add("correct");
 
-      // FULL 10‑second pause AFTER reveal
       setTimeout(() => {
         locked.style.display = "none";
         document.getElementById("game").style.display = "none";
@@ -411,11 +420,9 @@ function checkAnswer(button, index) {
         updatePermanentLadder(0);
       }, 10000);
     }
-
-  }, 5000); // 5‑second gold suspense
+  }, 5000);
 }
 
-/* FIXED LADDER RESET */
 function updatePermanentLadder(roundIndex) {
   const items = document.querySelectorAll("#permanent-ladder .ladder-item");
 
