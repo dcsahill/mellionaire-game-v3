@@ -65,7 +65,7 @@ body {
   flex: 1;
   display: flex;
   justify-content: center;
-  padding-left: 320px;   /* moved from right → left */
+  padding-right: 320px;
 }
 
 /* GAME CARD */
@@ -168,11 +168,11 @@ h1 {
   display: none;
 }
 
-/* FIXED LADDER — NOW ON THE LEFT */
+/* FIXED LADDER — MEDIUM SHIFT LEFT */
 #side-panel {
   position: fixed;
   top: 40px;
-  left: 40px;   /* moved from right → left */
+  right: 120px;   /* ← medium shift */
   width: 240px;
   display: flex;
   flex-direction: column;
@@ -222,7 +222,7 @@ h1 {
   <button id="start-btn" onclick="beginGame()">START GAME</button>
 </div>
 
-<!-- FIXED LADDER (LEFT SIDE) -->
+<!-- FIXED LADDER -->
 <div id="side-panel">
   <img src="millionaire-logo.png" id="millionaire-logo">
   <div id="permanent-ladder">
