@@ -58,14 +58,15 @@ body {
   display: flex;
   justify-content: center;
   width: 100%;
-  padding-top: 120px;   /* shifted down */
 }
 
+/* THIS is what actually shifts the game down */
 #game-wrapper {
   flex: 1;
   display: flex;
   justify-content: center;
   padding-right: 320px;
+  margin-top: 120px;   /* ← REAL downward shift */
 }
 
 /* GAME CARD */
@@ -171,8 +172,8 @@ h1 {
 /* FIXED LADDER — MEDIUM SHIFT DOWN + MEDIUM SHIFT LEFT */
 #side-panel {
   position: fixed;
-  top: 120px;     /* shifted down */
-  right: 120px;   /* medium left shift */
+  top: 120px;     /* ← downward shift */
+  right: 120px;   /* ← medium left shift */
   width: 240px;
   display: flex;
   flex-direction: column;
