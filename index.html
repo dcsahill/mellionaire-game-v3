@@ -53,11 +53,13 @@ body {
   transform: scale(1.06);
 }
 
-/* MAIN LAYOUT */
+/* MAIN LAYOUT – shifted down */
 #layout {
   display: flex;
   justify-content: center;
   width: 100%;
+  position: relative;
+  top: 140px;   /* medium downward shift for the whole game area */
 }
 
 /* GAME WRAPPER */
@@ -68,7 +70,7 @@ body {
   padding-right: 320px;
 }
 
-/* GAME CARD — MEDIUM DOWNWARD SHIFT */
+/* GAME CARD */
 #game {
   max-width: 650px;
   width: 100%;
@@ -79,7 +81,7 @@ body {
   display: none;
   display: flex;
   flex-direction: column;
-  margin-top: 140px;   /* ← MEDIUM SHIFT DOWN */
+  margin-top: 0;   /* let #layout handle the vertical shift */
 }
 
 h1 {
