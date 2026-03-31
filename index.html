@@ -1,422 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Who Wants to Be a Mellionaire?</title>
+  <meta charset="UTF-8" />
+  <title>Who Wants to Be a Mellionaire?</title>
+  <style>
+    body {
+      font-family: 'Trebuchet MS', sans-serif;
+      background: radial-gradient(circle at center, #18346d 0%, #001634 80%);
+      color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
 
-<style>
-body {
-  font-family: 'Trebuchet MS', sans-serif;
-  background: radial-gradient(circle at center, #18346d 0%, #001634 80%);
-  color: #f8f8f8;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
+    /* FRONT PAGE */
+    #front-page {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+    }
 
-/* FRONT PAGE WITH IMAGE BACKGROUND */
-#front-page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-}
+    #front-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
 
-#front-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-}
+    #start-btn {
+      background: #ffd700;
+      color: #000;
+      padding: 18px 50px;
+      font-size: 1.6rem;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 0 25px rgba(255,215,0,0.6);
+      transition: 0.2s ease;
+      z-index: 1;
+    }
 
-#start-btn {
-  background: #ffd700;
-  color: #000;
-  padding: 18px 50px;
-  font-size: 1.6rem;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: bold;
-  letter-spacing: 1px;
-  box-shadow: 0 0 25px rgba(255,215,0,0.6);
-  transition: 0.2s ease;
-  z-index: 1;
-}
+    #start-btn:hover {
+      background: #ffea70;
+      transform: scale(1.06);
+    }
 
-#start-btn:hover {
-  background: #ffea70;
-  transform: scale(1.06);
-}
+    /* MAIN LAYOUT */
+    #layout {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+      top: 180px;
+    }
 
-/* MAIN LAYOUT */
-#layout {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  position: relative;
-  top: 180px;
-}
+    #game-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding-right: 320px;
+    }
 
-/* GAME WRAPPER */
-#game-wrapper {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding-right: 320px;
-}
+    #game {
+      max-width: 650px;
+      width: 100%;
+      padding: 30px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.55);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
+      display: none;
+      flex-direction: column;
+    }
 
-/* GAME CARD */
-#game {
-  max-width: 650px;
-  width: 100%;
-  padding: 30px;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.55);
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px #001f54 inset;
-  display: none;
-  flex-direction: column;
-}
+    h1 {
+      text-align: center;
+      color: #ffd700;
+      font-size: 2.2rem;
+    }
 
-h1 {
-  text-align: center;
-  color: #ffd700;
-  font-size: 2.2rem;
-}
+    #round-info {
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 10px;
+      text-align: center;
+    }
 
-#round-info {
-  font-weight: bold;
-  color: #ffd700;
-  margin-bottom: 10px;
-  text-align: center;
-}
+    #question {
+      font-size: 1.3rem;
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(0,0,0,0.4);
+      border: 2px solid #ffd700;
+      border-radius: 12px;
+      text-align: center;
+    }
 
-#question {
-  font-size: 1.3rem;
-  margin: 20px 0;
-  padding: 15px;
-  background: rgba(0,0,0,0.4);
-  border: 2px solid #ffd700;
-  border-radius: 12px;
-  text-align: center;
-}
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 24px;
+      margin-top: 20px;
+    }
 
-/* ANSWERS */
-.options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px 24px;
-  margin-top: 20px;
-}
+    .option-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(to bottom, #0d2a66, #081a44);
+      border: 2px solid #ffd700;
+      border-radius: 40px;
+      padding: 14px 20px;
+      color: #f8f8f8;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: 0.2s ease;
+    }
 
-.option-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: linear-gradient(to bottom, #0d2a66, #081a44);
-  border: 2px solid #ffd700;
-  border-radius: 40px;
-  padding: 14px 20px;
-  color: #f8f8f8;
-  cursor: pointer;
-  font-size: 1.1rem;
-  transition: 0.2s ease;
-}
+    .option-btn:hover {
+      background: linear-gradient(to bottom, #123b8a, #0a255c);
+      transform: scale(1.02);
+    }
 
-.option-btn:hover {
-  background: linear-gradient(to bottom, #123b8a, #0a255c);
-  transform: scale(1.02);
-}
+    .option-label {
+      background: #ffd700;
+      color: #000;
+      font-weight: bold;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.option-label {
-  background: #ffd700;
-  color: #000;
-  font-weight: bold;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .option-btn.locked {
+      background: #ffd700;
+      color: #000;
+    }
 
-.option-btn.locked {
-  background: #ffd700;
-  color: #000;
-}
+    .option-btn.correct {
+      background: #0f7a0f;
+    }
 
-.option-btn.correct {
-  background: #0f7a0f;
-}
+    .option-btn.wrong {
+      background: #7a0f0f;
+    }
 
-.option-btn.wrong {
-  background: #7a0f0f;
-}
+    #locked-in {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffd700;
+      min-height: 40px;
+      display: none;
+    }
 
-/* LOCKED IN MESSAGE */
-#locked-in {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #ffd700;
-  min-height: 40px;
-  display: none;
-}
+    #side-panel {
+      position: fixed;
+      top: 120px;
+      right: 120px;
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-/* FIXED LADDER */
-#side-panel {
-  position: fixed;
-  top: 120px;
-  right: 120px;
-  width: 240px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    #millionaire-logo {
+      width: 240px;
+      margin-bottom: 20px;
+    }
 
-#millionaire-logo {
-  width: 240px;
-  margin-bottom: 20px;
-}
+    #permanent-ladder {
+      width: 240px;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 12px;
+    }
 
-#permanent-ladder {
-  width: 240px;
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 12px;
-}
+    #permanent-ladder .ladder-item {
+      font-size: 1.2rem;
+      padding: 8px 18px;
+      border: 2px solid #ffd700;
+      border-radius: 10px;
+      color: #ffd700;
+      opacity: 0.35;
+      background: rgba(0,0,0,0.4);
+    }
 
-#permanent-ladder .ladder-item {
-  font-size: 1.2rem;
-  padding: 8px 18px;
-  border: 2px solid #ffd700;
-  border-radius: 10px;
-  color: #ffd700;
-  opacity: 0.35;
-  background: rgba(0,0,0,0.4);
-}
+    #permanent-ladder .ladder-item.reached {
+      background: #0f7a0f;
+      color: #fff;
+      opacity: 1;
+    }
 
-#permanent-ladder .ladder-item.reached {
-  background: #0f7a0f;
-  color: #fff;
-  opacity: 1;
-}
-
-#permanent-ladder .ladder-item.active {
-  opacity: 1;
-  transform: scale(1.12);
-}
-</style>
+    #permanent-ladder .ladder-item.active {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- FRONT PAGE -->
-<div id="front-page">
-  <img src="front-page-background.png" id="front-background">
-  <button id="start-btn" onclick="beginGame()">START GAME</button>
-</div>
-
-<!-- FIXED LADDER -->
-<div id="side-panel">
-  <img src="millionaire-logo.png" id="millionaire-logo">
-  <div id="permanent-ladder">
-    <div class="ladder-item">$1</div>
-    <div class="ladder-item">$100</div>
-    <div class="ladder-item">$1,000</div>
-    <div class="ladder-item">$10,000</div>
-    <div class="ladder-item">$100,000</div>
-    <div class="ladder-item">MELLIONAIRE</div>
+  <!-- FRONT PAGE -->
+  <div id="front-page">
+    <img src="front-page-background.png" id="front-background">
+    <button id="start-btn" onclick="beginGame()">START GAME</button>
   </div>
-</div>
 
-<!-- MAIN GAME -->
-<div id="layout">
-  <div id="game-wrapper">
-    <div id="game">
-      <h1>Who Wants to Be a Mellionaire?</h1>
-      <div id="round-info"></div>
-      <div id="question"></div>
-      <div class="options"></div>
-      <div id="locked-in"></div>
+  <!-- LADDER -->
+  <div id="side-panel">
+    <img src="millionaire-logo.png" id="millionaire-logo">
+    <div id="permanent-ladder">
+      <div class="ladder-item">$1</div>
+      <div class="ladder-item">$100</div>
+      <div class="ladder-item">$1,000</div>
+      <div class="ladder-item">$10,000</div>
+      <div class="ladder-item">$100,000</div>
+      <div class="ladder-item">MELLIONAIRE</div>
     </div>
   </div>
-</div>
 
-<script>
-/* GAME DATA */
-const ROUNDS = [
-  { name: "Round 1", prize: "$1" },
-  { name: "Round 2", prize: "$100" },
-  { name: "Round 3", prize: "$1,000" },
-  { name: "Round 4", prize: "$10,000" },
-  { name: "Round 5", prize: "$100,000" },
-  { name: "Final Round", prize: "MELLIONAIRE" }
-];
+  <!-- GAME -->
+  <div id="layout">
+    <div id="game-wrapper">
+      <div id="game">
+        <h1>Who Wants to Be a Mellionaire?</h1>
+        <div id="round-info"></div>
+        <div id="question"></div>
+        <div class="options"></div>
+        <div id="locked-in"></div>
+      </div>
+    </div>
+  </div>
 
-const QUESTIONS = {
-  1: [
-    { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
-    { q: "HOW MANY SIBLINGS DOES SHE HAVE?", a: ["ZERO","ONE","TWO","THREE"], c: 1 },
-    { q: "MEL'S PARENTS NAMES ARE?", a: ["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"], c: 2 },
-    { q: "MEL'S MAIDEN NAME IS?", a: ["HIGGINS","HASKINS","HOLLOWAY","HILL"], c: 3 }
-  ],
-  2: [
-    { q: "WHAT HIGH SCHOOL DID MEL ATTEND?", a: ["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"], c: 2 },
-    { q: "WHAT IS OSCAR'S MIDDLE NAME?", a: ["JACOB","JAMES","JOHN","JOEL"], c: 1 },
-    { q: "WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?", a: ["SAXOPHONE","GUITAR","CLARINET","TUBA"], c: 0 },
-    { q: "WHAT IS MEL'S FAVOURITE SPIRIT?", a: ["RUM","GIN","VODKA","TEQUILA"], c: 1 }
-  ],
-  3: [
-    { q: "WHAT WAS THE THEME FOR MEL'S WEDDING?", a: ["PAPER","DISCO","OCEAN","ICE"], c: 0 },
-    { q: "WHERE IS SNUG COTTAGE LOCATED?", a: ["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"], c: 3 },
-    { q: "WHAT FLAVOUR WAS MEL'S WEDDING CAKE?", a: ["RED VELVET","LEMON","CHEESE","PISTACHIO"], c: 2 },
-    { q: "MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?", a: ["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"], c: 1 }
-  ],
-  4: [
-    { q: "WHAT STAR SIGN IS MEL?", a: ["GEMINI","LIBRA","SCORPIO","ARIES"], c: 3 },
-    { q: "WHAT PRIMARY SCHOOL DID MEL ATTEND?", a: ["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c: 0 },
-    { q: "WHAT POSITION DID MEL PLAY FOR NETBALL?", a: ["GK","C","GS","WD"], c: 0 },
-    { q: "WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?", a: ["COLLAR BONE","WRIST","LEG","NONE"], c: 3 }
-  ],
-  5: [
-    { q: "WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?", a: ["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"], c: 3 },
-    { q: "WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?", a: ["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"], c: 1 },
-    { q: "IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?", a: ["GERMANY","ARGENTINA","JAPAN","CANADA"], c: 2 },
-    { q: "IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?", a: ["ANDREWS","CAMDEN","MORPHETT","LOHE"], c: 3 }
-  ],
-  6: [
-    { q: "AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?", a: ["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"], c: 2 },
-    { q: "AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?", a: ["BLUE","YELLOW","GREEN","RED"], c: 0 },
-    { q: "WHAT WAS THE NAME OF MEL'S GUINEA PIG?", a: ["CHARLOTTE","GINGER","PATCHES","MISSY"], c: 1 },
-    { q: "MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?", a: ["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"], c: 3 }
-  ]
-};
+  <script>
+    const ROUNDS = [
+      { name: "Round 1", prize: "$1" },
+      { name: "Round 2", prize: "$100" },
+      { name: "Round 3", prize: "$1,000" },
+      { name: "Round 4", prize: "$10,000" },
+      { name: "Round 5", prize: "$100,000" },
+      { name: "Final Round", prize: "MELLIONAIRE" }
+    ];
 
-let currentRound = 0;
-let currentQuestion = null;
+    const QUESTIONS = {
+      1: [
+        { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
+        { q: "HOW MANY SIBLINGS DOES SHE HAVE?", a: ["ZERO","ONE","TWO","THREE"], c: 1 },
+        { q: "MEL'S PARENTS NAMES ARE?", a: ["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"], c: 2 },
+        { q: "MEL'S MAIDEN NAME IS?", a: ["HIGGINS","HASKINS","HOLLOWAY","HILL"], c: 3 }
+      ],
+      2: [
+        { q: "WHAT HIGH SCHOOL DID MEL ATTEND?", a: ["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"], c: 2 },
+        { q: "WHAT IS OSCAR'S MIDDLE NAME?", a: ["JACOB","JAMES","JOHN","JOEL"], c: 1 },
+        { q: "WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?", a: ["SAXOPHONE","GUITAR","CLARINET","TUBA"], c: 0 },
+        { q: "WHAT IS MEL'S FAVOURITE SPIRIT?", a: ["RUM","GIN","VODKA","TEQUILA"], c: 1 }
+      ],
+      3: [
+        { q: "WHAT WAS THE THEME FOR MEL'S WEDDING?", a: ["PAPER","DISCO","OCEAN","ICE"], c: 0 },
+        { q: "WHERE IS SNUG COTTAGE LOCATED?", a: ["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"], c: 3 },
+        { q: "WHAT FLAVOUR WAS MEL'S WEDDING CAKE?", a: ["RED VELVET","LEMON","CHEESE","PISTACHIO"], c: 2 },
+        { q: "MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?", a: ["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"], c: 1 }
+      ],
+      4: [
+        { q: "WHAT STAR SIGN IS MEL?", a: ["GEMINI","LIBRA","SCORPIO","ARIES"], c: 3 },
+        { q: "WHAT PRIMARY SCHOOL DID MEL ATTEND?", a: ["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c: 0 },
+        { q: "WHAT POSITION DID MEL PLAY FOR NETBALL?", a: ["GK","C","GS","WD"], c: 0 },
+        { q: "WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?", a: ["COLLAR BONE","WRIST","LEG","NONE"], c: 3 }
+      ],
+      5: [
+        { q: "WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?", a: ["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"], c: 3 },
+        { q: "WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?", a: ["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"], c: 1 },
+        { q: "IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?", a: ["GERMANY","ARGENTINA","JAPAN","CANADA"], c: 2 },
+        { q: "IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?", a: ["ANDREWS","CAMDEN","MORPHETT","LOHE"], c: 3 }
+      ],
+      6: [
+        { q: "AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?", a: ["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"], c: 2 },
+        { q: "AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?", a: ["BLUE","YELLOW","GREEN","RED"], c: 0 },
+        { q: "WHAT WAS THE NAME OF MEL'S GUINEA PIG?", a: ["CHARLOTTE","GINGER","PATCHES","MISSY"], c: 1 },
+        { q: "MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?", a: ["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"], c: 3 }
+      ]
+    };
 
-function beginGame() {
-  document.getElementById("front-page").style.display = "none";
-  document.getElementById("game").style.display = "flex";
-  startGame();
-}
+    let currentRound = 0;
+    let currentQuestion = null;
 
-function startGame() {
-  currentRound = 0;
-  updatePermanentLadder(0);
-  nextRound();
-}
-
-function nextRound() {
-  const round = ROUNDS[currentRound];
-  document.getElementById("round-info").innerText = `${round.name} – Prize: ${round.prize}`;
-
-  updatePermanentLadder(currentRound);
-
-  const qList = QUESTIONS[currentRound + 1];
-  currentQuestion = qList[Math.floor(Math.random() * qList.length)];
-
-  document.getElementById("locked-in").style.display = "none";
-  document.getElementById("locked-in").innerText = "";
-
-  displayQuestion();
-}
-
-function displayQuestion() {
-  document.getElementById("question").innerText = currentQuestion.q;
-
-  const optionsDiv = document.querySelector(".options");
-  optionsDiv.innerHTML = "";
-
-  const labels = ["A", "B", "C", "D"];
-
-  currentQuestion.a.forEach((opt, index) => {
-    const btn = document.createElement("button");
-    btn.className = "option-btn";
-
-    const labelSpan = document.createElement("span");
-    labelSpan.className = "option-label";
-    labelSpan.innerText = labels[index];
-
-    const textSpan = document.createElement("span");
-    textSpan.innerText = opt;
-
-    btn.appendChild(labelSpan);
-    btn.appendChild(textSpan);
-
-    btn.onclick = () => checkAnswer(btn, index);
-    optionsDiv.appendChild(btn);
-  });
-}
-
-function checkAnswer(button, index) {
-  const buttons = document.querySelectorAll(".option-btn");
-  buttons.forEach(b => b.disabled = true);
-
-  const locked = document.getElementById("locked-in");
-  locked.innerText = "LOCKED IN";
-  locked.style.display = "block";
-
-  button.classList.add("locked");
-
-  setTimeout(() => {
-    if (index === currentQuestion.c) {
-      button.classList.remove("locked");
-      button.classList.add("correct");
-
-      setTimeout(() => {
-        locked.style.display = "none";
-        currentRound++;
-        if (currentRound >= ROUNDS.length) {
-          document.getElementById("round-info").innerText = "You are a Mellionaire!";
-          document.querySelector(".options").innerHTML = "";
-          document.getElementById("question").innerText = "";
-        } else {
-          nextRound();
-        }
-      }, 2000);
-
-    } else {
-      button.classList.remove("locked");
-      button.classList.add("wrong");
-      document.getElementById("round-info").innerText = "BAD LUCK!";
-
-      const allButtons = document.querySelectorAll(".option-btn");
-      allButtons[currentQuestion.c].classList.add("correct");
-
-      setTimeout(() => {
-        locked.style.display = "none";
-        document.getElementById("game").style.display = "none";
-        document.getElementById("front-page").style.display = "flex";
-        updatePermanentLadder(0);
-      }, 10000);
+    function beginGame() {
+      document.getElementById("front-page").style.display = "none";
+      document.getElementById("game").style.display = "flex";
+      startGame();
     }
-  }, 5000);
-}
 
-function updatePermanentLadder(roundIndex) {
-  const items = document.querySelectorAll("#permanent-ladder .ladder-item");
+    function startGame() {
+      currentRound = 0;
+      updatePermanentLadder(0);
+      nextRound();
+    }
 
-  items.forEach((item, i) => {
-    item.classList.remove("active", "reached");
+    function nextRound() {
+      const round = ROUNDS[currentRound];
+      document.getElementById("round-info").innerText =
+        `${round.name} – Prize: ${round.prize}`;
 
-    if (i < roundIndex) item.classList.add("reached");
-    if (i === roundIndex) item.classList.add("active");
-  });
-}
-</script>
+      updatePermanentLadder(currentRound);
+
+      const qList = QUESTIONS[currentRound + 1];
+      currentQuestion = qList[Math.floor(Math.random() * qList.length)];
+
+      const locked = document.getElementById("locked-in");
+      locked.style.display = "none";
+      locked.innerText = "";
+
+      displayQuestion();
+    }
+
+    function displayQuestion() {
+      document.getElementById("question").innerText = currentQuestion.q;
+
+      const optionsDiv = document.querySelector(".options");
+      optionsDiv.innerHTML = "";
+
+      const labels = ["A", "B", "C", "D"];
+
+      currentQuestion.a.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "option-label";
+        labelSpan.innerText = labels[index];
+
+        const textSpan = document.createElement("span");
+        textSpan.innerText = opt;
+
+        btn.appendChild(labelSpan);
+        btn.appendChild(textSpan);
+
+        btn.onclick = () => checkAnswer(btn, index);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(button, index) {
+      const buttons = document.querySelectorAll(".option-btn");
+      buttons.forEach(b => b.disabled = true);
+
+      const locked = document.getElementById("locked-in");
+      locked.innerText = "LOCKED IN";
+      locked.style.display = "block";
+
+      button.classList.add("locked");
+
+      setTimeout(() => {
+        if (index === currentQuestion.c) {
+          button.classList.remove("locked");
+          button.classList.add("correct");
+
+          setTimeout(() => {
+            locked.style.display = "none";
+            currentRound++;
+            if (currentRound >= ROUNDS.length) {
+              document.getElementById("round-info").innerText =
+                "You are a Mellionaire!";
+              document.querySelector(".options").innerHTML = "";
+              document.getElementById("question").innerText = "";
+            } else {
+              nextRound();
+            }
+          }, 2000);
+
+        } else {
+          button.classList.remove("locked");
+          button.classList.add("wrong");
+          document.getElementById("round-info").innerText = "BAD LUCK!";
+
+          const allButtons = document.querySelectorAll(".option-btn");
+          allButtons[currentQuestion.c].classList.add("correct");
+
+          setTimeout(() => {
+            locked.style.display = "none";
+            document.getElementById("game").style.display = "none";
+            document.getElementById("front-page").style.display = "flex";
+            updatePermanentLadder(0);
+          }, 10000);
+        }
+      }, 5000);
+    }
+
+    function updatePermanentLadder(roundIndex) {
+      const items = document.querySelectorAll("#permanent-ladder .ladder-item");
+
+      items.forEach((item, i) => {
+        item.classList.remove("active", "reached");
+        if (i < roundIndex) item.classList.add("reached");
+        if (i === roundIndex) item.classList.add("active");
+      });
+    }
+  </script>
 
 </body>
 </html>
