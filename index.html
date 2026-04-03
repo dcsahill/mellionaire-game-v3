@@ -38,6 +38,14 @@
       z-index: -1;
     }
 
+    #front-logo {
+      width: 320px;
+      max-width: 80%;
+      z-index: 1;
+      margin-bottom: 30px;
+      filter: drop-shadow(0 0 20px rgba(0,0,0,0.6));
+    }
+
     #start-btn {
       background: #ffd700;
       color: #000;
@@ -219,10 +227,11 @@
   <!-- FRONT PAGE -->
   <div id="front-page">
     <img src="front-page-background.png" id="front-background">
+    <img src="millionaire-logo.png" id="front-logo">
     <button id="start-btn" onclick="beginGame()">START GAME</button>
   </div>
 
-  <!-- LADDER -->
+  <!-- SIDE PANEL -->
   <div id="side-panel">
     <img src="millionaire-logo.png" id="millionaire-logo">
     <div id="permanent-ladder">
