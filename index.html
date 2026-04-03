@@ -20,9 +20,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: #000;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 99999;
@@ -38,10 +36,17 @@
       z-index: -1;
     }
 
+    /* NEW WRAPPER TO FORCE CENTERING */
+    #front-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+    }
+
     #front-logo {
       width: 320px;
       max-width: 80%;
-      z-index: 1;
       margin-bottom: 30px;
       filter: drop-shadow(0 0 20px rgba(0,0,0,0.6));
     }
@@ -58,7 +63,6 @@
       letter-spacing: 1px;
       box-shadow: 0 0 25px rgba(255,215,0,0.6);
       transition: 0.2s ease;
-      z-index: 1;
     }
 
     #start-btn:hover {
@@ -227,8 +231,11 @@
   <!-- FRONT PAGE -->
   <div id="front-page">
     <img src="front-page-background.png" id="front-background">
-    <img src="millionaire-logo.png" id="front-logo">
-    <button id="start-btn" onclick="beginGame()">START GAME</button>
+
+    <div id="front-content">
+      <img src="millionaire-logo.png" id="front-logo">
+      <button id="start-btn" onclick="beginGame()">START GAME</button>
+    </div>
   </div>
 
   <!-- SIDE PANEL -->
