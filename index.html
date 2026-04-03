@@ -36,7 +36,7 @@
       z-index: -1;
     }
 
-    /* NEW WRAPPER TO FORCE CENTERING */
+    /* WRAPPER TO FORCE CENTERING */
     #front-content {
       display: flex;
       flex-direction: column;
@@ -44,9 +44,10 @@
       z-index: 2;
     }
 
+    /* DOUBLE-SIZED LOGO */
     #front-logo {
-      width: 320px;
-      max-width: 80%;
+      width: 640px;      /* doubled */
+      max-width: 90%;    /* still responsive */
       margin-bottom: 30px;
       filter: drop-shadow(0 0 20px rgba(0,0,0,0.6));
     }
