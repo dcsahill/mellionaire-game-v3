@@ -109,6 +109,13 @@
       font-size: 2.2rem;
     }
 
+    #player-name {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
     #round-info {
       font-weight: bold;
       color: #ffd700;
@@ -125,7 +132,7 @@
       border: 2px solid #ffd700;
       border-radius: 12px;
       text-align: center;
-      color: #ffffff; /* ← WHITE TEXT */
+      color: #ffffff;
     }
 
     .options {
@@ -264,6 +271,7 @@
     <div id="game-wrapper">
       <div id="game">
         <h1>Who Wants to Be a Mellionaire?</h1>
+        <div id="player-name"></div>
         <div id="round-info"></div>
         <div id="question"></div>
         <div class="options"></div>
@@ -273,6 +281,8 @@
   </div>
 
   <script>
+    let playerName = "";
+
     const ROUNDS = [
       { name: "Round 1", prize: "$1" },
       { name: "Round 2", prize: "$100" },
@@ -325,8 +335,17 @@
     let currentQuestion = null;
 
     function beginGame() {
+      playerName = prompt("Enter your name to begin:");
+
+      if (!playerName || playerName.trim() === "") {
+        playerName = "Player";
+      }
+
+      document.getElementById("player-name").innerText = `Welcome, ${playerName}!`;
+
       document.getElementById("front-page").style.display = "none";
       document.getElementById("game").style.display = "flex";
+
       startGame();
     }
 
@@ -400,7 +419,7 @@
             currentRound++;
             if (currentRound >= ROUNDS.length) {
               document.getElementById("round-info").innerText =
-                "You are a Mellionaire!";
+                `${playerName}, you are a Mellionaire!`;
               document.querySelector(".options").innerHTML = "";
               document.getElementById("question").innerText = "";
             } else {
