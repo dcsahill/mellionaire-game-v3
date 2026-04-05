@@ -53,7 +53,11 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 #leaderboard-content h1{font-size:3.5rem;color:#ffd700;margin-bottom:20px;}
 #leaderboard-columns{display:flex;gap:40px;justify-content:center;margin-bottom:40px;}
 #leaderboard-left,#leaderboard-right{flex:1;text-align:left;}
-.leaderboard-line{font-size:1.2rem;margin:4px 0;}
+.leaderboard-line{
+  font-size:1.8rem;
+  margin:6px 0;
+  color:#fff;
+}
 #close-leaderboard-btn{
   background:#ffd700;color:#000;padding:16px 50px;font-size:1.6rem;
   border:none;border-radius:14px;cursor:pointer;font-weight:bold;
@@ -315,12 +319,26 @@ function renderLeaderboard(){
   if(!left||!right)return;
   left.innerHTML="";right.innerHTML="";
   const scores=loadScores();
-  scores.forEach((s,idx)=>{
+  const filled=[];
+  for(let i=0;i<40;i++){
+    if(scores[i]){
+      filled.push({number:i+1,name:scores[i].name,prize:scores[i].prize});
+    }else{
+      filled.push({number:i+1,name:"—",prize:"—"});
+    }
+  }
+  for(let i=0;i<20;i++){
     const line=document.createElement("div");
     line.className="leaderboard-line";
-    line.innerText=`${idx+1}. ${s.name} — ${s.prize}`;
-    if(idx<20)left.appendChild(line);else right.appendChild(line);
-  });
+    line.innerText=`${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    left.appendChild(line);
+  }
+  for(let i=20;i<40;i++){
+    const line=document.createElement("div");
+    line.className="leaderboard-line";
+    line.innerText=`${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    right.appendChild(line);
+  }
 }
 function openLeaderboard(){
   renderLeaderboard();
