@@ -54,8 +54,8 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 #leaderboard-columns{display:flex;gap:40px;justify-content:center;margin-bottom:40px;}
 #leaderboard-left,#leaderboard-right{flex:1;text-align:left;}
 .leaderboard-line{
-  font-size:1.5rem;   /* smaller font */
-  margin:4px 0;       /* tighter spacing */
+  font-size:1.5rem;
+  margin:4px 0;
   color:#fff;
 }
 #close-leaderboard-btn{
@@ -123,13 +123,11 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 <!-- FULL-SCREEN LEADERBOARD -->
 <div id="leaderboard-screen">
   <div id="leaderboard-content">
-    <h1>TOP 40 PLAYERS</h1>
+    <h1>TOP 30 PLAYERS</h1>
     <div id="leaderboard-columns">
       <div id="leaderboard-left"></div>
       <div id="leaderboard-right"></div>
     </div>
-
-    <!-- UPDATED BUTTON -->
     <button id="close-leaderboard-btn" onclick="closeLeaderboard()">BACK</button>
   </div>
 </div>
@@ -292,7 +290,7 @@ function restartGame(){
   renderLeaderboard();
 }
 
-/* LEADERBOARD (TOP 40) */
+/* LEADERBOARD (TOP 30) */
 function prizeToValue(prize){
   if(prize==="MELLIONAIRE")return 1000001;
   const num=parseInt(prize.replace(/[^0-9]/g,""))||0;
@@ -312,7 +310,7 @@ function saveScore(name,prize){
   let scores=loadScores();
   scores.push({name,prize});
   scores.sort((a,b)=>prizeToValue(b.prize)-prizeToValue(a.prize));
-  if(scores.length>40)scores=scores.slice(0,40);
+  if(scores.length>30)scores=scores.slice(0,30);
   saveScores(scores);
 }
 function renderLeaderboard(){
@@ -322,20 +320,20 @@ function renderLeaderboard(){
   left.innerHTML="";right.innerHTML="";
   const scores=loadScores();
   const filled=[];
-  for(let i=0;i<40;i++){
+  for(let i=0;i<30;i++){
     if(scores[i]){
       filled.push({number:i+1,name:scores[i].name,prize:scores[i].prize});
     }else{
       filled.push({number:i+1,name:"—",prize:"—"});
     }
   }
-  for(let i=0;i<20;i++){
+  for(let i=0;i<15;i++){
     const line=document.createElement("div");
     line.className="leaderboard-line";
     line.innerText=`${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
     left.appendChild(line);
   }
-  for(let i=20;i<40;i++){
+  for(let i=15;i<30;i++){
     const line=document.createElement("div");
     line.className="leaderboard-line";
     line.innerText=`${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
@@ -397,5 +395,6 @@ updateConfetti();
 /* INITIAL LEADERBOARD RENDER */
 renderLeaderboard();
 </script>
+
 </body>
 </html>
