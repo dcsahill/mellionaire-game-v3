@@ -267,7 +267,7 @@
 
     #win-content h3 {
       font-size: 3rem;
-      color: #ffd700;
+      color: #ffffff; /* white */
       margin-bottom: 50px;
       text-shadow: 0 0 20px #000;
     }
@@ -480,7 +480,7 @@
             // WIN CONDITION
             if (currentRound >= ROUNDS.length) {
               document.getElementById("game").style.display = "none";
-              document.getElementById("winner-name").innerText = playerName + "!";
+              document.getElementById("winner-name").innerText = playerName;
               document.getElementById("win-screen").style.display = "flex";
               return;
             }
