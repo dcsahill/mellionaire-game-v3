@@ -3,160 +3,47 @@
 <head>
 <meta charset="UTF-8" />
 <title>Who Wants to Be a Mellionaire?</title>
-
 <style>
-body {
-  font-family: 'Trebuchet MS', sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background-image: url("front-page-background.png");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-
-/* FRONT PAGE */
-#front-page {
-  position: fixed; top: 0; left: 0;
-  width: 100%; height: 100%;
-  display: flex; justify-content: center; align-items: center;
-  z-index: 99999;
-}
-#front-background {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover; z-index: -1;
-}
-#front-content { display: flex; flex-direction: column; align-items: center; }
-#front-logo {
-  width: 640px; max-width: 90%; margin-bottom: 30px;
-  filter: drop-shadow(0 0 20px rgba(0,0,0,0.6));
-}
-#start-btn {
-  background: #ffd700; color: #000;
-  padding: 18px 50px; font-size: 1.6rem;
-  border: none; border-radius: 14px; cursor: pointer;
-  font-weight: bold; letter-spacing: 1px;
-  box-shadow: 0 0 25px rgba(255,215,0,0.6);
-}
-#start-btn:hover { background: #ffea70; transform: scale(1.06); }
-
-/* MAIN LAYOUT */
-#layout { display: flex; justify-content: center; width: 100%; position: relative; top: 180px; }
-#game-wrapper { flex: 1; display: flex; justify-content: center; padding-right: 320px; }
-
-#game {
-  max-width: 650px; width: 100%;
-  padding: 30px; border-radius: 20px;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(2px);
-  box-shadow: 0 0 40px rgba(0,0,0,0.9), 0 0 80px #001f54 inset;
-  display: none; flex-direction: column;
-}
-
-h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
-#player-name { text-align: center; font-size: 1.4rem; color: #fff; margin-bottom: 10px; }
-#round-info { text-align: center; font-weight: bold; color: #ffd700; margin-bottom: 10px; }
-
-#question {
-  font-size: 1.3rem; margin: 20px 0; padding: 15px;
-  background: rgba(0,0,0,0.4); border: 2px solid #ffd700;
-  border-radius: 12px; text-align: center; color: #ffffff;
-}
-
-.options {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 16px 24px; margin-top: 20px;
-}
-
-.option-btn {
-  display: flex; align-items: center; gap: 12px;
-  background: linear-gradient(to bottom, #0d2a66, #081a44);
-  border: 2px solid #ffd700; border-radius: 40px;
-  padding: 14px 20px; color: #f8f8f8;
-  cursor: pointer; font-size: 1.1rem;
-}
-.option-btn:hover { background: #123b8a; transform: scale(1.02); }
-
-.option-label {
-  background: #ffd700; color: #000; font-weight: bold;
-  width: 32px; height: 32px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-}
-
-.option-btn.locked { background: #ffd700; color: #000; }
-.option-btn.correct { background: #0f7a0f; }
-.option-btn.wrong { background: #7a0f0f; }
-
-#locked-in {
-  margin-top: 20px; text-align: center;
-  font-size: 2rem; font-weight: bold; color: #ffd700;
-  min-height: 40px; display: none;
-}
-
-/* SIDE PANEL */
-#side-panel {
-  position: fixed; top: 120px; right: 120px;
-  width: 240px; display: flex; flex-direction: column; align-items: center;
-}
-#millionaire-logo { width: 240px; margin-bottom: 20px; }
-#permanent-ladder {
-  width: 240px; display: flex; flex-direction: column-reverse; gap: 12px;
-}
-#permanent-ladder .ladder-item {
-  font-size: 1.2rem; padding: 8px 18px;
-  border: 2px solid #ffd700; border-radius: 10px;
-  color: #ffd700; opacity: 0.35; background: rgba(0,0,0,0.4);
-}
-#permanent-ladder .ladder-item.reached { background: #0f7a0f; color: #fff; opacity: 1; }
-#permanent-ladder .ladder-item.active { opacity: 1; transform: scale(1.12); }
-
-/* WIN SCREEN */
-#win-screen {
-  position: fixed; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
-  display: none; justify-content: center; align-items: center;
-  z-index: 999999; text-align: center;
-}
-
-/* Fireworks + Confetti canvases */
-#fireworks-canvas, #confetti-canvas {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none; z-index: 1;
-}
-
-#win-content { position: relative; z-index: 2; }
-
-#win-content h1 {
-  font-size: 5rem; color: #ffd700;
-  margin-bottom: 20px; text-shadow: 0 0 25px #000;
-}
-#win-content h2 {
-  font-size: 3.5rem; color: #ffffff;
-  margin-bottom: 10px; text-shadow: 0 0 20px #000;
-}
-#win-content h3 {
-  font-size: 3rem; color: #ffffff;
-  margin-bottom: 50px; text-shadow: 0 0 20px #000;
-}
-
-#play-again-btn {
-  background: #ffd700; color: #000;
-  padding: 20px 60px; font-size: 2rem;
-  border: none; border-radius: 14px; cursor: pointer;
-  font-weight: bold; letter-spacing: 1px;
-  box-shadow: 0 0 30px rgba(255,215,0,0.7);
-}
-#play-again-btn:hover { background: #ffea70; transform: scale(1.08); }
+body{font-family:'Trebuchet MS',sans-serif;margin:0;padding:0;overflow-x:hidden;background-image:url("front-page-background.png");background-size:cover;background-position:center;background-attachment:fixed;}
+#front-page{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;z-index:99999;}
+#front-background{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-1;}
+#front-content{display:flex;flex-direction:column;align-items:center;}
+#front-logo{width:640px;max-width:90%;margin-bottom:30px;filter:drop-shadow(0 0 20px rgba(0,0,0,0.6));}
+#start-btn{background:#ffd700;color:#000;padding:18px 50px;font-size:1.6rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 25px rgba(255,215,0,0.6);}
+#start-btn:hover{background:#ffea70;transform:scale(1.06);}
+#layout{display:flex;justify-content:center;width:100%;position:relative;top:180px;}
+#game-wrapper{flex:1;display:flex;justify-content:center;padding-right:320px;}
+#game{max-width:650px;width:100%;padding:30px;border-radius:20px;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);box-shadow:0 0 40px rgba(0,0,0,0.9),0 0 80px #001f54 inset;display:none;flex-direction:column;}
+h1{text-align:center;color:#ffd700;font-size:2.2rem;}
+#player-name{text-align:center;font-size:1.4rem;color:#fff;margin-bottom:10px;}
+#round-info{text-align:center;font-weight:bold;color:#ffd700;margin-bottom:10px;}
+#question{font-size:1.3rem;margin:20px 0;padding:15px;background:rgba(0,0,0,0.4);border:2px solid #ffd700;border-radius:12px;text-align:center;color:#fff;}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;margin-top:20px;}
+.option-btn{display:flex;align-items:center;gap:12px;background:linear-gradient(to bottom,#0d2a66,#081a44);border:2px solid #ffd700;border-radius:40px;padding:14px 20px;color:#f8f8f8;cursor:pointer;font-size:1.1rem;}
+.option-btn:hover{background:#123b8a;transform:scale(1.02);}
+.option-label{background:#ffd700;color:#000;font-weight:bold;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.option-btn.locked{background:#ffd700;color:#000;}
+.option-btn.correct{background:#0f7a0f;}
+.option-btn.wrong{background:#7a0f0f;}
+#locked-in{margin-top:20px;text-align:center;font-size:2rem;font-weight:bold;color:#ffd700;min-height:40px;display:none;}
+#side-panel{position:fixed;top:120px;right:120px;width:240px;display:flex;flex-direction:column;align-items:center;}
+#millionaire-logo{width:240px;margin-bottom:20px;}
+#permanent-ladder{width:240px;display:flex;flex-direction:column-reverse;gap:12px;}
+#permanent-ladder .ladder-item{font-size:1.2rem;padding:8px 18px;border:2px solid #ffd700;border-radius:10px;color:#ffd700;opacity:.35;background:rgba(0,0,0,0.4);}
+#permanent-ladder .ladder-item.reached{background:#0f7a0f;color:#fff;opacity:1;}
+#permanent-ladder .ladder-item.active{opacity:1;transform:scale(1.12);}
+#win-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:999999;text-align:center;}
+#confetti-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+#win-content{position:relative;z-index:2;}
+#win-content h1{font-size:5rem;color:#ffd700;margin-bottom:20px;text-shadow:0 0 25px #000;}
+#win-content h2{font-size:3.5rem;color:#fff;margin-bottom:10px;text-shadow:0 0 20px #000;}
+#win-content h3{font-size:3rem;color:#fff;margin-bottom:50px;text-shadow:0 0 20px #000;}
+#play-again-btn{background:#ffd700;color:#000;padding:20px 60px;font-size:2rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 30px rgba(255,215,0,0.7);}
+#play-again-btn:hover{background:#ffea70;transform:scale(1.08);}
 </style>
 </head>
-
 <body>
 
-<!-- FRONT PAGE -->
 <div id="front-page">
   <img src="front-page-background.png" id="front-background">
   <div id="front-content">
@@ -165,7 +52,6 @@ h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
   </div>
 </div>
 
-<!-- SIDE PANEL -->
 <div id="side-panel">
   <img src="millionaire-logo.png" id="millionaire-logo">
   <div id="permanent-ladder">
@@ -178,7 +64,6 @@ h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
   </div>
 </div>
 
-<!-- GAME -->
 <div id="layout">
   <div id="game-wrapper">
     <div id="game">
@@ -192,311 +77,226 @@ h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
   </div>
 </div>
 
-<!-- WIN SCREEN -->
 <div id="win-screen">
-  <canvas id="fireworks-canvas"></canvas>
   <canvas id="confetti-canvas"></canvas>
-
   <div id="win-content">
-    <h1>CONGRATULATIONS!</h1>
+    <h1 id="win-title">CONGRATULATIONS!</h1>
     <h2 id="winner-name"></h2>
-    <h3>YOU ARE NOW A MELLIONAIRE!</h3>
+    <h3 id="win-subtext">YOU ARE NOW A MELLIONAIRE!</h3>
     <button id="play-again-btn" onclick="restartGame()">PLAY AGAIN</button>
   </div>
 </div>
 
 <script>
-let playerName = "";
-let currentRound = 0;
-let currentQuestion = null;
+let playerName="",currentRound=0,currentQuestion=null,lastPrize="$0";
 
-const ROUNDS = [
-  { name: "Round 1", prize: "$1" },
-  { name: "Round 2", prize: "$100" },
-  { name: "Round 3", prize: "$1,000" },
-  { name: "Round 4", prize: "$10,000" },
-  { name: "Round 5", prize: "$100,000" },
-  { name: "Final Round", prize: "MELLIONAIRE" }
+const ROUNDS=[
+  {name:"Round 1",prize:"$1"},
+  {name:"Round 2",prize:"$100"},
+  {name:"Round 3",prize:"$1,000"},
+  {name:"Round 4",prize:"$10,000"},
+  {name:"Round 5",prize:"$100,000"},
+  {name:"Final Round",prize:"MELLIONAIRE"}
 ];
 
-const QUESTIONS = {
-  1: [
-    { q: "WHAT IS MEL'S MIDDLE NAME?", a: ["KATE","JANE","ROSE","CLARISSA"], c: 0 },
-    { q: "HOW MANY SIBLINGS DOES SHE HAVE?", a: ["ZERO","ONE","TWO","THREE"], c: 1 },
-    { q: "MEL'S PARENTS NAMES ARE?", a: ["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"], c: 2 },
-    { q: "MEL'S MAIDEN NAME IS?", a: ["HIGGINS","HASKINS","HOLLOWAY","HILL"], c: 3 }
+const QUESTIONS={
+  1:[
+    {q:"WHAT IS MEL'S MIDDLE NAME?",a:["KATE","JANE","ROSE","CLARISSA"],c:0},
+    {q:"HOW MANY SIBLINGS DOES SHE HAVE?",a:["ZERO","ONE","TWO","THREE"],c:1},
+    {q:"MEL'S PARENTS NAMES ARE?",a:["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"],c:2},
+    {q:"MEL'S MAIDEN NAME IS?",a:["HIGGINS","HASKINS","HOLLOWAY","HILL"],c:3}
   ],
-  2: [
-    { q: "WHAT HIGH SCHOOL DID MEL ATTEND?", a: ["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"], c: 2 },
-    { q: "WHAT IS OSCAR'S MIDDLE NAME?", a: ["JACOB","JAMES","JOHN","JOEL"], c: 1 },
-    { q: "WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?", a: ["SAXOPHONE","GUITAR","CLARINET","TUBA"], c: 0 },
-    { q: "WHAT IS MEL'S FAVOURITE SPIRIT?", a: ["RUM","GIN","VODKA","TEQUILA"], c: 1 }
+  2:[
+    {q:"WHAT HIGH SCHOOL DID MEL ATTEND?",a:["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"],c:2},
+    {q:"WHAT IS OSCAR'S MIDDLE NAME?",a:["JACOB","JAMES","JOHN","JOEL"],c:1},
+    {q:"WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?",a:["SAXOPHONE","GUITAR","CLARINET","TUBA"],c:0},
+    {q:"WHAT IS MEL'S FAVOURITE SPIRIT?",a:["RUM","GIN","VODKA","TEQUILA"],c:1}
   ],
-  3: [
-    { q: "WHAT WAS THE THEME FOR MEL'S WEDDING?", a: ["PAPER","DISCO","OCEAN","ICE"], c: 0 },
-    { q: "WHERE IS SNUG COTTAGE LOCATED?", a: ["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"], c: 3 },
-    { q: "WHAT FLAVOUR WAS MEL'S WEDDING CAKE?", a: ["RED VELVET","LEMON","CHEESE","PISTACHIO"], c: 2 },
-    { q: "MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?", a: ["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"], c: 1 }
+  3:[
+    {q:"WHAT WAS THE THEME FOR MEL'S WEDDING?",a:["PAPER","DISCO","OCEAN","ICE"],c:0},
+    {q:"WHERE IS SNUG COTTAGE LOCATED?",a:["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"],c:3},
+    {q:"WHAT FLAVOUR WAS MEL'S WEDDING CAKE?",a:["RED VELVET","LEMON","CHEESE","PISTACHIO"],c:2},
+    {q:"MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?",a:["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"],c:1}
   ],
-  4: [
-    { q: "WHAT STAR SIGN IS MEL?", a: ["GEMINI","LIBRA","SCORPIO","ARIES"], c: 3 },
-    { q: "WHAT PRIMARY SCHOOL DID MEL ATTEND?", a: ["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c: 0 },
-    { q: "WHAT POSITION DID MEL PLAY FOR NETBALL?", a: ["GK","C","GS","WD"], c: 0 },
-    { q: "WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?", a: ["COLLAR BONE","WRIST","LEG","NONE"], c: 3 }
+  4:[
+    {q:"WHAT STAR SIGN IS MEL?",a:["GEMINI","LIBRA","SCORPIO","ARIES"],c:3},
+    {q:"WHAT PRIMARY SCHOOL DID MEL ATTEND?",a:["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"],c:0},
+    {q:"WHAT POSITION DID MEL PLAY FOR NETBALL?",a:["GK","C","GS","WD"],c:0},
+    {q:"WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?",a:["COLLAR BONE","WRIST","LEG","NONE"],c:3}
   ],
-  5: [
-    { q: "WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?", a: ["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"], c: 3 },
-    { q: "WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?", a: ["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"], c: 1 },
-    { q: "IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?", a: ["GERMANY","ARGENTINA","JAPAN","CANADA"], c: 2 },
-    { q: "IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?", a: ["ANDREWS","CAMDEN","MORPHETT","LOHE"], c: 3 }
+  5:[
+    {q:"WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?",a:["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"],c:3},
+    {q:"WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?",a:["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"],c:1},
+    {q:"IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?",a:["GERMANY","ARGENTINA","JAPAN","CANADA"],c:2},
+    {q:"IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?",a:["ANDREWS","CAMDEN","MORPHETT","LOHE"],c:3}
   ],
-  6: [
-    { q: "AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?", a: ["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"], c: 2 },
-    { q: "AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?", a: ["BLUE","YELLOW","GREEN","RED"], c: 0 },
-    { q: "WHAT WAS THE NAME OF MEL'S GUINEA PIG?", a: ["CHARLOTTE","GINGER","PATCHES","MISSY"], c: 1 },
-    { q: "MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?", a: ["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"], c: 3 }
+  6:[
+    {q:"AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?",a:["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"],c:2},
+    {q:"AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?",a:["BLUE","YELLOW","GREEN","RED"],c:0},
+    {q:"WHAT WAS THE NAME OF MEL'S GUINEA PIG?",a:["CHARLOTTE","GINGER","PATCHES","MISSY"],c:1},
+    {q:"MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?",a:["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"],c:3}
   ]
 };
 
-function beginGame() {
-  playerName = prompt("Enter your name to begin:");
-  if (!playerName || playerName.trim() === "") playerName = "Player";
-
-  document.getElementById("player-name").innerText = `Welcome, ${playerName}!`;
-  document.getElementById("front-page").style.display = "none";
-  document.getElementById("game").style.display = "flex";
-
+function beginGame(){
+  playerName=prompt("Enter your name to begin:");
+  if(!playerName||playerName.trim()==="")playerName="Player";
+  document.getElementById("player-name").innerText=`Welcome, ${playerName}!`;
+  document.getElementById("front-page").style.display="none";
+  document.getElementById("game").style.display="flex";
   startGame();
 }
 
-function startGame() {
-  currentRound = 0;
+function startGame(){
+  currentRound=0;
+  lastPrize="$0";
   updatePermanentLadder(0);
   nextRound();
 }
 
-function nextRound() {
-  const round = ROUNDS[currentRound];
-  document.getElementById("round-info").innerText =
-    `${round.name} – Prize: ${round.prize}`;
-
+function nextRound(){
+  const round=ROUNDS[currentRound];
+  lastPrize=round.prize;
+  document.getElementById("round-info").innerText=`${round.name} – Prize: ${round.prize}`;
   updatePermanentLadder(currentRound);
-
-  const qList = QUESTIONS[currentRound + 1];
-  currentQuestion = qList[Math.floor(Math.random() * qList.length)];
-
-  const locked = document.getElementById("locked-in");
-  locked.style.display = "none";
-  locked.innerText = "";
-
+  const qList=QUESTIONS[currentRound+1];
+  currentQuestion=qList[Math.floor(Math.random()*qList.length)];
+  const locked=document.getElementById("locked-in");
+  locked.style.display="none";
+  locked.innerText="";
   displayQuestion();
 }
 
-function displayQuestion() {
-  document.getElementById("question").innerText = currentQuestion.q;
-
-  const optionsDiv = document.querySelector(".options");
-  optionsDiv.innerHTML = "";
-
-  const labels = ["A", "B", "C", "D"];
-
-  currentQuestion.a.forEach((opt, index) => {
-    const btn = document.createElement("button");
-    btn.className = "option-btn";
-
-    const labelSpan = document.createElement("span");
-    labelSpan.className = "option-label";
-    labelSpan.innerText = labels[index];
-
-    const textSpan = document.createElement("span");
-    textSpan.innerText = opt;
-
+function displayQuestion(){
+  document.getElementById("question").innerText=currentQuestion.q;
+  const optionsDiv=document.querySelector(".options");
+  optionsDiv.innerHTML="";
+  const labels=["A","B","C","D"];
+  currentQuestion.a.forEach((opt,index)=>{
+    const btn=document.createElement("button");
+    btn.className="option-btn";
+    const labelSpan=document.createElement("span");
+    labelSpan.className="option-label";
+    labelSpan.innerText=labels[index];
+    const textSpan=document.createElement("span");
+    textSpan.innerText=opt;
     btn.appendChild(labelSpan);
     btn.appendChild(textSpan);
-
-    btn.onclick = () => checkAnswer(btn, index);
+    btn.onclick=()=>checkAnswer(btn,index);
     optionsDiv.appendChild(btn);
   });
 }
 
-function checkAnswer(button, index) {
-  const buttons = document.querySelectorAll(".option-btn");
-  buttons.forEach(b => b.disabled = true);
-
-  const locked = document.getElementById("locked-in");
-  locked.innerText = "LOCKED IN";
-  locked.style.display = "block";
-
+function checkAnswer(button,index){
+  const buttons=document.querySelectorAll(".option-btn");
+  buttons.forEach(b=>b.disabled=true);
+  const locked=document.getElementById("locked-in");
+  locked.innerText="LOCKED IN";
+  locked.style.display="block";
   button.classList.add("locked");
-
-  setTimeout(() => {
-    if (index === currentQuestion.c) {
+  setTimeout(()=>{
+    if(index===currentQuestion.c){
       button.classList.remove("locked");
       button.classList.add("correct");
-
-      setTimeout(() => {
-        locked.style.display = "none";
+      setTimeout(()=>{
+        locked.style.display="none";
         currentRound++;
-
-        if (currentRound >= ROUNDS.length) {
-          document.getElementById("game").style.display = "none";
-          document.getElementById("winner-name").innerText = playerName;
-          document.getElementById("win-screen").style.display = "flex";
-          startFireworks();
-          startConfetti();
-          return;
-        }
-
+        if(currentRound>=ROUNDS.length){showWinScreen();return;}
         nextRound();
-      }, 2000);
-    } else {
+      },2000);
+    }else{
       button.classList.remove("locked");
       button.classList.add("wrong");
-      document.getElementById("round-info").innerText = "BAD LUCK!";
-
-      const allButtons = document.querySelectorAll(".option-btn");
+      const allButtons=document.querySelectorAll(".option-btn");
       allButtons[currentQuestion.c].classList.add("correct");
-
-      setTimeout(() => {
-        locked.style.display = "none";
-        document.getElementById("game").style.display = "none";
-        document.getElementById("front-page").style.display = "flex";
-        updatePermanentLadder(0);
-      }, 10000);
+      setTimeout(()=>{showLossScreen();},10000);
     }
-  }, 5000);
+  },5000);
 }
 
-function updatePermanentLadder(roundIndex) {
-  const items = document.querySelectorAll("#permanent-ladder .ladder-item");
-  items.forEach((item, i) => {
-    item.classList.remove("active", "reached");
-    if (i < roundIndex) item.classList.add("reached");
-    if (i === roundIndex) item.classList.add("active");
+function updatePermanentLadder(roundIndex){
+  const items=document.querySelectorAll("#permanent-ladder .ladder-item");
+  items.forEach((item,i)=>{
+    item.classList.remove("active","reached");
+    if(i<roundIndex)item.classList.add("reached");
+    if(i===roundIndex)item.classList.add("active");
   });
 }
 
-function restartGame() {
-  document.getElementById("win-screen").style.display = "none";
-  document.getElementById("front-page").style.display = "flex";
+function showWinScreen(){
+  document.getElementById("game").style.display="none";
+  document.getElementById("winner-name").innerText=playerName;
+  document.getElementById("win-title").innerText="CONGRATULATIONS!";
+  document.getElementById("win-subtext").innerText="YOU ARE NOW A MELLIONAIRE!";
+  document.getElementById("win-screen").style.display="flex";
+  startConfetti();
 }
 
-/* FIREWORKS */
-const fwCanvas = document.getElementById("fireworks-canvas");
-const fwCtx = fwCanvas.getContext("2d");
-
-function resizeFireworks() {
-  fwCanvas.width = window.innerWidth;
-  fwCanvas.height = window.innerHeight;
-}
-resizeFireworks();
-window.addEventListener("resize", resizeFireworks);
-
-let fwParticles = [];
-let fwIntervalId = null;
-
-function createFirework() {
-  const x = Math.random() * fwCanvas.width;
-  const y = Math.random() * fwCanvas.height * 0.5;
-
-  for (let i = 0; i < 60; i++) {
-    fwParticles.push({
-      x,
-      y,
-      angle: Math.random() * Math.PI * 2,
-      speed: Math.random() * 4 + 2,
-      radius: Math.random() * 3 + 2,
-      alpha: 1,
-      decay: Math.random() * 0.02 + 0.01,
-      color: "rgba(255, 215, 0,"
-    });
-  }
+function showLossScreen(){
+  document.getElementById("game").style.display="none";
+  document.getElementById("winner-name").innerText=playerName;
+  document.getElementById("win-title").innerText="BAD LUCK";
+  document.getElementById("win-subtext").innerText=`Enjoy your ${lastPrize}`;
+  document.getElementById("win-screen").style.display="flex";
 }
 
-function updateFireworks() {
-  fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-
-  fwParticles.forEach((p, index) => {
-    p.x += Math.cos(p.angle) * p.speed;
-    p.y += Math.sin(p.angle) * p.speed;
-    p.alpha -= p.decay;
-
-    if (p.alpha <= 0) {
-      fwParticles.splice(index, 1);
-    } else {
-      fwCtx.beginPath();
-      fwCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      fwCtx.fillStyle = p.color + p.alpha + ")";
-      fwCtx.fill();
-    }
-  });
-
-  requestAnimationFrame(updateFireworks);
+function restartGame(){
+  document.getElementById("win-screen").style.display="none";
+  document.getElementById("win-title").innerText="CONGRATULATIONS!";
+  document.getElementById("win-subtext").innerText="YOU ARE NOW A MELLIONAIRE!";
+  confettiPieces=[];
+  document.getElementById("front-page").style.display="flex";
+  updatePermanentLadder(0);
 }
-
-function startFireworks() {
-  if (fwIntervalId) clearInterval(fwIntervalId);
-  fwIntervalId = setInterval(createFirework, 600);
-}
-updateFireworks();
 
 /* CONFETTI */
-const confettiCanvas = document.getElementById("confetti-canvas");
-const confettiCtx = confettiCanvas.getContext("2d");
+const confettiCanvas=document.getElementById("confetti-canvas");
+const confettiCtx=confettiCanvas.getContext("2d");
 
-function resizeConfetti() {
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
+function resizeConfetti(){
+  confettiCanvas.width=window.innerWidth;
+  confettiCanvas.height=window.innerHeight;
 }
 resizeConfetti();
-window.addEventListener("resize", resizeConfetti);
+window.addEventListener("resize",resizeConfetti);
 
-let confettiPieces = [];
+let confettiPieces=[];
 
-function createConfettiPiece() {
-  return {
-    x: Math.random() * confettiCanvas.width,
-    y: -20,
-    size: Math.random() * 8 + 4,
-    speedY: Math.random() * 3 + 2,
-    speedX: (Math.random() - 0.5) * 2,
-    rotation: Math.random() * 360,
-    rotationSpeed: (Math.random() - 0.5) * 10,
-    color: Math.random() > 0.5 ? "#FFD700" : "#FFF5A3"
+function createConfettiPiece(){
+  return{
+    x:Math.random()*confettiCanvas.width,
+    y:-20,
+    size:Math.random()*8+4,
+    speedY:Math.random()*3+2,
+    speedX:(Math.random()-0.5)*2,
+    rotation:Math.random()*360,
+    rotationSpeed:(Math.random()-0.5)*10,
+    color:Math.random()>0.5?"#FFD700":"#FFF5A3"
   };
 }
 
-function startConfetti() {
-  confettiPieces = [];
-  for (let i = 0; i < 150; i++) {
-    confettiPieces.push(createConfettiPiece());
-  }
+function startConfetti(){
+  confettiPieces=[];
+  for(let i=0;i<150;i++){confettiPieces.push(createConfettiPiece());}
 }
 
-function updateConfetti() {
-  confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-
-  confettiPieces.forEach((p, index) => {
-    p.y += p.speedY;
-    p.x += p.speedX;
-    p.rotation += p.rotationSpeed;
-
-    if (p.y > confettiCanvas.height + 20) {
-      confettiPieces[index] = createConfettiPiece();
-    }
-
+function updateConfetti(){
+  confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+  confettiPieces.forEach((p,index)=>{
+    p.y+=p.speedY;
+    p.x+=p.speedX;
+    p.rotation+=p.rotationSpeed;
+    if(p.y>confettiCanvas.height+20){confettiPieces[index]=createConfettiPiece();}
     confettiCtx.save();
-    confettiCtx.translate(p.x, p.y);
-    confettiCtx.rotate((p.rotation * Math.PI) / 180);
-    confettiCtx.fillStyle = p.color;
-    confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+    confettiCtx.translate(p.x,p.y);
+    confettiCtx.rotate((p.rotation*Math.PI)/180);
+    confettiCtx.fillStyle=p.color;
+    confettiCtx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
     confettiCtx.restore();
   });
-
   requestAnimationFrame(updateConfetti);
 }
 updateConfetti();
 </script>
-
 </body>
 </html>
