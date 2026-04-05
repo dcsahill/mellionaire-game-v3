@@ -12,11 +12,6 @@ body{font-family:'Trebuchet MS',sans-serif;margin:0;padding:0;overflow-x:hidden;
 #start-btn,#show-leaderboard-btn{background:#ffd700;color:#000;padding:14px 40px;font-size:1.2rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 18px rgba(255,215,0,0.6);}
 #start-btn:hover,#show-leaderboard-btn:hover{background:#ffea70;transform:scale(1.05);}
 #show-leaderboard-btn{margin-top:4px;}
-#leaderboard-section{margin-top:10px;width:90vw;max-width:900px;background:rgba(0,0,0,0.7);border-radius:16px;padding:16px 20px;display:none;flex-direction:column;align-items:center;color:#fff;}
-#leaderboard-section h2{margin:0 0 10px 0;color:#ffd700;}
-#leaderboard-columns{display:flex;gap:40px;width:100%;justify-content:center;}
-#leaderboard-left,#leaderboard-right{flex:1;}
-.leaderboard-line{font-size:0.95rem;margin:2px 0;}
 #layout{display:flex;justify-content:center;width:100%;position:relative;top:180px;}
 #game-wrapper{flex:1;display:flex;justify-content:center;padding-right:320px;}
 #game{max-width:650px;width:100%;padding:30px;border-radius:20px;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);box-shadow:0 0 40px rgba(0,0,0,0.9),0 0 80px #001f54 inset;display:none;flex-direction:column;}
@@ -38,7 +33,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 #permanent-ladder .ladder-item{font-size:1.1rem;padding:8px 18px;border:2px solid #ffd700;border-radius:10px;color:#ffd700;opacity:.35;background:rgba(0,0,0,0.4);}
 #permanent-ladder .ladder-item.reached{background:#0f7a0f;color:#fff;opacity:1;}
 #permanent-ladder .ladder-item.active{opacity:1;transform:scale(1.12);}
-#win-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:99999;text-align:center;}
+#win-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:99998;text-align:center;}
 #confetti-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
 #win-content{position:relative;z-index:2;}
 #win-content h1{font-size:4.5rem;color:#ffd700;margin-bottom:10px;text-shadow:0 0 25px #000;}
@@ -46,6 +41,30 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 #win-content h3{font-size:2.4rem;color:#fff;margin-bottom:30px;text-shadow:0 0 20px #000;}
 #play-again-btn{background:#ffd700;color:#000;padding:16px 50px;font-size:1.8rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 30px rgba(255,215,0,0.7);}
 #play-again-btn:hover{background:#ffea70;transform:scale(1.08);}
+
+/* FULL-SCREEN LEADERBOARD */
+#leaderboard-screen{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);
+  display:none;justify-content:center;align-items:center;
+  z-index:99999;text-align:center;color:#fff;
+}
+#leaderboard-content{width:90%;max-width:900px;}
+#leaderboard-content h1{font-size:3.5rem;color:#ffd700;margin-bottom:20px;}
+#leaderboard-columns{display:flex;gap:40px;justify-content:center;margin-bottom:40px;}
+#leaderboard-left,#leaderboard-right{flex:1;text-align:left;}
+.leaderboard-line{
+  font-size:1.8rem;
+  margin:6px 0;
+  color:#fff;
+}
+#close-leaderboard-btn{
+  background:#ffd700;color:#000;padding:16px 50px;font-size:1.6rem;
+  border:none;border-radius:14px;cursor:pointer;font-weight:bold;
+  box-shadow:0 0 30px rgba(255,215,0,0.7);
+}
+#close-leaderboard-btn:hover{background:#ffea70;transform:scale(1.08);}
+
 @media(max-width:900px){
   #layout{top:140px;}
   #game-wrapper{padding-right:0;}
@@ -62,15 +81,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   <div id="front-content">
     <img src="millionaire-logo.png" id="front-logo">
     <button id="start-btn" onclick="beginGame()">START GAME</button>
-    <button id="show-leaderboard-btn" onclick="toggleLeaderboard()">SHOW LEADERBOARD</button>
-
-    <div id="leaderboard-section">
-      <h2>TOP 40 PLAYERS</h2>
-      <div id="leaderboard-columns">
-        <div id="leaderboard-left"></div>
-        <div id="leaderboard-right"></div>
-      </div>
-    </div>
+    <button id="show-leaderboard-btn" onclick="openLeaderboard()">SHOW LEADERBOARD</button>
   </div>
 </div>
 
@@ -106,6 +117,18 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
     <h2 id="winner-name"></h2>
     <h3 id="win-subtext">YOU ARE NOW A MELLIONAIRE!</h3>
     <button id="play-again-btn" onclick="restartGame()">PLAY AGAIN</button>
+  </div>
+</div>
+
+<!-- FULL-SCREEN LEADERBOARD -->
+<div id="leaderboard-screen">
+  <div id="leaderboard-content">
+    <h1>TOP 40 PLAYERS</h1>
+    <div id="leaderboard-columns">
+      <div id="leaderboard-left"></div>
+      <div id="leaderboard-right"></div>
+    </div>
+    <button id="close-leaderboard-btn" onclick="closeLeaderboard()">CLOSE</button>
   </div>
 </div>
 
@@ -293,19 +316,36 @@ function saveScore(name,prize){
 function renderLeaderboard(){
   const left=document.getElementById("leaderboard-left");
   const right=document.getElementById("leaderboard-right");
+  if(!left||!right)return;
   left.innerHTML="";right.innerHTML="";
   const scores=loadScores();
-  scores.forEach((s,idx)=>{
+  const filled=[];
+  for(let i=0;i<40;i++){
+    if(scores[i]){
+      filled.push({number:i+1,name:scores[i].name,prize:scores[i].prize});
+    }else{
+      filled.push({number:i+1,name:"—",prize:"—"});
+    }
+  }
+  for(let i=0;i<20;i++){
     const line=document.createElement("div");
     line.className="leaderboard-line";
-    line.innerText=`${idx+1}. ${s.name} — ${s.prize}`;
-    if(idx<20)left.appendChild(line);else right.appendChild(line);
-  });
+    line.innerText=`${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    left.appendChild(line);
+  }
+  for(let i=20;i<40;i++){
+    const line=document.createElement("div");
+    line.className="leaderboard-line";
+    line.innerText=`${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    right.appendChild(line);
+  }
 }
-function toggleLeaderboard(){
-  const section=document.getElementById("leaderboard-section");
-  if(section.style.display==="flex"){section.style.display="none";}
-  else{renderLeaderboard();section.style.display="flex";}
+function openLeaderboard(){
+  renderLeaderboard();
+  document.getElementById("leaderboard-screen").style.display="flex";
+}
+function closeLeaderboard(){
+  document.getElementById("leaderboard-screen").style.display="none";
 }
 
 /* CONFETTI */
@@ -352,7 +392,7 @@ function updateConfetti(){
 }
 updateConfetti();
 
-/* INITIAL LEADERBOARD RENDER ON LOAD */
+/* INITIAL LEADERBOARD RENDER */
 renderLeaderboard();
 </script>
 </body>
