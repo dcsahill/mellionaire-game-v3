@@ -112,7 +112,7 @@ h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
 #permanent-ladder .ladder-item.reached { background: #0f7a0f; color: #fff; opacity: 1; }
 #permanent-ladder .ladder-item.active { opacity: 1; transform: scale(1.12); }
 
-/* WIN/LOSS SCREEN */
+/* WIN SCREEN */
 #win-screen {
   position: fixed; top: 0; left: 0;
   width: 100%; height: 100%;
@@ -121,6 +121,7 @@ h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
   z-index: 999999; text-align: center;
 }
 
+/* Fireworks + Confetti canvases */
 #fireworks-canvas, #confetti-canvas {
   position: absolute; top: 0; left: 0;
   width: 100%; height: 100%;
@@ -150,7 +151,6 @@ h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
   box-shadow: 0 0 30px rgba(255,215,0,0.7);
 }
 #play-again-btn:hover { background: #ffea70; transform: scale(1.08); }
-
 </style>
 </head>
 
@@ -192,15 +192,15 @@ h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
   </div>
 </div>
 
-<!-- WIN/LOSS SCREEN -->
+<!-- WIN SCREEN -->
 <div id="win-screen">
   <canvas id="fireworks-canvas"></canvas>
   <canvas id="confetti-canvas"></canvas>
 
   <div id="win-content">
-    <h1 id="win-title">CONGRATULATIONS!</h1>
+    <h1>CONGRATULATIONS!</h1>
     <h2 id="winner-name"></h2>
-    <h3 id="win-subtext">YOU ARE NOW A MELLIONAIRE!</h3>
+    <h3>YOU ARE NOW A MELLIONAIRE!</h3>
     <button id="play-again-btn" onclick="restartGame()">PLAY AGAIN</button>
   </div>
 </div>
@@ -209,9 +209,7 @@ h1 { text-align: center; color: #ffd700; font-size: 2.2rem; }
 let playerName = "";
 let currentRound = 0;
 let currentQuestion = null;
-let lastPrize = "$0";
 
-/* GAME DATA */
 const ROUNDS = [
   { name: "Round 1", prize: "$1" },
   { name: "Round 2", prize: "$100" },
@@ -258,9 +256,8 @@ const QUESTIONS = {
     { q: "WHAT WAS THE NAME OF MEL'S GUINEA PIG?", a: ["CHARLOTTE","GINGER","PATCHES","MISSY"], c: 1 },
     { q: "MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?", a: ["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"], c: 3 }
   ]
-];
+};
 
-/* GAME FLOW */
 function beginGame() {
   playerName = prompt("Enter your name to begin:");
   if (!playerName || playerName.trim() === "") playerName = "Player";
@@ -274,15 +271,12 @@ function beginGame() {
 
 function startGame() {
   currentRound = 0;
-  lastPrize = "$0";
   updatePermanentLadder(0);
   nextRound();
 }
 
 function nextRound() {
   const round = ROUNDS[currentRound];
-  lastPrize = round.prize;
-
   document.getElementById("round-info").innerText =
     `${round.name} – Prize: ${round.prize}`;
 
@@ -291,7 +285,10 @@ function nextRound() {
   const qList = QUESTIONS[currentRound + 1];
   currentQuestion = qList[Math.floor(Math.random() * qList.length)];
 
-  document.getElementById("locked-in").style.display = "none";
+  const locked = document.getElementById("locked-in");
+  locked.style.display = "none";
+  locked.innerText = "";
+
   displayQuestion();
 }
 
@@ -342,23 +339,30 @@ function checkAnswer(button, index) {
         currentRound++;
 
         if (currentRound >= ROUNDS.length) {
-          showWinScreen();
+          document.getElementById("game").style.display = "none";
+          document.getElementById("winner-name").innerText = playerName;
+          document.getElementById("win-screen").style.display = "flex";
+          startFireworks();
+          startConfetti();
           return;
         }
 
         nextRound();
       }, 2000);
-
     } else {
       button.classList.remove("locked");
       button.classList.add("wrong");
+      document.getElementById("round-info").innerText = "BAD LUCK!";
 
       const allButtons = document.querySelectorAll(".option-btn");
       allButtons[currentQuestion.c].classList.add("correct");
 
       setTimeout(() => {
-        showLossScreen();
-      }, 3000);
+        locked.style.display = "none";
+        document.getElementById("game").style.display = "none";
+        document.getElementById("front-page").style.display = "flex";
+        updatePermanentLadder(0);
+      }, 10000);
     }
   }, 5000);
 }
@@ -372,42 +376,9 @@ function updatePermanentLadder(roundIndex) {
   });
 }
 
-/* WIN / LOSS SCREENS */
-function showWinScreen() {
-  document.getElementById("game").style.display = "none";
-
-  document.getElementById("winner-name").innerText = playerName;
-  document.getElementById("win-title").innerText = "CONGRATULATIONS!";
-  document.getElementById("win-subtext").innerText = "YOU ARE NOW A MELLIONAIRE!";
-
-  document.getElementById("win-screen").style.display = "flex";
-
-  startFireworks();
-  startConfetti();
-}
-
-function showLossScreen() {
-  document.getElementById("game").style.display = "none";
-
-  document.getElementById("winner-name").innerText = playerName;
-  document.getElementById("win-title").innerText = "BAD LUCK";
-  document.getElementById("win-subtext").innerText = `Enjoy your ${lastPrize}`;
-
-  document.getElementById("win-screen").style.display = "flex";
-  // No fireworks or confetti on loss
-}
-
 function restartGame() {
   document.getElementById("win-screen").style.display = "none";
   document.getElementById("front-page").style.display = "flex";
-
-  // Reset win screen text for next time
-  document.getElementById("win-title").innerText = "CONGRATULATIONS!";
-  document.getElementById("win-subtext").innerText = "YOU ARE NOW A MELLIONAIRE!";
-
-  // Optionally clear fireworks/confetti state
-  fwParticles = [];
-  confettiPieces = [];
 }
 
 /* FIREWORKS */
@@ -462,12 +433,12 @@ function updateFireworks() {
 
   requestAnimationFrame(updateFireworks);
 }
-updateFireworks();
 
 function startFireworks() {
   if (fwIntervalId) clearInterval(fwIntervalId);
   fwIntervalId = setInterval(createFirework, 600);
 }
+updateFireworks();
 
 /* CONFETTI */
 const confettiCanvas = document.getElementById("confetti-canvas");
@@ -525,7 +496,6 @@ function updateConfetti() {
   requestAnimationFrame(updateConfetti);
 }
 updateConfetti();
-
 </script>
 
 </body>
