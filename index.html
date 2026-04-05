@@ -5,21 +5,27 @@
 <title>Who Wants to Be a Mellionaire?</title>
 <style>
 body{font-family:'Trebuchet MS',sans-serif;margin:0;padding:0;overflow-x:hidden;background-image:url("front-page-background.png");background-size:cover;background-position:center;background-attachment:fixed;}
-#front-page{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;z-index:99999;}
+#front-page{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;z-index:9999;}
 #front-background{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-1;}
-#front-content{display:flex;flex-direction:column;align-items:center;}
-#front-logo{width:640px;max-width:90%;margin-bottom:30px;filter:drop-shadow(0 0 20px rgba(0,0,0,0.6));}
-#start-btn{background:#ffd700;color:#000;padding:18px 50px;font-size:1.6rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 25px rgba(255,215,0,0.6);}
-#start-btn:hover{background:#ffea70;transform:scale(1.06);}
+#front-content{display:flex;flex-direction:column;align-items:center;gap:16px;}
+#front-logo{width:640px;max-width:90%;filter:drop-shadow(0 0 20px rgba(0,0,0,0.6));}
+#start-btn,#show-leaderboard-btn{background:#ffd700;color:#000;padding:14px 40px;font-size:1.2rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 18px rgba(255,215,0,0.6);}
+#start-btn:hover,#show-leaderboard-btn:hover{background:#ffea70;transform:scale(1.05);}
+#show-leaderboard-btn{margin-top:4px;}
+#leaderboard-section{margin-top:10px;width:90vw;max-width:900px;background:rgba(0,0,0,0.7);border-radius:16px;padding:16px 20px;display:none;flex-direction:column;align-items:center;color:#fff;}
+#leaderboard-section h2{margin:0 0 10px 0;color:#ffd700;}
+#leaderboard-columns{display:flex;gap:40px;width:100%;justify-content:center;}
+#leaderboard-left,#leaderboard-right{flex:1;}
+.leaderboard-line{font-size:0.95rem;margin:2px 0;}
 #layout{display:flex;justify-content:center;width:100%;position:relative;top:180px;}
 #game-wrapper{flex:1;display:flex;justify-content:center;padding-right:320px;}
 #game{max-width:650px;width:100%;padding:30px;border-radius:20px;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);box-shadow:0 0 40px rgba(0,0,0,0.9),0 0 80px #001f54 inset;display:none;flex-direction:column;}
-h1{text-align:center;color:#ffd700;font-size:2.2rem;}
+h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 #player-name{text-align:center;font-size:1.4rem;color:#fff;margin-bottom:10px;}
 #round-info{text-align:center;font-weight:bold;color:#ffd700;margin-bottom:10px;}
 #question{font-size:1.3rem;margin:20px 0;padding:15px;background:rgba(0,0,0,0.4);border:2px solid #ffd700;border-radius:12px;text-align:center;color:#fff;}
 .options{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;margin-top:20px;}
-.option-btn{display:flex;align-items:center;gap:12px;background:linear-gradient(to bottom,#0d2a66,#081a44);border:2px solid #ffd700;border-radius:40px;padding:14px 20px;color:#f8f8f8;cursor:pointer;font-size:1.1rem;}
+.option-btn{display:flex;align-items:center;gap:12px;background:linear-gradient(to bottom,#0d2a66,#081a44);border:2px solid #ffd700;border-radius:40px;padding:14px 20px;color:#f8f8f8;cursor:pointer;font-size:1.05rem;}
 .option-btn:hover{background:#123b8a;transform:scale(1.02);}
 .option-label{background:#ffd700;color:#000;font-weight:bold;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
 .option-btn.locked{background:#ffd700;color:#000;}
@@ -29,17 +35,24 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;}
 #side-panel{position:fixed;top:120px;right:120px;width:240px;display:flex;flex-direction:column;align-items:center;}
 #millionaire-logo{width:240px;margin-bottom:20px;}
 #permanent-ladder{width:240px;display:flex;flex-direction:column-reverse;gap:12px;}
-#permanent-ladder .ladder-item{font-size:1.2rem;padding:8px 18px;border:2px solid #ffd700;border-radius:10px;color:#ffd700;opacity:.35;background:rgba(0,0,0,0.4);}
+#permanent-ladder .ladder-item{font-size:1.1rem;padding:8px 18px;border:2px solid #ffd700;border-radius:10px;color:#ffd700;opacity:.35;background:rgba(0,0,0,0.4);}
 #permanent-ladder .ladder-item.reached{background:#0f7a0f;color:#fff;opacity:1;}
 #permanent-ladder .ladder-item.active{opacity:1;transform:scale(1.12);}
-#win-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:999999;text-align:center;}
+#win-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:99999;text-align:center;}
 #confetti-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
 #win-content{position:relative;z-index:2;}
-#win-content h1{font-size:5rem;color:#ffd700;margin-bottom:20px;text-shadow:0 0 25px #000;}
-#win-content h2{font-size:3.5rem;color:#fff;margin-bottom:10px;text-shadow:0 0 20px #000;}
-#win-content h3{font-size:3rem;color:#fff;margin-bottom:50px;text-shadow:0 0 20px #000;}
-#play-again-btn{background:#ffd700;color:#000;padding:20px 60px;font-size:2rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 30px rgba(255,215,0,0.7);}
+#win-content h1{font-size:4.5rem;color:#ffd700;margin-bottom:10px;text-shadow:0 0 25px #000;}
+#win-content h2{font-size:3rem;color:#fff;margin-bottom:6px;text-shadow:0 0 20px #000;}
+#win-content h3{font-size:2.4rem;color:#fff;margin-bottom:30px;text-shadow:0 0 20px #000;}
+#play-again-btn{background:#ffd700;color:#000;padding:16px 50px;font-size:1.8rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 30px rgba(255,215,0,0.7);}
 #play-again-btn:hover{background:#ffea70;transform:scale(1.08);}
+@media(max-width:900px){
+  #layout{top:140px;}
+  #game-wrapper{padding-right:0;}
+  #side-panel{position:static;margin-top:20px;}
+  #front-page{align-items:flex-start;padding-top:40px;}
+  #leaderboard-columns{flex-direction:column;}
+}
 </style>
 </head>
 <body>
@@ -49,6 +62,15 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;}
   <div id="front-content">
     <img src="millionaire-logo.png" id="front-logo">
     <button id="start-btn" onclick="beginGame()">START GAME</button>
+    <button id="show-leaderboard-btn" onclick="toggleLeaderboard()">SHOW LEADERBOARD</button>
+
+    <div id="leaderboard-section">
+      <h2>TOP 40 PLAYERS</h2>
+      <div id="leaderboard-columns">
+        <div id="leaderboard-left"></div>
+        <div id="leaderboard-right"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -89,7 +111,6 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;}
 
 <script>
 let playerName="",currentRound=0,currentQuestion=null,lastPrize="$0";
-
 const ROUNDS=[
   {name:"Round 1",prize:"$1"},
   {name:"Round 2",prize:"$100"},
@@ -98,7 +119,6 @@ const ROUNDS=[
   {name:"Round 5",prize:"$100,000"},
   {name:"Final Round",prize:"MELLIONAIRE"}
 ];
-
 const QUESTIONS={
   1:[
     {q:"WHAT IS MEL'S MIDDLE NAME?",a:["KATE","JANE","ROSE","CLARISSA"],c:0},
@@ -138,6 +158,7 @@ const QUESTIONS={
   ]
 };
 
+/* GAME FLOW */
 function beginGame(){
   playerName=prompt("Enter your name to begin:");
   if(!playerName||playerName.trim()==="")playerName="Player";
@@ -146,14 +167,12 @@ function beginGame(){
   document.getElementById("game").style.display="flex";
   startGame();
 }
-
 function startGame(){
   currentRound=0;
   lastPrize="$0";
   updatePermanentLadder(0);
   nextRound();
 }
-
 function nextRound(){
   const round=ROUNDS[currentRound];
   lastPrize=round.prize;
@@ -166,7 +185,6 @@ function nextRound(){
   locked.innerText="";
   displayQuestion();
 }
-
 function displayQuestion(){
   document.getElementById("question").innerText=currentQuestion.q;
   const optionsDiv=document.querySelector(".options");
@@ -186,7 +204,6 @@ function displayQuestion(){
     optionsDiv.appendChild(btn);
   });
 }
-
 function checkAnswer(button,index){
   const buttons=document.querySelectorAll(".option-btn");
   buttons.forEach(b=>b.disabled=true);
@@ -213,7 +230,6 @@ function checkAnswer(button,index){
     }
   },5000);
 }
-
 function updatePermanentLadder(roundIndex){
   const items=document.querySelectorAll("#permanent-ladder .ladder-item");
   items.forEach((item,i)=>{
@@ -223,23 +239,24 @@ function updatePermanentLadder(roundIndex){
   });
 }
 
+/* WIN / LOSS + LEADERBOARD */
 function showWinScreen(){
   document.getElementById("game").style.display="none";
   document.getElementById("winner-name").innerText=playerName;
   document.getElementById("win-title").innerText="CONGRATULATIONS!";
   document.getElementById("win-subtext").innerText="YOU ARE NOW A MELLIONAIRE!";
   document.getElementById("win-screen").style.display="flex";
+  saveScore(playerName,"MELLIONAIRE");
   startConfetti();
 }
-
 function showLossScreen(){
   document.getElementById("game").style.display="none";
   document.getElementById("winner-name").innerText=playerName;
   document.getElementById("win-title").innerText="BAD LUCK";
   document.getElementById("win-subtext").innerText=`Enjoy your ${lastPrize}`;
   document.getElementById("win-screen").style.display="flex";
+  saveScore(playerName,lastPrize);
 }
-
 function restartGame(){
   document.getElementById("win-screen").style.display="none";
   document.getElementById("win-title").innerText="CONGRATULATIONS!";
@@ -247,21 +264,60 @@ function restartGame(){
   confettiPieces=[];
   document.getElementById("front-page").style.display="flex";
   updatePermanentLadder(0);
+  renderLeaderboard();
+}
+
+/* LEADERBOARD (TOP 40) */
+function prizeToValue(prize){
+  if(prize==="MELLIONAIRE")return 1000001;
+  const num=parseInt(prize.replace(/[^0-9]/g,""))||0;
+  return num;
+}
+function loadScores(){
+  try{
+    const raw=localStorage.getItem("mellionaire_scores");
+    if(!raw)return[];
+    return JSON.parse(raw);
+  }catch(e){return[];}
+}
+function saveScores(arr){
+  localStorage.setItem("mellionaire_scores",JSON.stringify(arr));
+}
+function saveScore(name,prize){
+  let scores=loadScores();
+  scores.push({name,prize});
+  scores.sort((a,b)=>prizeToValue(b.prize)-prizeToValue(a.prize));
+  if(scores.length>40)scores=scores.slice(0,40);
+  saveScores(scores);
+}
+function renderLeaderboard(){
+  const left=document.getElementById("leaderboard-left");
+  const right=document.getElementById("leaderboard-right");
+  left.innerHTML="";right.innerHTML="";
+  const scores=loadScores();
+  scores.forEach((s,idx)=>{
+    const line=document.createElement("div");
+    line.className="leaderboard-line";
+    line.innerText=`${idx+1}. ${s.name} — ${s.prize}`;
+    if(idx<20)left.appendChild(line);else right.appendChild(line);
+  });
+}
+function toggleLeaderboard(){
+  const section=document.getElementById("leaderboard-section");
+  if(section.style.display==="flex"){section.style.display="none";}
+  else{renderLeaderboard();section.style.display="flex";}
 }
 
 /* CONFETTI */
 const confettiCanvas=document.getElementById("confetti-canvas");
 const confettiCtx=confettiCanvas.getContext("2d");
-
 function resizeConfetti(){
   confettiCanvas.width=window.innerWidth;
   confettiCanvas.height=window.innerHeight;
 }
 resizeConfetti();
 window.addEventListener("resize",resizeConfetti);
-
 let confettiPieces=[];
-
 function createConfettiPiece(){
   return{
     x:Math.random()*confettiCanvas.width,
@@ -274,19 +330,17 @@ function createConfettiPiece(){
     color:Math.random()>0.5?"#FFD700":"#FFF5A3"
   };
 }
-
 function startConfetti(){
   confettiPieces=[];
-  for(let i=0;i<150;i++){confettiPieces.push(createConfettiPiece());}
+  for(let i=0;i<150;i++)confettiPieces.push(createConfettiPiece());
 }
-
 function updateConfetti(){
   confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
   confettiPieces.forEach((p,index)=>{
     p.y+=p.speedY;
     p.x+=p.speedX;
     p.rotation+=p.rotationSpeed;
-    if(p.y>confettiCanvas.height+20){confettiPieces[index]=createConfettiPiece();}
+    if(p.y>confettiCanvas.height+20)confettiPieces[index]=createConfettiPiece();
     confettiCtx.save();
     confettiCtx.translate(p.x,p.y);
     confettiCtx.rotate((p.rotation*Math.PI)/180);
@@ -297,6 +351,9 @@ function updateConfetti(){
   requestAnimationFrame(updateConfetti);
 }
 updateConfetti();
+
+/* INITIAL LEADERBOARD RENDER ON LOAD */
+renderLeaderboard();
 </script>
 </body>
 </html>
