@@ -3,79 +3,196 @@
 <head>
 <meta charset="UTF-8" />
 <title>Who Wants to Be a Mellionaire?</title>
+
 <style>
-body{font-family:'Trebuchet MS',sans-serif;margin:0;padding:0;overflow-x:hidden;background-image:url("front-page-background.png");background-size:cover;background-position:center;background-attachment:fixed;}
-#front-page{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;z-index:9999;}
-#front-background{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-1;}
-#front-content{display:flex;flex-direction:column;align-items:center;gap:16px;}
-#front-logo{width:640px;max-width:90%;filter:drop-shadow(0 0 20px rgba(0,0,0,0.6));}
-#start-btn,#show-leaderboard-btn{background:#ffd700;color:#000;padding:14px 40px;font-size:1.2rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 18px rgba(255,215,0,0.6);}
-#start-btn:hover,#show-leaderboard-btn:hover{background:#ffea70;transform:scale(1.05);}
+/* ===== GLOBAL ===== */
+body{
+  font-family:'Trebuchet MS',sans-serif;
+  margin:0;padding:0;overflow-x:hidden;
+  background-image:url("front-page-background.png");
+  background-size:cover;background-position:center;
+  background-attachment:fixed;
+}
+
+/* ===== FRONT PAGE ===== */
+#front-page{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  display:flex;justify-content:center;align-items:center;
+  z-index:9999;
+}
+#front-background{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  object-fit:cover;z-index:-1;
+}
+#front-content{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+}
+#front-logo{
+  width:640px;max-width:90%;
+  filter:drop-shadow(0 0 20px rgba(0,0,0,0.6));
+}
+#start-btn,#show-leaderboard-btn{
+  background:#ffd700;color:#000;padding:14px 40px;
+  font-size:1.2rem;border:none;border-radius:14px;
+  cursor:pointer;font-weight:bold;letter-spacing:1px;
+  box-shadow:0 0 18px rgba(255,215,0,0.6);
+}
+#start-btn:hover,#show-leaderboard-btn:hover{
+  background:#ffea70;transform:scale(1.05);
+}
 #show-leaderboard-btn{margin-top:4px;}
-#layout{display:flex;justify-content:center;width:100%;position:relative;top:180px;}
-#game-wrapper{flex:1;display:flex;justify-content:center;padding-right:320px;}
-#game{max-width:650px;width:100%;padding:30px;border-radius:20px;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);box-shadow:0 0 40px rgba(0,0,0,0.9),0 0 80px #001f54 inset;display:none;flex-direction:column;}
+
+/* ===== GAME LAYOUT ===== */
+#layout{
+  display:flex;justify-content:center;width:100%;
+  position:relative;top:180px;
+}
+#game-wrapper{
+  flex:1;display:flex;justify-content:center;padding-right:320px;
+}
+#game{
+  max-width:650px;width:100%;padding:30px;border-radius:20px;
+  background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);
+  box-shadow:0 0 40px rgba(0,0,0,0.9),0 0 80px #001f54 inset;
+  display:none;flex-direction:column;
+}
 h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 #player-name{text-align:center;font-size:1.4rem;color:#fff;margin-bottom:10px;}
 #round-info{text-align:center;font-weight:bold;color:#ffd700;margin-bottom:10px;}
-#question{font-size:1.3rem;margin:20px 0;padding:15px;background:rgba(0,0,0,0.4);border:2px solid #ffd700;border-radius:12px;text-align:center;color:#fff;}
-.options{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;margin-top:20px;}
-.option-btn{display:flex;align-items:center;gap:12px;background:linear-gradient(to bottom,#0d2a66,#081a44);border:2px solid #ffd700;border-radius:40px;padding:14px 20px;color:#f8f8f8;cursor:pointer;font-size:1.05rem;}
+#question{
+  font-size:1.3rem;margin:20px 0;padding:15px;
+  background:rgba(0,0,0,0.4);border:2px solid #ffd700;
+  border-radius:12px;text-align:center;color:#fff;
+}
+
+/* ===== OPTIONS ===== */
+.options{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:16px 24px;margin-top:20px;
+}
+.option-btn{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(to bottom,#0d2a66,#081a44);
+  border:2px solid #ffd700;border-radius:40px;
+  padding:14px 20px;color:#f8f8f8;cursor:pointer;
+  font-size:1.05rem;
+}
 .option-btn:hover{background:#123b8a;transform:scale(1.02);}
-.option-label{background:#ffd700;color:#000;font-weight:bold;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.option-label{
+  background:#ffd700;color:#000;font-weight:bold;
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
 .option-btn.locked{background:#ffd700;color:#000;}
 .option-btn.correct{background:#0f7a0f;}
 .option-btn.wrong{background:#7a0f0f;}
-#locked-in{margin-top:20px;text-align:center;font-size:2rem;font-weight:bold;color:#ffd700;min-height:40px;display:none;}
-#side-panel{position:fixed;top:120px;right:120px;width:240px;display:flex;flex-direction:column;align-items:center;}
+
+#locked-in{
+  margin-top:20px;text-align:center;font-size:2rem;
+  font-weight:bold;color:#ffd700;min-height:40px;display:none;
+}
+
+/* ===== SIDE PANEL ===== */
+#side-panel{
+  position:fixed;top:120px;right:120px;width:240px;
+  display:flex;flex-direction:column;align-items:center;
+}
 #millionaire-logo{width:240px;margin-bottom:20px;}
-#permanent-ladder{width:240px;display:flex;flex-direction:column-reverse;gap:12px;}
-#permanent-ladder .ladder-item{font-size:1.1rem;padding:8px 18px;border:2px solid #ffd700;border-radius:10px;color:#ffd700;opacity:.35;background:rgba(0,0,0,0.4);}
-#permanent-ladder .ladder-item.reached{background:#0f7a0f;color:#fff;opacity:1;}
-#permanent-ladder .ladder-item.active{opacity:1;transform:scale(1.12);}
-#win-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:99998;text-align:center;}
-#confetti-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+#permanent-ladder{
+  width:240px;display:flex;flex-direction:column-reverse;gap:12px;
+}
+#permanent-ladder .ladder-item{
+  font-size:1.1rem;padding:8px 18px;border:2px solid #ffd700;
+  border-radius:10px;color:#ffd700;opacity:.35;
+  background:rgba(0,0,0,0.4);
+}
+#permanent-ladder .ladder-item.reached{
+  background:#0f7a0f;color:#fff;opacity:1;
+}
+#permanent-ladder .ladder-item.active{
+  opacity:1;transform:scale(1.12);
+}
+
+/* ===== WIN SCREEN ===== */
+#win-screen{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);
+  display:none;justify-content:center;align-items:center;
+  z-index:99998;text-align:center;
+}
+#confetti-canvas{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;
+}
 #win-content{position:relative;z-index:2;}
-#win-content h1{font-size:4.5rem;color:#ffd700;margin-bottom:10px;text-shadow:0 0 25px #000;}
-#win-content h2{font-size:3rem;color:#fff;margin-bottom:6px;text-shadow:0 0 20px #000;}
-#win-content h3{font-size:2.4rem;color:#fff;margin-bottom:30px;text-shadow:0 0 20px #000;}
-#play-again-btn{background:#ffd700;color:#000;padding:16px 50px;font-size:1.8rem;border:none;border-radius:14px;cursor:pointer;font-weight:bold;letter-spacing:1px;box-shadow:0 0 30px rgba(255,215,0,0.7);}
+#win-content h1{
+  font-size:4.5rem;color:#ffd700;margin-bottom:10px;
+  text-shadow:0 0 25px #000;
+}
+#win-content h2{
+  font-size:3rem;color:#fff;margin-bottom:6px;
+  text-shadow:0 0 20px #000;
+}
+#win-content h3{
+  font-size:2.4rem;color:#fff;margin-bottom:30px;
+  text-shadow:0 0 20px #000;
+}
+#play-again-btn{
+  background:#ffd700;color:#000;padding:16px 50px;
+  font-size:1.8rem;border:none;border-radius:14px;
+  cursor:pointer;font-weight:bold;letter-spacing:1px;
+  box-shadow:0 0 30px rgba(255,215,0,0.7);
+}
 #play-again-btn:hover{background:#ffea70;transform:scale(1.08);}
 
-/* FULL-SCREEN LEADERBOARD */
+/* ===== LEADERBOARD ===== */
 #leaderboard-screen{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);
   display:none;justify-content:center;align-items:center;
   z-index:99999;text-align:center;color:#fff;
 }
-#leaderboard-content{width:90%;max-width:900px;}
-#leaderboard-content h1{font-size:3.5rem;color:#ffd700;margin-bottom:20px;}
-#leaderboard-columns{display:flex;gap:40px;justify-content:center;margin-bottom:40px;}
-#leaderboard-left,#leaderboard-right{flex:1;text-align:left;}
+#leaderboard-content{
+  width:90%;max-width:1100px;
+}
+#leaderboard-content h1{
+  font-size:3.5rem;color:#ffd700;margin-bottom:20px;
+}
+
+#leaderboard-columns{
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+}
+
+.leaderboard-column{
+  flex:1;
+  text-align:left;
+  padding:0 20px;
+}
+
 .leaderboard-line{
-  font-size:1.5rem;
+  font-size:1.4rem;
   margin:4px 0;
   color:#fff;
 }
-#close-leaderboard-btn{
-  background:#ffd700;color:#000;padding:16px 50px;font-size:1.6rem;
-  border:none;border-radius:14px;cursor:pointer;font-weight:bold;
-  box-shadow:0 0 30px rgba(255,215,0,0.7);
-}
-#close-leaderboard-btn:hover{background:#ffea70;transform:scale(1.08);}
 
-@media(max-width:900px){
-  #layout{top:140px;}
-  #game-wrapper{padding-right:0;}
-  #side-panel{position:static;margin-top:20px;}
-  #front-page{align-items:flex-start;padding-top:40px;}
-  #leaderboard-columns{flex-direction:column;}
+#close-leaderboard-btn{
+  background:#ffd700;color:#000;padding:16px 50px;
+  font-size:1.6rem;border:none;border-radius:14px;
+  cursor:pointer;font-weight:bold;
+  box-shadow:0 0 30px rgba(255,215,0,0.7);
+  margin-top:30px;
+}
+#close-leaderboard-btn:hover{
+  background:#ffea70;transform:scale(1.08);
 }
 </style>
 </head>
+
 <body>
 
+<!-- ===== FRONT PAGE ===== -->
 <div id="front-page">
   <img src="front-page-background.png" id="front-background">
   <div id="front-content">
@@ -85,6 +202,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   </div>
 </div>
 
+<!-- ===== SIDE PANEL ===== -->
 <div id="side-panel">
   <img src="millionaire-logo.png" id="millionaire-logo">
   <div id="permanent-ladder">
@@ -97,6 +215,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   </div>
 </div>
 
+<!-- ===== GAME AREA ===== -->
 <div id="layout">
   <div id="game-wrapper">
     <div id="game">
@@ -110,6 +229,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   </div>
 </div>
 
+<!-- ===== WIN SCREEN ===== -->
 <div id="win-screen">
   <canvas id="confetti-canvas"></canvas>
   <div id="win-content">
@@ -120,279 +240,373 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   </div>
 </div>
 
-<!-- FULL-SCREEN LEADERBOARD -->
+<!-- ===== LEADERBOARD ===== -->
 <div id="leaderboard-screen">
   <div id="leaderboard-content">
     <h1>TOP 30 PLAYERS</h1>
+
     <div id="leaderboard-columns">
-      <div id="leaderboard-left"></div>
-      <div id="leaderboard-right"></div>
+      <div class="leaderboard-column" id="col1"></div>
+      <div class="leaderboard-column" id="col2"></div>
+      <div class="leaderboard-column" id="col3"></div>
     </div>
+
     <button id="close-leaderboard-btn" onclick="closeLeaderboard()">BACK</button>
   </div>
 </div>
-
 <script>
-let playerName="",currentRound=0,currentQuestion=null,lastPrize="$0";
-const ROUNDS=[
-  {name:"Round 1",prize:"$1"},
-  {name:"Round 2",prize:"$100"},
-  {name:"Round 3",prize:"$1,000"},
-  {name:"Round 4",prize:"$10,000"},
-  {name:"Round 5",prize:"$100,000"},
-  {name:"Final Round",prize:"MELLIONAIRE"}
+let playerName = "";
+let currentRound = 0;
+let currentQuestion = null;
+let lastPrize = "$0";
+
+/* ===== ROUND DEFINITIONS ===== */
+const ROUNDS = [
+  { name: "Round 1", prize: "$1" },
+  { name: "Round 2", prize: "$100" },
+  { name: "Round 3", prize: "$1,000" },
+  { name: "Round 4", prize: "$10,000" },
+  { name: "Round 5", prize: "$100,000" },
+  { name: "Final Round", prize: "MELLIONAIRE" }
 ];
-const QUESTIONS={
-  1:[
-    {q:"WHAT IS MEL'S MIDDLE NAME?",a:["KATE","JANE","ROSE","CLARISSA"],c:0},
-    {q:"HOW MANY SIBLINGS DOES SHE HAVE?",a:["ZERO","ONE","TWO","THREE"],c:1},
-    {q:"MEL'S PARENTS NAMES ARE?",a:["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"],c:2},
-    {q:"MEL'S MAIDEN NAME IS?",a:["HIGGINS","HASKINS","HOLLOWAY","HILL"],c:3}
+
+/* ===== QUESTIONS ===== */
+const QUESTIONS = {
+  1: [
+    { q:"WHAT IS MEL'S MIDDLE NAME?", a:["KATE","JANE","ROSE","CLARISSA"], c:0 },
+    { q:"HOW MANY SIBLINGS DOES SHE HAVE?", a:["ZERO","ONE","TWO","THREE"], c:1 },
+    { q:"MEL'S PARENTS NAMES ARE?", a:["RODNEY & SANDRA","ROGER & SUZANNE","RODNEY & SUZANNE","ROGER & SANDRA"], c:2 },
+    { q:"MEL'S MAIDEN NAME IS?", a:["HIGGINS","HASKINS","HOLLOWAY","HILL"], c:3 }
   ],
-  2:[
-    {q:"WHAT HIGH SCHOOL DID MEL ATTEND?",a:["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"],c:2},
-    {q:"WHAT IS OSCAR'S MIDDLE NAME?",a:["JACOB","JAMES","JOHN","JOEL"],c:1},
-    {q:"WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?",a:["SAXOPHONE","GUITAR","CLARINET","TUBA"],c:0},
-    {q:"WHAT IS MEL'S FAVOURITE SPIRIT?",a:["RUM","GIN","VODKA","TEQUILA"],c:1}
+  2: [
+    { q:"WHAT HIGH SCHOOL DID MEL ATTEND?", a:["WESTMINISTER","BLACKWOOD","IMMANUEL","WALFORD"], c:2 },
+    { q:"WHAT IS OSCAR'S MIDDLE NAME?", a:["JACOB","JAMES","JOHN","JOEL"], c:1 },
+    { q:"WHICH INSTRUMENT DID MEL PLAY IN HIGH SCHOOL?", a:["SAXOPHONE","GUITAR","CLARINET","TUBA"], c:0 },
+    { q:"WHAT IS MEL'S FAVOURITE SPIRIT?", a:["RUM","GIN","VODKA","TEQUILA"], c:1 }
   ],
-  3:[
-    {q:"WHAT WAS THE THEME FOR MEL'S WEDDING?",a:["PAPER","DISCO","OCEAN","ICE"],c:0},
-    {q:"WHERE IS SNUG COTTAGE LOCATED?",a:["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"],c:3},
-    {q:"WHAT FLAVOUR WAS MEL'S WEDDING CAKE?",a:["RED VELVET","LEMON","CHEESE","PISTACHIO"],c:2},
-    {q:"MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?",a:["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"],c:1}
+  3: [
+    { q:"WHAT WAS THE THEME FOR MEL'S WEDDING?", a:["PAPER","DISCO","OCEAN","ICE"], c:0 },
+    { q:"WHERE IS SNUG COTTAGE LOCATED?", a:["MANNUM","GOOLWA","MURRAY BRIDGE","VICTOR HARBOUR"], c:3 },
+    { q:"WHAT FLAVOUR WAS MEL'S WEDDING CAKE?", a:["RED VELVET","LEMON","CHEESE","PISTACHIO"], c:2 },
+    { q:"MEL RECENTLY MADE A CAREER CHANGE INTO WHAT FIELD?", a:["ACCOUNTING","EVENT MANAGEMENT","CONSTRUCTION","RELIGION"], c:1 }
   ],
-  4:[
-    {q:"WHAT STAR SIGN IS MEL?",a:["GEMINI","LIBRA","SCORPIO","ARIES"],c:3},
-    {q:"WHAT PRIMARY SCHOOL DID MEL ATTEND?",a:["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"],c:0},
-    {q:"WHAT POSITION DID MEL PLAY FOR NETBALL?",a:["GK","C","GS","WD"],c:0},
-    {q:"WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?",a:["COLLAR BONE","WRIST","LEG","NONE"],c:3}
+  4: [
+    { q:"WHAT STAR SIGN IS MEL?", a:["GEMINI","LIBRA","SCORPIO","ARIES"], c:3 },
+    { q:"WHAT PRIMARY SCHOOL DID MEL ATTEND?", a:["HAPPY VALLEY","IMMANUEL","HALLET COVE","COROMANDEL"], c:0 },
+    { q:"WHAT POSITION DID MEL PLAY FOR NETBALL?", a:["GK","C","GS","WD"], c:0 },
+    { q:"WHICH OF THE FOLLOWING BONES HAS MEL BROKEN?", a:["COLLAR BONE","WRIST","LEG","NONE"], c:3 }
   ],
-  5:[
-    {q:"WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?",a:["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"],c:3},
-    {q:"WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?",a:["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"],c:1},
-    {q:"IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?",a:["GERMANY","ARGENTINA","JAPAN","CANADA"],c:2},
-    {q:"IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?",a:["ANDREWS","CAMDEN","MORPHETT","LOHE"],c:3}
+  5: [
+    { q:"WHICH OF THE FOLLOWING HAS MEL NOT TAKEN A RIDE ON?", a:["ELEPHANT","CAMEL","HELICOPTER","MOTORBIKE"], c:3 },
+    { q:"WHAT IS THE NAME OF THE BALLET SCHOOL THAT MEL ATTENDED?", a:["PIVOTAL DANCE ACADEMY","TENISON COLLEGE","TURNING POINT DANCE","ALL THAT JAZZ"], c:1 },
+    { q:"IN HIGH SCHOOL, MEL HAD EXCHANGE STUDENTS FROM WHICH COUNTRY?", a:["GERMANY","ARGENTINA","JAPAN","CANADA"], c:2 },
+    { q:"IN HIGH SCHOOL, MEL WAS HOUSE CAPTAIN FOR WHICH TEAM?", a:["ANDREWS","CAMDEN","MORPHETT","LOHE"], c:3 }
   ],
-  6:[
-    {q:"AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?",a:["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"],c:2},
-    {q:"AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?",a:["BLUE","YELLOW","GREEN","RED"],c:0},
-    {q:"WHAT WAS THE NAME OF MEL'S GUINEA PIG?",a:["CHARLOTTE","GINGER","PATCHES","MISSY"],c:1},
-    {q:"MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?",a:["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"],c:3}
+  6: [
+    { q:"AS A CHILD, WHAT WAS MEL'S FAVOURITE GAME ON SUPER NINTENDO?", a:["SUPER MARIO BROS","ZELDA","DONKEY KONG COUNTRY","KIRBY"], c:2 },
+    { q:"AT MEL'S WEDDING, WHAT COLOUR PAPER FLOWER WAS NOT USED?", a:["BLUE","YELLOW","GREEN","RED"], c:0 },
+    { q:"WHAT WAS THE NAME OF MEL'S GUINEA PIG?", a:["CHARLOTTE","GINGER","PATCHES","MISSY"], c:1 },
+    { q:"MEL'S FRIENDS XMAS ORIGINATED AT WHAT WINERY?", a:["HARNDORF","BIRD IN HAND","CHAPEL HILL","ECHIDNA"], c:3 }
   ]
 };
 
-/* GAME FLOW */
+/* ===== GAME START ===== */
 function beginGame(){
-  playerName=prompt("Enter your name to begin:");
-  if(!playerName||playerName.trim()==="")playerName="Player";
-  document.getElementById("player-name").innerText=`Welcome, ${playerName}!`;
-  document.getElementById("front-page").style.display="none";
-  document.getElementById("game").style.display="flex";
+  playerName = prompt("Enter your name to begin:");
+  if(!playerName || playerName.trim()==="") playerName = "Player";
+
+  document.getElementById("player-name").innerText = `Welcome, ${playerName}!`;
+  document.getElementById("front-page").style.display = "none";
+  document.getElementById("game").style.display = "flex";
+
   startGame();
 }
+
 function startGame(){
-  currentRound=0;
-  lastPrize="$0";
+  currentRound = 0;
+  lastPrize = "$0";   // ⭐ ensures wrong on Q1 = $0
   updatePermanentLadder(0);
   nextRound();
 }
+
+/* ===== LOAD NEXT ROUND ===== */
 function nextRound(){
-  const round=ROUNDS[currentRound];
-  lastPrize=round.prize;
-  document.getElementById("round-info").innerText=`${round.name} – Prize: ${round.prize}`;
+  const round = ROUNDS[currentRound];
+
+  document.getElementById("round-info").innerText =
+    `${round.name} – Prize: ${round.prize}`;
+
   updatePermanentLadder(currentRound);
-  const qList=QUESTIONS[currentRound+1];
-  currentQuestion=qList[Math.floor(Math.random()*qList.length)];
-  const locked=document.getElementById("locked-in");
-  locked.style.display="none";
-  locked.innerText="";
+
+  const qList = QUESTIONS[currentRound + 1];
+  currentQuestion = qList[Math.floor(Math.random() * qList.length)];
+
+  const locked = document.getElementById("locked-in");
+  locked.style.display = "none";
+  locked.innerText = "";
+
   displayQuestion();
 }
+
+/* ===== DISPLAY QUESTION ===== */
 function displayQuestion(){
-  document.getElementById("question").innerText=currentQuestion.q;
-  const optionsDiv=document.querySelector(".options");
-  optionsDiv.innerHTML="";
-  const labels=["A","B","C","D"];
+  document.getElementById("question").innerText = currentQuestion.q;
+
+  const optionsDiv = document.querySelector(".options");
+  optionsDiv.innerHTML = "";
+
+  const labels = ["A","B","C","D"];
+
   currentQuestion.a.forEach((opt,index)=>{
-    const btn=document.createElement("button");
-    btn.className="option-btn";
-    const labelSpan=document.createElement("span");
-    labelSpan.className="option-label";
-    labelSpan.innerText=labels[index];
-    const textSpan=document.createElement("span");
-    textSpan.innerText=opt;
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "option-label";
+    labelSpan.innerText = labels[index];
+
+    const textSpan = document.createElement("span");
+    textSpan.innerText = opt;
+
     btn.appendChild(labelSpan);
     btn.appendChild(textSpan);
-    btn.onclick=()=>checkAnswer(btn,index);
+
+    btn.onclick = () => checkAnswer(btn,index);
+
     optionsDiv.appendChild(btn);
   });
 }
+
+/* ===== CHECK ANSWER ===== */
 function checkAnswer(button,index){
-  const buttons=document.querySelectorAll(".option-btn");
-  buttons.forEach(b=>b.disabled=true);
-  const locked=document.getElementById("locked-in");
-  locked.innerText="LOCKED IN";
-  locked.style.display="block";
+  const buttons = document.querySelectorAll(".option-btn");
+  buttons.forEach(b => b.disabled = true);
+
+  const locked = document.getElementById("locked-in");
+  locked.innerText = "LOCKED IN";
+  locked.style.display = "block";
+
   button.classList.add("locked");
+
   setTimeout(()=>{
-    if(index===currentQuestion.c){
+
+    if(index === currentQuestion.c){
       button.classList.remove("locked");
       button.classList.add("correct");
+
+      // ⭐ Correct scoring fix:
+      // Only update lastPrize when they PASS a round
+      lastPrize = ROUNDS[currentRound].prize;
+
       setTimeout(()=>{
-        locked.style.display="none";
+        locked.style.display = "none";
         currentRound++;
-        if(currentRound>=ROUNDS.length){showWinScreen();return;}
+
+        if(currentRound >= ROUNDS.length){
+          showWinScreen();
+          return;
+        }
+
         nextRound();
       },2000);
-    }else{
+
+    } else {
       button.classList.remove("locked");
       button.classList.add("wrong");
-      const allButtons=document.querySelectorAll(".option-btn");
+
+      const allButtons = document.querySelectorAll(".option-btn");
       allButtons[currentQuestion.c].classList.add("correct");
-      setTimeout(()=>{showLossScreen();},10000);
+
+      setTimeout(()=>{ showLossScreen(); },10000);
     }
+
   },5000);
 }
+
+/* ===== UPDATE LADDER ===== */
 function updatePermanentLadder(roundIndex){
-  const items=document.querySelectorAll("#permanent-ladder .ladder-item");
+  const items = document.querySelectorAll("#permanent-ladder .ladder-item");
+
   items.forEach((item,i)=>{
     item.classList.remove("active","reached");
-    if(i<roundIndex)item.classList.add("reached");
-    if(i===roundIndex)item.classList.add("active");
+    if(i < roundIndex) item.classList.add("reached");
+    if(i === roundIndex) item.classList.add("active");
   });
 }
 
-/* WIN / LOSS + LEADERBOARD */
+/* ===== WIN / LOSS ===== */
 function showWinScreen(){
-  document.getElementById("game").style.display="none";
-  document.getElementById("winner-name").innerText=playerName;
-  document.getElementById("win-title").innerText="CONGRATULATIONS!";
-  document.getElementById("win-subtext").innerText="YOU ARE NOW A MELLIONAIRE!";
-  document.getElementById("win-screen").style.display="flex";
+  document.getElementById("game").style.display = "none";
+  document.getElementById("winner-name").innerText = playerName;
+  document.getElementById("win-title").innerText = "CONGRATULATIONS!";
+  document.getElementById("win-subtext").innerText = "YOU ARE NOW A MELLIONAIRE!";
+  document.getElementById("win-screen").style.display = "flex";
+
   saveScore(playerName,"MELLIONAIRE");
   startConfetti();
 }
+
 function showLossScreen(){
-  document.getElementById("game").style.display="none";
-  document.getElementById("winner-name").innerText=playerName;
-  document.getElementById("win-title").innerText="BAD LUCK";
-  document.getElementById("win-subtext").innerText=`Enjoy your ${lastPrize}`;
-  document.getElementById("win-screen").style.display="flex";
+  document.getElementById("game").style.display = "none";
+  document.getElementById("winner-name").innerText = playerName;
+  document.getElementById("win-title").innerText = "BAD LUCK";
+  document.getElementById("win-subtext").innerText = `Enjoy your ${lastPrize}`;
+  document.getElementById("win-screen").style.display = "flex";
+
   saveScore(playerName,lastPrize);
 }
+
 function restartGame(){
-  document.getElementById("win-screen").style.display="none";
-  document.getElementById("win-title").innerText="CONGRATULATIONS!";
-  document.getElementById("win-subtext").innerText="YOU ARE NOW A MELLIONAIRE!";
-  confettiPieces=[];
-  document.getElementById("front-page").style.display="flex";
+  document.getElementById("win-screen").style.display = "none";
+  document.getElementById("front-page").style.display = "flex";
+
+  confettiPieces = [];
   updatePermanentLadder(0);
   renderLeaderboard();
 }
+/* ===== LEADERBOARD SYSTEM ===== */
 
-/* LEADERBOARD (TOP 30) */
 function prizeToValue(prize){
-  if(prize==="MELLIONAIRE")return 1000001;
-  const num=parseInt(prize.replace(/[^0-9]/g,""))||0;
+  if(prize === "MELLIONAIRE") return 1000001;
+  const num = parseInt(prize.replace(/[^0-9]/g,"")) || 0;
   return num;
 }
+
 function loadScores(){
   try{
-    const raw=localStorage.getItem("mellionaire_scores");
-    if(!raw)return[];
+    const raw = localStorage.getItem("mellionaire_scores");
+    if(!raw) return [];
     return JSON.parse(raw);
-  }catch(e){return[];}
-}
-function saveScores(arr){
-  localStorage.setItem("mellionaire_scores",JSON.stringify(arr));
-}
-function saveScore(name,prize){
-  let scores=loadScores();
-  scores.push({name,prize});
-  scores.sort((a,b)=>prizeToValue(b.prize)-prizeToValue(a.prize));
-  if(scores.length>30)scores=scores.slice(0,30);
-  saveScores(scores);
-}
-function renderLeaderboard(){
-  const left=document.getElementById("leaderboard-left");
-  const right=document.getElementById("leaderboard-right");
-  if(!left||!right)return;
-  left.innerHTML="";right.innerHTML="";
-  const scores=loadScores();
-  const filled=[];
-  for(let i=0;i<30;i++){
-    if(scores[i]){
-      filled.push({number:i+1,name:scores[i].name,prize:scores[i].prize});
-    }else{
-      filled.push({number:i+1,name:"—",prize:"—"});
-    }
+  }catch(e){
+    return [];
   }
-  for(let i=0;i<15;i++){
-    const line=document.createElement("div");
-    line.className="leaderboard-line";
-    line.innerText=`${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
-    left.appendChild(line);
-  }
-  for(let i=15;i<30;i++){
-    const line=document.createElement("div");
-    line.className="leaderboard-line";
-    line.innerText=`${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
-    right.appendChild(line);
-  }
-}
-function openLeaderboard(){
-  renderLeaderboard();
-  document.getElementById("leaderboard-screen").style.display="flex";
-}
-function closeLeaderboard(){
-  document.getElementById("leaderboard-screen").style.display="none";
 }
 
-/* CONFETTI */
-const confettiCanvas=document.getElementById("confetti-canvas");
-const confettiCtx=confettiCanvas.getContext("2d");
+function saveScores(arr){
+  localStorage.setItem("mellionaire_scores", JSON.stringify(arr));
+}
+
+function saveScore(name, prize){
+  let scores = loadScores();
+  scores.push({name, prize});
+
+  scores.sort((a,b)=> prizeToValue(b.prize) - prizeToValue(a.prize));
+
+  if(scores.length > 30) scores = scores.slice(0,30);
+
+  saveScores(scores);
+}
+
+function renderLeaderboard(){
+  const col1 = document.getElementById("col1");
+  const col2 = document.getElementById("col2");
+  const col3 = document.getElementById("col3");
+
+  col1.innerHTML = "";
+  col2.innerHTML = "";
+  col3.innerHTML = "";
+
+  const scores = loadScores();
+  const filled = [];
+
+  for(let i=0;i<30;i++){
+    if(scores[i]){
+      filled.push({number:i+1, name:scores[i].name, prize:scores[i].prize});
+    } else {
+      filled.push({number:i+1, name:"—", prize:"—"});
+    }
+  }
+
+  for(let i=0;i<10;i++){
+    const line = document.createElement("div");
+    line.className = "leaderboard-line";
+    line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    col1.appendChild(line);
+  }
+
+  for(let i=10;i<20;i++){
+    const line = document.createElement("div");
+    line.className = "leaderboard-line";
+    line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    col2.appendChild(line);
+  }
+
+  for(let i=20;i<30;i++){
+    const line = document.createElement("div");
+    line.className = "leaderboard-line";
+    line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    col3.appendChild(line);
+  }
+}
+
+function openLeaderboard(){
+  renderLeaderboard();
+  document.getElementById("leaderboard-screen").style.display = "flex";
+}
+
+function closeLeaderboard(){
+  document.getElementById("leaderboard-screen").style.display = "none";
+}
+
+/* ===== CONFETTI ===== */
+
+const confettiCanvas = document.getElementById("confetti-canvas");
+const confettiCtx = confettiCanvas.getContext("2d");
+
 function resizeConfetti(){
-  confettiCanvas.width=window.innerWidth;
-  confettiCanvas.height=window.innerHeight;
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
 }
 resizeConfetti();
-window.addEventListener("resize",resizeConfetti);
-let confettiPieces=[];
+window.addEventListener("resize", resizeConfetti);
+
+let confettiPieces = [];
+
 function createConfettiPiece(){
-  return{
-    x:Math.random()*confettiCanvas.width,
-    y:-20,
-    size:Math.random()*8+4,
-    speedY:Math.random()*3+2,
-    speedX:(Math.random()-0.5)*2,
-    rotation:Math.random()*360,
-    rotationSpeed:(Math.random()-0.5)*10,
-    color:Math.random()>0.5?"#FFD700":"#FFF5A3"
+  return {
+    x: Math.random() * confettiCanvas.width,
+    y: -20,
+    size: Math.random() * 8 + 4,
+    speedY: Math.random() * 3 + 2,
+    speedX: (Math.random() - 0.5) * 2,
+    rotation: Math.random() * 360,
+    rotationSpeed: (Math.random() - 0.5) * 10,
+    color: Math.random() > 0.5 ? "#FFD700" : "#FFF5A3"
   };
 }
+
 function startConfetti(){
-  confettiPieces=[];
-  for(let i=0;i<150;i++)confettiPieces.push(createConfettiPiece());
+  confettiPieces = [];
+  for(let i=0;i<150;i++){
+    confettiPieces.push(createConfettiPiece());
+  }
 }
+
 function updateConfetti(){
   confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+
   confettiPieces.forEach((p,index)=>{
-    p.y+=p.speedY;
-    p.x+=p.speedX;
-    p.rotation+=p.rotationSpeed;
-    if(p.y>confettiCanvas.height+20)confettiPieces[index]=createConfettiPiece();
+    p.y += p.speedY;
+    p.x += p.speedX;
+    p.rotation += p.rotationSpeed;
+
+    if(p.y > confettiCanvas.height + 20){
+      confettiPieces[index] = createConfettiPiece();
+    }
+
     confettiCtx.save();
-    confettiCtx.translate(p.x,p.y);
-    confettiCtx.rotate((p.rotation*Math.PI)/180);
-    confettiCtx.fillStyle=p.color;
-    confettiCtx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
+    confettiCtx.translate(p.x, p.y);
+    confettiCtx.rotate((p.rotation * Math.PI) / 180);
+    confettiCtx.fillStyle = p.color;
+    confettiCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
     confettiCtx.restore();
   });
+
   requestAnimationFrame(updateConfetti);
 }
 updateConfetti();
 
-/* INITIAL LEADERBOARD RENDER */
+/* ===== INITIALIZE LEADERBOARD ON LOAD ===== */
 renderLeaderboard();
 </script>
 
