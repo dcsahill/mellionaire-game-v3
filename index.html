@@ -693,16 +693,16 @@ updateConfetti();
 /* ===== INITIALIZE LEADERBOARD ON LOAD ===== */
 renderLeaderboard();
 function submitName(){
-  const input = document.getElementById("name-input").value.trim();
-  if (!input) return; // ignore empty
+  const input = document.getElementById("name-input").value.trim().toUpperCase();
+  if (!input) return;
 
-  const scores = loadScores(); // get existing leaderboard names
-  const existingNames = scores.map(s => s.name.toLowerCase());
+  const scores = loadScores();
+  const existingNames = scores.map(s => s.name.toUpperCase());
 
-  // Check if name already exists
-  if (existingNames.includes(input.toLowerCase())) {
+  // Check for duplicate names
+  if (existingNames.includes(input)) {
     alert("That name is already on the leaderboard. Please add a last initial.");
-    return; // stop here and let them edit the name
+    return;
   }
 
   // Name is unique — continue
