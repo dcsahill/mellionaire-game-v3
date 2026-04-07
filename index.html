@@ -257,6 +257,9 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   background:#ffea70;
   transform:scale(1.05);
 }
+.leaderboard-name {
+  white-space: nowrap;
+}
 </style>
 </head>
 
@@ -599,7 +602,7 @@ function renderLeaderboard(){
   for(let i=0;i<20;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
-    line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    line.innerHTML = `<span class="leaderboard-name">${filled[i].number}. ${filled[i].name} — ${filled[i].prize}</span>`;
     col1.appendChild(line);
   }
 
@@ -607,7 +610,7 @@ function renderLeaderboard(){
   for(let i=20;i<40;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
-    line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    line.innerHTML = `<span class="leaderboard-name">${filled[i].number}. ${filled[i].name} — ${filled[i].prize}</span>`;
     col2.appendChild(line);
   }
 
@@ -615,7 +618,7 @@ function renderLeaderboard(){
   for(let i=40;i<60;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
-    line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
+    line.innerHTML = `<span class="leaderboard-name">${filled[i].number}. ${filled[i].name} — ${filled[i].prize}</span>`;
     col3.appendChild(line);
   }
 }
