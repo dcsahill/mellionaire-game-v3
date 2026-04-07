@@ -704,22 +704,26 @@ function submitName(){
   const input = document.getElementById("name-input").value.trim().toUpperCase();
   if (!input) return;
 
+  const warning = document.getElementById("name-warning");
+  warning.style.display = "none"; // reset warning
+
   const scores = loadScores();
   const existingNames = scores.map(s => s.name.toUpperCase());
 
-  // Check for duplicate names
+  // Duplicate name check
   if (existingNames.includes(input)) {
-    alert("That name is already on the leaderboard. Please add a last initial.");
+    warning.innerText = "NAME ALREADY EXISTS, TRY ADDING A LAST NAME INITIAL";
+    warning.style.display = "block";
     return;
   }
 
-  // Name is unique — continue
+  // Name is valid
   playerName = input;
 
   // Hide name screen
   document.getElementById("name-screen").style.display = "none";
 
-  // Start the game immediately
+  // Start game immediately
   beginGame();
 }
   function openNameScreen(){
