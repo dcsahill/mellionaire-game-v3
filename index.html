@@ -192,11 +192,83 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 #close-leaderboard-btn:hover{
   background:#ffea70;transform:scale(1.08);
 }
+/* all your existing CSS… */
+/* …lots of styles… */
+/* …leaderboard styles… */
+
+/* PASTE STEP 2 CSS RIGHT HERE */
+
+/* NAME ENTRY SCREEN */
+#name-screen{
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.85);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+#name-box{
+  background:rgba(0,0,0,0.6);
+  border:2px solid #ffd700;
+  padding:40px 50px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 0 30px rgba(255,215,0,0.5);
+}
+
+#name-box h2{
+  color:#ffd700;
+  font-size:2rem;
+  margin-bottom:20px;
+}
+
+#name-input{
+  width:260px;
+  padding:12px 16px;
+  font-size:1.2rem;
+  border-radius:10px;
+  border:2px solid #ffd700;
+  background:rgba(0,0,0,0.4);
+  color:#fff;
+  text-align:center;
+  outline:none;
+}
+
+#name-input::placeholder{
+  color:#ccc;
+}
+
+#name-submit{
+  margin-top:20px;
+  background:#ffd700;
+  color:#000;
+  padding:12px 40px;
+  font-size:1.3rem;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+#name-submit:hover{
+  background:#ffea70;
+  transform:scale(1.05);
+}
 </style>
 </head>
 
 <body>
-
+<!-- NAME ENTRY SCREEN -->
+<div id="name-screen">
+  <div id="name-box">
+    <h2>ENTER PLAYER NAME</h2>
+    <input id="name-input" type="text" maxlength="20" autocomplete="off" placeholder="Your name">
+    <button id="name-submit" onclick="submitName()">START</button>
+  </div>
+</div>
 <!-- ===== FRONT PAGE ===== -->
 <div id="front-page">
   <img src="front-page-background.png" id="front-background">
@@ -317,8 +389,7 @@ const QUESTIONS = {
 
 /* ===== GAME START ===== */
 function beginGame(){
-  playerName = prompt("Enter your name to begin:");
-  if(!playerName || playerName.trim()==="") playerName = "Player";
+// Name already collected from custom name screen
 
   document.getElementById("player-name").innerText = `Welcome, ${playerName}!`;
   document.getElementById("front-page").style.display = "none";
@@ -618,6 +689,19 @@ updateConfetti();
 
 /* ===== INITIALIZE LEADERBOARD ON LOAD ===== */
 renderLeaderboard();
+function submitName(){
+  const input = document.getElementById("name-input").value.trim();
+  playerName = input || "Player";
+
+  // Hide the name entry screen
+  document.getElementById("name-screen").style.display = "none";
+
+  // Show the front page
+  document.getElementById("front-page").style.display = "flex";
+
+  // Update the welcome text in the game
+  document.getElementById("player-name").innerText = `Welcome, ${playerName}!`;
+}
 </script>
 
 </body>
