@@ -159,21 +159,24 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   font-size:3.5rem;color:#ffd700;margin-bottom:20px;
 }
 
+/* 3 full-width columns */
 #leaderboard-columns{
   display:flex;
   justify-content:space-between;
   width:100%;
 }
 
+/* Each column grows vertically (Option A) */
 .leaderboard-column{
   flex:1;
   text-align:left;
   padding:0 20px;
 }
 
+/* Slightly smaller font for 20 entries */
 .leaderboard-line{
-  font-size:1.4rem;
-  margin:4px 0;
+  font-size:1.2rem;
+  margin:3px 0;
   color:#fff;
 }
 
@@ -243,7 +246,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 <!-- ===== LEADERBOARD ===== -->
 <div id="leaderboard-screen">
   <div id="leaderboard-content">
-    <h1>TOP 30 PLAYERS</h1>
+    <h1>TOP 60 PLAYERS</h1>
 
     <div id="leaderboard-columns">
       <div class="leaderboard-column" id="col1"></div>
@@ -464,7 +467,7 @@ function restartGame(){
   updatePermanentLadder(0);
   renderLeaderboard();
 }
-/* ===== LEADERBOARD SYSTEM ===== */
+/* ===== LEADERBOARD SYSTEM (TOP 60) ===== */
 
 function prizeToValue(prize){
   if(prize === "MELLIONAIRE") return 1000001;
@@ -492,7 +495,8 @@ function saveScore(name, prize){
 
   scores.sort((a,b)=> prizeToValue(b.prize) - prizeToValue(a.prize));
 
-  if(scores.length > 30) scores = scores.slice(0,30);
+  // ⭐ Now stores TOP 60
+  if(scores.length > 60) scores = scores.slice(0,60);
 
   saveScores(scores);
 }
@@ -509,7 +513,8 @@ function renderLeaderboard(){
   const scores = loadScores();
   const filled = [];
 
-  for(let i=0;i<30;i++){
+  // ⭐ Fill 60 rows (or blanks)
+  for(let i=0;i<60;i++){
     if(scores[i]){
       filled.push({number:i+1, name:scores[i].name, prize:scores[i].prize});
     } else {
@@ -517,21 +522,24 @@ function renderLeaderboard(){
     }
   }
 
-  for(let i=0;i<10;i++){
+  // Column 1: 1–20
+  for(let i=0;i<20;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
     line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
     col1.appendChild(line);
   }
 
-  for(let i=10;i<20;i++){
+  // Column 2: 21–40
+  for(let i=20;i<40;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
     line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
     col2.appendChild(line);
   }
 
-  for(let i=20;i<30;i++){
+  // Column 3: 41–60
+  for(let i=40;i<60;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
     line.innerText = `${filled[i].number}. ${filled[i].name} — ${filled[i].prize}`;
