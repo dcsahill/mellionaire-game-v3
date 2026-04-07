@@ -694,13 +694,22 @@ updateConfetti();
 renderLeaderboard();
 function submitName(){
   const input = document.getElementById("name-input").value.trim();
-  playerName = input || "Player";
+  if (!input) return; // ignore empty
 
-  // Hide the name entry screen
+  const scores = loadScores(); // get existing leaderboard names
+  const existingNames = scores.map(s => s.name.toLowerCase());
+
+  // Check if name already exists
+  if (existingNames.includes(input.toLowerCase())) {
+    alert("That name is already on the leaderboard. Please add a last initial.");
+    return; // stop here and let them edit the name
+  }
+
+  // Name is unique — continue
+  playerName = input;
+
+  // Hide name screen
   document.getElementById("name-screen").style.display = "none";
-
-  // Update welcome text (optional)
-  document.getElementById("player-name").innerText = `Welcome, ${playerName}!`;
 
   // Start the game immediately
   beginGame();
