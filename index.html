@@ -260,6 +260,14 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 .leaderboard-name {
   white-space: nowrap;
 }
+#name-warning {
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+  display: none; /* hidden until needed */
+}  
 </style>
 </head>
 
@@ -268,9 +276,9 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 <div id="name-screen">
   <div id="name-box">
     <h2>ENTER PLAYER NAME</h2>
-    <input id="name-input" type="text" maxlength="20" autocomplete="off" placeholder="Your name">
+    <div id="name-warning"></div>
+    <input id="name-input" type="text" placeholder="ENTER NAME">
     <button id="name-submit" onclick="submitName()">START</button>
-  </div>
 </div>
 <!-- ===== FRONT PAGE ===== -->
 <div id="front-page">
