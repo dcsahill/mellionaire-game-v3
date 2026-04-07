@@ -708,6 +708,9 @@ function submitName(){
   function openNameScreen(){
   document.getElementById("front-page").style.display = "none";
   document.getElementById("name-screen").style.display = "flex";
+
+  // Clear previous player's name
+  document.getElementById("name-input").value = "";
 }
 </script>
 
