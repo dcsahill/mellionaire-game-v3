@@ -559,7 +559,7 @@ function restartGame(){
 
   confettiPieces = [];
   updatePermanentLadder(0);
-  renderLeaderboardPage();
+  renderLeaderboard();
 }
 /* ===== LEADERBOARD SYSTEM (TOP 60) ===== */
 
@@ -568,10 +568,6 @@ function prizeToValue(prize){
   const num = parseInt(prize.replace(/[^0-9]/g,"")) || 0;
   return num;
 }
-
-let currentPage = 0;      // 0 = first page, 1 = second page
-const rowsPerPage = 15;   // 15 rows per column
-const columns = 3;        // 3 columns per page
 
 function loadScores(){
   try{
@@ -593,96 +589,62 @@ function saveScore(name, prize){
 
   scores.sort((a,b)=> prizeToValue(b.prize) - prizeToValue(a.prize));
 
-  // ⭐ Now stores TOP 60
   if(scores.length > 60) scores = scores.slice(0,60);
 
   saveScores(scores);
 }
 
-function renderLeaderboardPage() {
-  const container = document.getElementById("leaderboard-entries");
-  container.innerHTML = "";
+function renderLeaderboard(){
+  const col1 = document.getElementById("col1");
+  const col2 = document.getElementById("col2");
+  const col3 = document.getElementById("col3");
+
+  col1.innerHTML = "";
+  col2.innerHTML = "";
+  col3.innerHTML = "";
 
   const scores = loadScores();
+  const filled = [];
 
-  const startIndex = currentPage * rowsPerPage * columns;
-  const endIndex = startIndex + rowsPerPage * columns;
-
-  const pageScores = scores.slice(startIndex, endIndex);
-
-  let html = "<div class='leaderboard-columns'>";
-
-  for (let col = 0; col < columns; col++) {
-    html += "<div class='leaderboard-column'>";
-
-    for (let row = 0; row < rowsPerPage; row++) {
-      const index = col * rowsPerPage + row;
-      const entry = pageScores[index];
-
-if (entry) {
-  html += `
-    <div class="leaderboard-row">
-      <span class="rank">${startIndex + index + 1}.</span>
-      <span class="name">${entry.name}</span>
-      <span class="prize">${entry.prize}</span>
-    </div>
-  `;
-} else {
-  html += `
-    <div class="leaderboard-row">
-      <span class="rank">${startIndex + index + 1}.</span>
-      <span class="name">—</span>
-      <span class="prize">—</span>
-    </div>
-  `;
-}
-
-
-    html += "</div>";
+  for(let i=0;i<60;i++){
+    if(scores[i]){
+      filled.push({number:i+1, name:scores[i].name, prize:scores[i].prize});
+    } else {
+      filled.push({number:i+1, name:"—", prize:"—"});
+    }
   }
 
-  html += "</div>";
+  for(let i=0;i<20;i++){
+    const line = document.createElement("div");
+    line.className = "leaderboard-line";
+    line.innerHTML = `<span class="leaderboard-name">${filled[i].number}. ${filled[i].name} — ${filled[i].prize}</span>`;
+    col1.appendChild(line);
+  }
 
-  container.innerHTML = html;
+  for(let i=20;i<40;i++){
+    const line = document.createElement("div");
+    line.className = "leaderboard-line";
+    line.innerHTML = `<span class="leaderboard-name">${filled[i].number}. ${filled[i].name} — ${filled[i].prize}</span>`;
+    col2.appendChild(line);
+  }
 
-  updatePageButtons();
-}
-function nextPage() {
-  const scores = loadScores();
-  const maxPage = Math.floor(scores.length / (rowsPerPage * columns));
-
-  if (currentPage < maxPage) {
-    currentPage++;
-    renderLeaderboardPage();
+  for(let i=40;i<60;i++){
+    const line = document.createElement("div");
+    line.className = "leaderboard-line";
+    line.innerHTML = `<span class="leaderboard-name">${filled[i].number}. ${filled[i].name} — ${filled[i].prize}</span>`;
+    col3.appendChild(line);
   }
 }
 
-function prevPage() {
-  if (currentPage > 0) {
-    currentPage--;
-    renderLeaderboardPage();
-  }
-}
-
-function updatePageButtons() {
-  const scores = loadScores();
-  const maxPage = Math.floor(scores.length / (rowsPerPage * columns));
-
-  document.getElementById("prev-page").style.display =
-    currentPage > 0 ? "inline-block" : "none";
-
-  document.getElementById("next-page").style.display =
-    currentPage < maxPage ? "inline-block" : "none";
-}
 function openLeaderboard(){
-currentPage = 0;
-  renderLeaderboardPage();
+  renderLeaderboard();
   document.getElementById("leaderboard-screen").style.display = "flex";
 }
 
 function closeLeaderboard(){
   document.getElementById("leaderboard-screen").style.display = "none";
 }
+
 
 /* ===== CONFETTI ===== */
 
@@ -743,7 +705,7 @@ function updateConfetti(){
 updateConfetti();
 
 /* ===== INITIALIZE LEADERBOARD ON LOAD ===== */
-renderLeaderboardPage();
+renderLeaderboard();
 function submitName(){
   const input = document.getElementById("name-input").value.trim().toUpperCase();
   if (!input) return;
