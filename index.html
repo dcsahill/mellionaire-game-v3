@@ -619,16 +619,24 @@ function renderLeaderboardPage() {
       const index = col * rowsPerPage + row;
       const entry = pageScores[index];
 
-      if (entry) {
-        html += `
-          <div class="leaderboard-row">
-            <span class="rank">${startIndex + index + 1}.</span>
-            <span class="name">${entry.name}</span>
-            <span class="prize">${entry.prize}</span>
-          </div>
-        `;
-      }
-    }
+if (entry) {
+  html += `
+    <div class="leaderboard-row">
+      <span class="rank">${startIndex + index + 1}.</span>
+      <span class="name">${entry.name}</span>
+      <span class="prize">${entry.prize}</span>
+    </div>
+  `;
+} else {
+  html += `
+    <div class="leaderboard-row">
+      <span class="rank">${startIndex + index + 1}.</span>
+      <span class="name">—</span>
+      <span class="prize">—</span>
+    </div>
+  `;
+}
+
 
     html += "</div>";
   }
