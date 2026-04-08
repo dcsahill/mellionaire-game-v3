@@ -531,7 +531,10 @@ function updatePermanentLadder(roundIndex){
   });
 }
 
-/* ===== WIN / LOSS ===== */
+/* ============================================================
+   ===============  WIN / LOSS SYSTEM  =========================
+   ============================================================ */
+
 function showWinScreen(){
   document.getElementById("game").style.display = "none";
   document.getElementById("winner-name").innerText = playerName;
@@ -559,9 +562,13 @@ function restartGame(){
 
   confettiPieces = [];
   updatePermanentLadder(0);
-  renderLeaderboard();
+  renderLeaderboard();   // ← ORIGINAL LEADERBOARD RESTORED
 }
-/* ===== LEADERBOARD SYSTEM (TOP 60) ===== */
+
+
+/* ============================================================
+   ===============  LEADERBOARD SYSTEM (TOP 60)  ===============
+   ============================================================ */
 
 function prizeToValue(prize){
   if(prize === "MELLIONAIRE") return 1000001;
@@ -606,6 +613,7 @@ function renderLeaderboard(){
   const scores = loadScores();
   const filled = [];
 
+  // Always fill 60 rows
   for(let i=0;i<60;i++){
     if(scores[i]){
       filled.push({number:i+1, name:scores[i].name, prize:scores[i].prize});
@@ -614,6 +622,7 @@ function renderLeaderboard(){
     }
   }
 
+  // Column 1: 1–20
   for(let i=0;i<20;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
@@ -621,6 +630,7 @@ function renderLeaderboard(){
     col1.appendChild(line);
   }
 
+  // Column 2: 21–40
   for(let i=20;i<40;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
@@ -628,6 +638,7 @@ function renderLeaderboard(){
     col2.appendChild(line);
   }
 
+  // Column 3: 41–60
   for(let i=40;i<60;i++){
     const line = document.createElement("div");
     line.className = "leaderboard-line";
@@ -646,7 +657,9 @@ function closeLeaderboard(){
 }
 
 
-/* ===== CONFETTI ===== */
+/* ============================================================
+   ====================  CONFETTI SYSTEM  ======================
+   ============================================================ */
 
 const confettiCanvas = document.getElementById("confetti-canvas");
 const confettiCtx = confettiCanvas.getContext("2d");
@@ -704,41 +717,39 @@ function updateConfetti(){
 }
 updateConfetti();
 
-/* ===== INITIALIZE LEADERBOARD ON LOAD ===== */
-renderLeaderboard();
+
+/* ============================================================
+   ====================  NAME ENTRY SYSTEM  ====================
+   ============================================================ */
+
 function submitName(){
   const input = document.getElementById("name-input").value.trim().toUpperCase();
   if (!input) return;
 
   const warning = document.getElementById("name-warning");
-  warning.style.display = "none"; // reset warning
+  warning.style.display = "none";
 
   const scores = loadScores();
   const existingNames = scores.map(s => s.name.toUpperCase());
 
-  // Duplicate name check
   if (existingNames.includes(input)) {
     warning.innerText = "NAME ALREADY EXISTS, TRY ADDING A LAST NAME INITIAL";
     warning.style.display = "block";
     return;
   }
 
-  // Name is valid
   playerName = input;
 
-  // Hide name screen
   document.getElementById("name-screen").style.display = "none";
-
-  // Start game immediately
   beginGame();
 }
-  function openNameScreen(){
+
+function openNameScreen(){
   document.getElementById("front-page").style.display = "none";
   document.getElementById("name-screen").style.display = "flex";
-
-  // Clear previous player's name
   document.getElementById("name-input").value = "";
 }
+
 </script>
 
 </body>
