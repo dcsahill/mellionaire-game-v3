@@ -53,8 +53,12 @@ body{
   display:flex;justify-content:center;width:100%;
   position:relative;top:180px;
 }
-#game-wrapper{
-  flex:1;display:flex;justify-content:center;padding-right:320px;
+#game-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;   /* ⭐ THIS IS THE FIX ⭐ */
+  align-items: center;      /* center everything vertically */
+  padding-right: 320px;
 }
 #game{
   max-width:650px;width:100%;padding:30px;border-radius:20px;
