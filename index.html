@@ -497,25 +497,26 @@ function nextRound(){
 
   updatePermanentLadder(currentRound);
 
- const deck = getShuffledRound(currentRound + 1);
-currentQuestion = deck.shift();   // take the next unused question
+  // ⭐ Get shuffled deck
+  const deck = getShuffledRound(currentRound + 1);
+  currentQuestion = deck.shift();   // take the next unused question
 
-// ⭐ Mark this question as used (PERSISTENT across games)
-const round = currentRound + 1;
-const index = QUESTIONS[round].indexOf(currentQuestion);
+  // ⭐ Mark this question as used (PERSISTENT across games)
+  const roundNum = currentRound + 1;
+  const index = QUESTIONS[roundNum].indexOf(currentQuestion);
 
-if (!USED[round]) USED[round] = [];
-if (!USED[round].includes(index)) {
-  USED[round].push(index);
-  localStorage.setItem("USED_QUESTIONS", JSON.stringify(USED));
-}
+  if (!USED[roundNum]) USED[roundNum] = [];
+  if (!USED[roundNum].includes(index)) {
+    USED[roundNum].push(index);
+    localStorage.setItem("USED_QUESTIONS", JSON.stringify(USED));
+  }
+
   const locked = document.getElementById("locked-in");
   locked.style.display = "none";
   locked.innerText = "";
 
   displayQuestion();
 }
-
 /* ===== DISPLAY QUESTION ===== */
 function displayQuestion(){
   document.getElementById("question").innerText = currentQuestion.q;
