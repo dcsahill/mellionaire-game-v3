@@ -368,6 +368,12 @@ const ROUNDS = [
 
 /* ===== PERSISTENT USED QUESTIONS ===== */
 let USED = JSON.parse(localStorage.getItem("USED_QUESTIONS") || "{}");
+
+function openNameScreen() {
+  document.getElementById("front-page").style.display = "block";
+  document.getElementById("leaderboard-screen").style.display = "none";
+  document.getElementById("game").style.display = "none";
+}
   
 /* ===== QUESTIONS ===== */
 const QUESTIONS = {
