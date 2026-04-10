@@ -908,6 +908,15 @@ function showLossScreen(){
   saveScore(playerName,lastPrize);
 }
 </script>
-
+<!-- WIN / LOSS OVERLAY -->
+<div id="win-screen" style="display:none;">
+  <canvas id="confetti-canvas"></canvas>
+  <div id="win-content">
+    <h1 id="win-title"></h1>
+    <h2 id="winner-name"></h2>
+    <h3 id="win-subtext"></h3>
+    <button id="play-again-btn" onclick="restartGame()">PLAY AGAIN</button>
+  </div>
+</div>
 </body>
 </html>
