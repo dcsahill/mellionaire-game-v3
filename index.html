@@ -489,12 +489,11 @@ function startGame(){
 }
 
 /* ===== LOAD NEXT ROUND ===== */
-/* ===== LOAD NEXT ROUND ===== */
 function nextRound(){
-  const round = ROUNDS[currentRound];
+  const roundInfo = ROUNDS[currentRound];
 
   document.getElementById("round-info").innerText =
-    `${round.name} – Prize: ${round.prize}`;
+    `${roundInfo.name} – Prize: ${roundInfo.prize}`;
 
   updatePermanentLadder(currentRound);
 
