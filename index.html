@@ -366,6 +366,9 @@ const ROUNDS = [
   { name: "Final Round", prize: "MELLIONAIRE" }
 ];
 
+/* ===== PERSISTENT USED QUESTIONS ===== */
+let USED = JSON.parse(localStorage.getItem("USED_QUESTIONS") || "{}"
+  
 /* ===== QUESTIONS ===== */
 const QUESTIONS = {
   1: [
@@ -440,16 +443,27 @@ const QUESTIONS = {
 const SHUFFLED = {};
   
 function getShuffledRound(round) {
-  // If no deck exists OR the deck is empty, create a new shuffled one
-  if (!SHUFFLED[round] || SHUFFLED[round].length === 0) {
-    SHUFFLED[round] = [...QUESTIONS[round]]; // copy original list
+  // Load used list for this round
+  const used = USED[round] || [];
 
-    // Fisher–Yates shuffle
-    for (let i = SHUFFLED[round].length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [SHUFFLED[round][i], SHUFFLED[round][j]] = [SHUFFLED[round][j], SHUFFLED[round][i]];
-    }
+  // Filter out used questions
+  let available = QUESTIONS[round].filter((q, i) => !used.includes(i));
+
+  // If all questions have been used, reset the list
+  if (available.length === 0) {
+    USED[round] = [];
+    localStorage.setItem("USED_QUESTIONS", JSON.stringify(USED));
+    available = [...QUESTIONS[round]];
   }
+
+  // Shuffle the available questions
+  for (let i = available.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [available[i], available[j]] = [available[j], available[i]];
+  }
+
+  // Save the shuffled deck for this round
+  SHUFFLED[round] = available;
 
   return SHUFFLED[round];
 }
@@ -471,7 +485,7 @@ function startGame(){
   currentRound = 0;
   lastPrize = "$0";
   updatePermanentLadder(0);
-  nextRound();
+  ;
 }
 
 /* ===== LOAD NEXT ROUND ===== */
@@ -483,9 +497,18 @@ function nextRound(){
 
   updatePermanentLadder(currentRound);
 
-  const deck = getShuffledRound(currentRound + 1);
+ const deck = getShuffledRound(currentRound + 1);
 currentQuestion = deck.shift();   // take the next unused question
 
+// ⭐ Mark this question as used (PERSISTENT across games)
+const round = currentRound + 1;
+const index = QUESTIONS[round].indexOf(currentQuestion);
+
+if (!USED[round]) USED[round] = [];
+if (!USED[round].includes(index)) {
+  USED[round].push(index);
+  localStorage.setItem("USED_QUESTIONS", JSON.stringify(USED));
+}
   const locked = document.getElementById("locked-in");
   locked.style.display = "none";
   locked.innerText = "";
