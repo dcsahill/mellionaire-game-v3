@@ -898,23 +898,7 @@ function openNameScreen(){
   document.getElementById("name-screen").style.display = "flex";
   document.getElementById("name-input").value = "";
 }
-function showLossScreen() {
-  // Hide the game
-  document.getElementById("game").style.display = "none";
 
-  // OPTIONAL: Hide lifeline bar if needed
-  document.getElementById("lifeline-bar").style.display = "none";
-
-  // Show the front page again
-  document.getElementById("front-page").style.display = "block";
-
-  // Reset round and prize
-  currentRound = 0;
-  lastPrize = "$0";
-
-  // OPTIONAL: Show a “bad luck” popup
-  alert("Bad luck! You got the question wrong.");
-}
 </script>
 
 </body>
