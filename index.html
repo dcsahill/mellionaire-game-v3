@@ -435,7 +435,25 @@ const QUESTIONS = {
   { q:"HOW MANY EARRINGS DOES MEL HAVE IN HER EARRING CUPBOARD?", a:["29","55","63","81"], c:2 },
 ],
 };
+  
+/* ===== SHUFFLED DECKS ===== */
+const SHUFFLED = {};
+  
+function getShuffledRound(round) {
+  // If no deck exists OR the deck is empty, create a new shuffled one
+  if (!SHUFFLED[round] || SHUFFLED[round].length === 0) {
+    SHUFFLED[round] = [...QUESTIONS[round]]; // copy original list
 
+    // Fisher–Yates shuffle
+    for (let i = SHUFFLED[round].length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [SHUFFLED[round][i], SHUFFLED[round][j]] = [SHUFFLED[round][j], SHUFFLED[round][i]];
+    }
+  }
+
+  return SHUFFLED[round];
+}
+  
 /* ===== GAME START ===== */
 function beginGame(){
 // Name already collected from custom name screen
@@ -448,8 +466,10 @@ function beginGame(){
 }
 
 function startGame(){
+  for (let r in SHUFFLED) SHUFFLED[r] = [];
+
   currentRound = 0;
-  lastPrize = "$0";   // ⭐ ensures wrong on Q1 = $0
+  lastPrize = "$0";
   updatePermanentLadder(0);
   nextRound();
 }
@@ -463,8 +483,8 @@ function nextRound(){
 
   updatePermanentLadder(currentRound);
 
-  const qList = QUESTIONS[currentRound + 1];
-  currentQuestion = qList[Math.floor(Math.random() * qList.length)];
+  const deck = getShuffledRound(currentRound + 1);
+currentQuestion = deck.shift();   // take the next unused question
 
   const locked = document.getElementById("locked-in");
   locked.style.display = "none";
