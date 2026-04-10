@@ -273,7 +273,30 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   text-align: center;
   margin-bottom: 10px;
   display: none; /* hidden until needed */
-}  
+}
+  #lifeline-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 20px 0;
+}
+
+#lifeline-5050 {
+  background: #ffd700;
+  color: #000;
+  padding: 12px 28px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 12px rgba(255,215,0,0.6);
+}
+
+#lifeline-5050:hover {
+  background: #ffea70;
+  transform: scale(1.05);
+}
 </style>
 </head>
 
@@ -310,17 +333,19 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 </div>
 
 <!-- ===== GAME AREA ===== -->
-<div id="layout">
-  <div id="game-wrapper">
-    <div id="game">
-      <h1>Who Wants to Be a Mellionaire?</h1>
-      <div id="player-name"></div>
-      <div id="round-info"></div>
-      <div id="question"></div>
-      <div class="options"></div>
-      <div id="locked-in"></div>
-    </div>
+<div id="game">
+  <h1>Who Wants to Be a Mellionaire?</h1>
+  <div id="player-name"></div>
+  <div id="round-info"></div>
+
+  <!-- ⭐ 50/50 BUTTON AT THE TOP ⭐ -->
+  <div id="lifeline-bar">
+    <button id="lifeline-5050" onclick="use5050()">50 / 50</button>
   </div>
+
+  <div id="question"></div>
+  <div class="options"></div>
+  <div id="locked-in"></div>
 </div>
 
 <!-- ===== WIN SCREEN ===== -->
@@ -373,6 +398,32 @@ function openNameScreen() {
   document.getElementById("front-page").style.display = "block";
   document.getElementById("leaderboard-screen").style.display = "none";
   document.getElementById("game").style.display = "none";
+}
+  
+let lifelineUsed = false;
+
+function use5050() {
+  if (lifelineUsed) return; // prevent reuse
+
+  const correctIndex = currentQuestion.c;
+
+  // Get all option buttons
+  const buttons = document.querySelectorAll(".option-btn");
+
+  // Build list of wrong answer indexes
+  const wrongIndexes = [0,1,2,3].filter(i => i !== correctIndex);
+
+  // Randomly pick two wrong answers to remove
+  const toRemove = wrongIndexes.sort(() => Math.random() - 0.5).slice(0, 2);
+
+  // Disable or hide them
+  toRemove.forEach(i => {
+    buttons[i].disabled = true;
+    buttons[i].style.opacity = "0.4";
+  });
+
+  lifelineUsed = true;
+  document.getElementById("lifeline-5050").disabled = true;
 }
   
 /* ===== QUESTIONS ===== */
@@ -492,9 +543,13 @@ function startGame(){
   lastPrize = "$0";
   updatePermanentLadder(0);
 
-  nextRound();   // ⭐ Load the first question
-}
+  // ⭐ Reset 50/50 lifeline
+  lifelineUsed = false;
+  document.getElementById("lifeline-5050").disabled = false;
+  document.getElementById("lifeline-5050").style.opacity = "1";
 
+  nextRound();   // Load the first question
+}
 /* ===== LOAD NEXT ROUND ===== */
 function nextRound(){
   const roundInfo = ROUNDS[currentRound];
