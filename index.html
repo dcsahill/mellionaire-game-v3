@@ -915,6 +915,17 @@ function showLossScreen() {
   // OPTIONAL: Show a “bad luck” popup
   alert("Bad luck! You got the question wrong.");
 }
+  <!-- WIN / LOSS OVERLAY -->
+<div id="win-screen" style="display:none;">
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="win-content">
+    <h1 id="win-title"></h1>
+    <h2 id="winner-name"></h2>
+    <h3 id="win-subtext"></h3>
+    <button id="play-again-btn" onclick="restartGame()">PLAY AGAIN</button>
+  </div>
+</div>
 </script>
 
 </body>
