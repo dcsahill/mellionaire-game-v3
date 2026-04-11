@@ -205,10 +205,9 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 }
 
 /* Each column grows vertically (Option A) */
-.leaderboard-column{
-  flex:1;
-  text-align:left;
-  padding:0 20px;
+.leaderboard-column {
+  width: 260px;      /* fixed width */
+  text-align: left;
 }
 
 /* Slightly smaller font for 20 entries */
@@ -245,7 +244,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   display: block;
   width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis; /* trims long names with … */
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 /* all your existing CSS… */
