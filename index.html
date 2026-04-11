@@ -50,8 +50,11 @@ body{
 
 /* ===== GAME LAYOUT ===== */
 #layout{
-  display:flex;justify-content:center;width:100%;
-  relative;top:120px;
+  display:flex;
+  justify-content:center;
+  width:100%;
+  position:relative;
+  top:120px;
 }
 #game-wrapper {
   flex: 1;
@@ -104,8 +107,13 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 
 /* ===== SIDE PANEL ===== */
 #side-panel{
-  fixed;top:120px;right:120px;width:240px;
-  display:flex;flex-direction:column;align-items:center;
+  position:fixed;
+  top:120px;
+  right:120px;
+  width:240px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 #millionaire-logo{width:240px;margin-bottom:20px;}
 #permanent-ladder{
@@ -125,22 +133,22 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 
 /* ===== WIN SCREEN ===== */
 #win-screen {
-   fixed;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.85);
   backdrop-filter: blur(4px);
-  display: flex;                 /* ← THIS is what centers it */
-  justify-content: center;       /* ← centers horizontally */
-  align-items: center;           /* ← centers vertically */
-  flex-direction: column;        /* ← keeps text stacked */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   z-index: 99998;
   text-align: center;
 }
 #confetti-canvas {
-   absolute;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100% !important;
