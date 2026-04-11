@@ -869,15 +869,7 @@ function openNameScreen(){
   document.getElementById("name-screen").style.display = "flex";
   document.getElementById("name-input").value = "";
 }
-function showLossScreen(){
-  document.getElementById("game").style.display = "none";
-  document.getElementById("winner-name").innerText = playerName;
-  document.getElementById("win-title").innerText = "BAD LUCK";
-  document.getElementById("win-subtext").innerText = `Enjoy your ${lastPrize}`;
-  document.getElementById("win-screen").style.display = "flex";
 
-  saveScore(playerName,lastPrize);
-}
 </script>
   
 <!-- WIN / LOSS OVERLAY -->
