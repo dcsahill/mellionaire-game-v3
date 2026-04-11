@@ -198,16 +198,16 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
 /* 3 full-width columns */
 #leaderboard-columns{
   display:flex;
-  justify-content:center;   /* Centers the 3-column block */
-  gap:180px;                 /* Space between columns */
-  width:100%;                /* Shrinks the block so centering is visible */
-  margin:0 auto;            /* Centers the block on the page */
+  justify-content:center;
+  gap:80px;          /* adjust spacing between columns */
+  width:auto;        /* let columns size themselves */
+  margin:0 auto;
 }
 
-/* Each column grows vertically (Option A) */
-.leaderboard-column {
-  width: 360px;      /* fixed width */
-  text-align: left;
+.leaderboard-column{
+  flex:0 0 320px;    /* ⬅️ FIXED WIDTH COLUMN */
+  text-align:left;
+  padding:0;
 }
 
 /* Slightly smaller font for 20 entries */
@@ -228,25 +228,15 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   background:#ffea70;transform:scale(1.08);
 }
 
-/* FIXED LEADERBOARD COLUMNS */
-#leaderboard-columns {
-  display: flex;
-  justify-content: center;
-  gap: 80px; /* adjust spacing between columns */
-}
-
-.leaderboard-column {
-  width: 260px;        /* FIXED WIDTH — prevents shifting */
-  text-align: left;
-}
 
 .leaderboard-name {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display:block;
+  width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
+  
 /* all your existing CSS… */
 /* …lots of styles… */
 /* …leaderboard styles… */
@@ -312,9 +302,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   background:#ffea70;
   transform:scale(1.05);
 }
-.leaderboard-name {
-  white-space: nowrap;
-}
+
 #name-warning {
   color: #ffd700;
   font-size: 1.1rem;
