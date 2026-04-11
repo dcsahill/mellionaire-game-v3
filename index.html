@@ -839,67 +839,6 @@ function closeLeaderboard(){
 
 
 /* ============================================================
-   ====================  CONFETTI SYSTEM  ======================
-   ============================================================ */
-
-const confettiCanvas = document.getElementById("confetti-canvas");
-const confettiCtx = confettiCanvas.getContext("2d");
-
-function resizeConfetti(){
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-}
-resizeConfetti();
-window.addEventListener("resize", resizeConfetti);
-
-let confettiPieces = [];
-
-function createConfettiPiece(){
-  return {
-    x: Math.random() * confettiCanvas.width,
-    y: -20,
-    size: Math.random() * 8 + 4,
-    speedY: Math.random() * 3 + 2,
-    speedX: (Math.random() - 0.5) * 2,
-    rotation: Math.random() * 360,
-    rotationSpeed: (Math.random() - 0.5) * 10,
-    color: Math.random() > 0.5 ? "#FFD700" : "#FFF5A3"
-  };
-}
-
-function startConfetti(){
-  confettiPieces = [];
-  for(let i=0;i<150;i++){
-    confettiPieces.push(createConfettiPiece());
-  }
-}
-
-function updateConfetti(){
-  confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
-
-  confettiPieces.forEach((p,index)=>{
-    p.y += p.speedY;
-    p.x += p.speedX;
-    p.rotation += p.rotationSpeed;
-
-    if(p.y > confettiCanvas.height + 20){
-      confettiPieces[index] = createConfettiPiece();
-    }
-
-    confettiCtx.save();
-    confettiCtx.translate(p.x, p.y);
-    confettiCtx.rotate((p.rotation * Math.PI) / 180);
-    confettiCtx.fillStyle = p.color;
-    confettiCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
-    confettiCtx.restore();
-  });
-
-  requestAnimationFrame(updateConfetti);
-}
-updateConfetti();
-
-
-/* ============================================================
    ====================  NAME ENTRY SYSTEM  ====================
    ============================================================ */
 
