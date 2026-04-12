@@ -910,7 +910,9 @@ function getResultMessage(prize) {
     case "MELLIONAIRE":
       return "MELLIONAIRE... Etched into history! \nPerfection is a very rare trait, make sure everyone know you have it!";
 
-   }
+  default:
+      return `You walk away with ${prize}.`;
+  }
 }
 </script>
   
