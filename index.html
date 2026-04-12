@@ -852,14 +852,23 @@ function closeLeaderboard(){
 
 function submitName(){
   const input = document.getElementById("name-input").value.trim().toUpperCase();
+  const warning = document.getElementById("name-warning");
+
+  warning.style.display = "none";
+
   if (!input) return;
 
-  const warning = document.getElementById("name-warning");
-  warning.style.display = "none";
+  // ⭐ Character limit check
+  if (input.length > 14) {
+    warning.innerText = "NAME MUST BE 14 CHARACTERS OR LESS";
+    warning.style.display = "block";
+    return;
+  }
 
   const scores = loadScores();
   const existingNames = scores.map(s => s.name.toUpperCase());
 
+  // ⭐ Duplicate name check
   if (existingNames.includes(input)) {
     warning.innerText = "NAME ALREADY EXISTS, TRY ADDING A LAST NAME INITIAL";
     warning.style.display = "block";
