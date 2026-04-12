@@ -250,7 +250,7 @@ h1{text-align:center;color:#ffd700;font-size:2.2rem;margin:0 0 10px 0;}
   top:0; left:0;
   width:100%; height:100%;
   background:rgba(0,0,0,0.85);
-  display:none;   /* HIDE IT UNTIL START IS CLICKED */
+  display: none;
   justify-content:center;
   align-items:center;
   z-index:99999;
@@ -455,9 +455,12 @@ const ROUNDS = [
 let USED = JSON.parse(localStorage.getItem("USED_QUESTIONS") || "{}");
 
 function openNameScreen() {
+  // hide everything else
   document.getElementById("front-page").style.display = "none";
   document.getElementById("leaderboard-screen").style.display = "none";
   document.getElementById("game").style.display = "none";
+
+  // show name screen
   document.getElementById("name-screen").style.display = "flex";
   document.getElementById("name-input").value = "";
 }
