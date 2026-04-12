@@ -455,9 +455,11 @@ const ROUNDS = [
 let USED = JSON.parse(localStorage.getItem("USED_QUESTIONS") || "{}");
 
 function openNameScreen() {
-  document.getElementById("front-page").style.display = "block";
+  document.getElementById("front-page").style.display = "none";
   document.getElementById("leaderboard-screen").style.display = "none";
   document.getElementById("game").style.display = "none";
+  document.getElementById("name-screen").style.display = "flex";
+  document.getElementById("name-input").value = "";
 }
   
 let lifelineUsed = false;
