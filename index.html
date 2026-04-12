@@ -890,38 +890,27 @@ function getResultMessage(prize) {
   switch(prize) {
 
     case "$0":
-      return "You leave with nothing this time — but every great champion starts somewhere.";
+      return "$0... Really... Nothing at all... Are you sure you are meant to be at this party?";
 
-    case "$100":
+    case "$1":
       return "At least you didn’t walk away empty‑handed! A solid start.";
 
-    case "$500":
+    case "$100":
       return "Not bad at all — you’re warming up!";
 
     case "$1,000":
       return "You hit the first safety net! Nicely done.";
 
-    case "$8,000":
+    case "$10,000":
       return "You were building real momentum — impressive run.";
 
-    case "$32,000":
+    case "$100,000":
       return "That’s a huge achievement — you should be proud.";
 
-    case "$125,000":
-      return "You were *so* close to the big leagues. Amazing effort.";
-
-    case "$250,000":
-      return "Incredible performance — only a few ever get this far.";
-
-    case "$500,000":
-      return "Half a million! That’s elite‑level gameplay.";
-
-    case "$1,000,000":
+    case "MELLIONAIRE":
       return "You are officially a MILLIONAIRE! Legendary performance.";
 
-    default:
-      return `You walk away with ${prize}.`;
-  }
+   }
 }
 </script>
   
