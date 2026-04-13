@@ -895,10 +895,10 @@ function getResultMessage(prize) {
   switch(prize) {
 
     case "$0":
-      return "$0... Really... Nothing at all... \nAre you even sure you're meant to be at this party?";
+      return "$0... Really?... Nothing at all?... \nAre you even sure you're meant to be at this party?";
 
     case "$1":
-      return "$1... Thanks for trying... i guess... \nMake sure you say happy bday to Mel, \nif you know which one she is...";
+      return "$1... Thanks for trying... i guess... \nMake sure you say happy bday to Mel, \nif you can work out which one she is...";
 
     case "$100":
       return "$100... Could be better! \nMaybe listen a little harder next time Mel is \nsharing her life story...";
@@ -913,7 +913,7 @@ function getResultMessage(prize) {
       return "$100,000... Oh so close to glory! \nOnly to stumble at that final hurdle, \nbe proud of this elite performance!";
 
     case "MELLIONAIRE":
-      return "Welcome to the MELLIONAIRE club! \nPerfection is a very rare trait, \nmake sure everyone know you have it!";
+      return "Welcome to the MELLIONAIRE club! \nPerfection is a rare trait, \nmake sure everyone here knows you have it!";
 
   default:
       return `You walk away with ${prize}.`;
